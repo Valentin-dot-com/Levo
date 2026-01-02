@@ -1,0 +1,59 @@
+// ------------------------------------------------------
+// ----------------------- FONTS ------------------------
+// ------------------------------------------------------
+
+$font-primary: 'Montserrat', sans-serif;
+
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+body {
+  font-family: $font-primary;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-primary;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: $font-primary;
+}
+
+$font-size-XL: 4rem;
+$font-size-L: 2rem;
+$font-size-M: 1.25rem;
+$font-size-S: 1rem;
+$font-size-text: 0.75rem;
+
+// ------------------------------------------------------
+// ---------------------- COLORS ------------------------
+// ------------------------------------------------------
+
+$color-fff: #fff;
+$color-white: #f9f8f6;
+$color-text: #2e3a35;
+$color-text-secondary: #6e7c75;
+$color-primary: #3f5e52;
+$color-accent: #e07a3f;
+$color-grey: #b6bdb8;
+$color-success: #4f7a63;
+$color-error: #b44e42;
+
+// ------------------------------------------------------
+// ---------------------- BORDER ------------------------
+// ------------------------------------------------------
+
+$border-raduis-XL: 1.5rem;
+$border-raduis-L: 1.25rem;
+$border-raduis-M: 1rem;
+$border-raduis-S: 0.75rem;
+
+
