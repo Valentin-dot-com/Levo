@@ -10,7 +10,6 @@ import { ProfileComponent } from './pages/profile/profile';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   // Auth routes (standalone layout)
   { path: 'auth', component: AuthComponent, canActivate: [loginRedirectGuard] },
@@ -22,6 +21,7 @@ export const routes: Routes = [
     component: AppLayoutComponent,
     canActivate: [authGuard],
     children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'boards', component: BoardsComponent },
