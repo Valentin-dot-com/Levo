@@ -5,7 +5,7 @@ import { AuthService } from '../../services/authenticate';
   selector: 'app-home',
   imports: [],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss'],
+  styleUrl: './home.scss',
 })
 export class HomeComponent {
   private auth = inject(AuthService);
