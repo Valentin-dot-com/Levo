@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button'
   selector: 'app-auth',
   imports: [FormsModule, CommonModule, MatButtonModule],
   templateUrl: './auth.html',
-  styleUrls: ['./auth.scss'],
+  styleUrl: './auth.scss',
 })
 export class AuthComponent {
   private auth = inject(AuthService);
