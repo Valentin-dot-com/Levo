@@ -22,10 +22,26 @@ html {
 }
 
 body {
-
+  font-family: $font-primary;
   color-scheme: light;
   background-color: $color-white;
   color: $color-text;
   margin: 0;
   height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-primary;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: $font-primary;
 }
