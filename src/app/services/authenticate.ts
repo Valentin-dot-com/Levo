@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
 import { SupabaseService } from './supabase';
@@ -8,6 +9,7 @@ import { SupabaseService } from './supabase';
 })
 export class AuthService {
   private supabase = inject(SupabaseService);
+  private router = inject(Router);
 
   private _currentUser$ = new BehaviorSubject<User | null>(null);
   private _session$ = new BehaviorSubject<Session | null>(null);
@@ -62,29 +64,21 @@ export class AuthService {
     return this.supabase.supabaseClient.auth.signUp({ email, password });
   }
 
-  signOut() {
-    return this.supabase.supabaseClient.auth.signOut();
+  async signOut() {
+    const { error } = await this.supabase.supabaseClient.auth.signOut();
+    if (!error) {
+      this.router.navigate(['/auth']);
+    }
+    return { error };
   }
 
   async signInWithGoogle() {
-    // return this.supabase.supabaseClient.auth.signInWithOAuth({
-    //   provider: 'google',
-    //   options: {
-    //     redirectTo: `${window.location.origin}/auth/callback`,
-    //   },
-    // });
-
-    const { data, error } = await this.supabase.supabaseClient.auth.signInWithOAuth({
+    return this.supabase.supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-
-    console.log('OAuth data:', data);
-    console.log('OAuth error:', error);
-
-    return { data, error };
   }
 
   // Might include at a later time
