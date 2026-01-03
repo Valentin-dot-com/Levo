@@ -14,8 +14,14 @@ export class AppLayoutComponent implements OnInit {
   private calendarService = inject(CalendarService);
   private boardService = inject(BoardService);
 
-  ngOnInit() {
-    this.calendarService.fetchAll();
-    this.boardService.fetchUserBoards();
+  async ngOnInit(): Promise<void> {
+    try {
+      await Promise.all([
+        this.calendarService.fetchAll(),
+        this.boardService.fetchUserBoards(),
+      ]);
+    } catch (error) {
+      console.error('Failed to initialize app layout data', error);
+    }
   }
 }
