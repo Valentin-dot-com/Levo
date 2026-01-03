@@ -1,6 +1,8 @@
+import { UUID, Timestamptz } from "./primitives";
+
 export interface Profile {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  created_at?: string;
+  user_id: UUID;
+  first_name?: string | null;
+  last_name?: string | null;
+  created_at?: Timestamptz | null;
 }
