@@ -52,7 +52,7 @@ export class AuthService {
   getUserId(): UUID {
     const userId = this.currentUser?.id;
     if (!userId) {
-      throw new Error('User not authenticated');
+      throw new Error('Cannot retrieve user ID: User is not authenticated');
     }
     return userId;
   }
