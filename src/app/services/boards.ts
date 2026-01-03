@@ -10,36 +10,28 @@ import { AuthService } from './authenticate';
 })
 export class BoardService {
   private supabase = inject(SupabaseService);
-  private calendar = inject(CalendarService);
+  private calendarService = inject(CalendarService);
   private auth = inject(AuthService);
 
   private _boards = signal<Board[]>([]);
-  private _error = signal<string | null>(null);
 
   readonly boards = this._boards.asReadonly();
-  readonly error = this._error.asReadonly();
 
   async fetchUserBoards(): Promise<void> {
-    this._error.set(null);
+    const calendarIds = this.calendarService.calendarIds();
 
-    try {
-      const calendarIds = this.calendar.calendarIds();
-
-      if (calendarIds.length === 0) {
-        this._boards.set([]);
-        return;
-      }
-
-      const { data, error } = await this.supabase.supabaseClient
-        .from('boards')
-        .select('*')
-        .in('calendar_id', calendarIds);
-
-      if (error) throw error;
-      this._boards.set(data ?? []);
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to fetch boards');
+    if (calendarIds.length === 0) {
+      this._boards.set([]);
+      throw new Error('No calendar-memberships for current user. Could not fetch boards');
     }
+
+    const { data, error } = await this.supabase.supabaseClient
+      .from('boards')
+      .select('*')
+      .in('calendar_id', calendarIds);
+
+    if (error) throw error;
+    this._boards.set(data ?? []);
   }
 
   // Filter purposes
@@ -48,69 +40,50 @@ export class BoardService {
   }
 
   async createBoard(calendarId: UUID, title: string): Promise<Board | null> {
-    this._error.set(null);
+    const userId = this.auth.getUserId();
 
-    try {
-      const userId = this.auth.getUserId();
-
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
-
-      const { data, error } = await this.supabase.supabaseClient
-        .from('boards')
-        .insert({
-          calendar_id: calendarId,
-          owner_id: userId,
-          title,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      this._boards.update((boards) => [...boards, data]);
-      return data;
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to create board');
-      return null;
+    if (!userId) {
+      throw new Error(
+        'No user-ID for current user. User not authenticated, could not create board'
+      );
     }
+
+    const { data, error } = await this.supabase.supabaseClient
+      .from('boards')
+      .insert({
+        calendar_id: calendarId,
+        owner_id: userId,
+        title,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    this._boards.update((boards) => [...boards, data]);
+    return data;
   }
 
   async updateBoard(id: UUID, title: string): Promise<Board | null> {
-    this._error.set(null);
+    const { data, error } = await this.supabase.supabaseClient
+      .from('boards')
+      .update({ title })
+      .eq('id', id)
+      .select()
+      .single();
 
-    try {
-      const { data, error } = await this.supabase.supabaseClient
-        .from('boards')
-        .update({ title })
-        .eq('id', id)
-        .select()
-        .single();
+    if (error) throw error;
 
-      if (error) throw error;
-
-      this._boards.update((boards) => boards.map((board) => (board.id === id ? data : board)));
-      return data;
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to update board');
-      return null;
-    }
+    this._boards.update((boards) => boards.map((board) => (board.id === id ? data : board)));
+    return data;
   }
 
   async deleteBoard(id: UUID): Promise<boolean> {
-    this._error.set(null);
+    const { error } = await this.supabase.supabaseClient.from('boards').delete().eq('id', id);
 
-    try {
-      const { error } = await this.supabase.supabaseClient.from('boards').delete().eq('id', id);
+    if (error) throw error;
 
-      if (error) throw error;
-
-      this._boards.update((boards) => boards.filter((board) => board.id !== id));
-      return true;
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to delete board');
-      return false;
-    }
+    this._boards.update((boards) => boards.filter((board) => board.id !== id));
+    return true;
   }
 }

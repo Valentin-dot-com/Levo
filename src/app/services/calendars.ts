@@ -13,7 +13,6 @@ export class CalendarService {
   private auth = inject(AuthService);
 
   private _calendars = signal<Calendar[]>([]);
-  private _error = signal<string | null>(null);
   private _currentYear = signal<number>(new Date().getFullYear());
   private _currentMonth = signal<number>(new Date().getMonth());
   private _taskCache = signal<Map<string, Task[]>>(new Map());
@@ -21,7 +20,6 @@ export class CalendarService {
   private _pendingRequests = new Map<string, Promise<void>>();
 
   readonly calendars = this._calendars.asReadonly();
-  readonly error = this._error.asReadonly();
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
@@ -117,26 +115,19 @@ export class CalendarService {
   }
 
   async fetchUserCalendars(): Promise<void> {
-    this._error.set(null);
+    const calendarIds = this._calendarIds();
 
-    try {
-      const calendarIds = this._calendarIds();
-
-      if (calendarIds.length === 0) {
-        this._error.set('No calendar-memberships for current user, could not fetch any calendars');
-        return;
-      }
-
-      const { data, error } = await this.supabase.supabaseClient
-        .from('calendars')
-        .select('id, owner_id, name, is_shared, created_at')
-        .in('id', calendarIds);
-
-      if (error) throw error;
-      this._calendars.set(data ?? []);
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to fetch calendars');
+    if (calendarIds.length === 0) {
+      return;
     }
+
+    const { data, error } = await this.supabase.supabaseClient
+      .from('calendars')
+      .select('id, owner_id, name, is_shared, created_at')
+      .in('id', calendarIds);
+
+    if (error) throw error;
+    this._calendars.set(data ?? []);
   }
 
   async fetchTasksForMonth(year: number, month: number): Promise<void> {
@@ -153,8 +144,6 @@ export class CalendarService {
       return pendingRequest;
     }
 
-    this._error.set(null);
-
     const fetchPromise = (async () => {
       try {
         const { start, end } = this.getMonthRange(year, month);
@@ -162,10 +151,8 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          this._error.set(
-            'No calendar-memberships found for the current user. Could not fetch any tasks'
-          );
-          return;
+          this.updateCache(key, []);
+          throw new Error('No calendar-memberships for current user. Could not fetch tasks')
         }
 
         const { data, error } = await this.supabase.supabaseClient
@@ -177,8 +164,6 @@ export class CalendarService {
 
         if (error) throw error;
         this.updateCache(key, data ?? []);
-      } catch (err) {
-        this._error.set(err instanceof Error ? err.message : 'Failed to fetch tasks');
       } finally {
         this._pendingRequests.delete(key);
       }
