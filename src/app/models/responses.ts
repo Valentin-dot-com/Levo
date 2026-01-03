@@ -29,6 +29,8 @@ export interface BoardsResponse {
 }
 
 // DTOs for creating/updating
+// Properties marked with ? does not need to be set.
+// Properties marked as nullable can be null.
 
 export interface CreateCalendarInput {
   name: string;
