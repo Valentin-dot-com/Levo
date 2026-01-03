@@ -207,9 +207,7 @@ export class CalendarService {
 
   async fetchAll(): Promise<void> {
     const now = new Date();
-    await Promise.all([
-      this.fetchUserCalendars(),
-      this.goToMonth(now.getFullYear(), now.getMonth()),
-    ]);
+    await this.fetchUserCalendars();
+    await this.goToMonth(now.getFullYear(), now.getMonth());
   }
 }
