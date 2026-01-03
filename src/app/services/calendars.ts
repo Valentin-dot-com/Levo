@@ -127,6 +127,18 @@ export class CalendarService {
     });
   }
 
+  /**
+   * Clears outdated entries from the task cache, keeping only a limited
+   * number of recent months relative to the currently selected month.
+   *
+   * This method should be called periodically (for example, after navigating
+   * across months or as part of an application-level cleanup routine) to
+   * prevent unbounded growth of the in-memory task cache.
+   *
+   * @param keepMonths The number of consecutive months to retain in the cache,
+   *                   including the current month. Older months beyond this
+   *                   window are removed. The default is 6.
+   */
   clearOldCache(keepMonths = 6): void {
     const currentYear = this._currentYear();
     const currentMonth = this._currentMonth();
