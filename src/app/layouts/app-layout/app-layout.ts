@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CalendarService } from '../../services/calendars';
+import { BoardService } from '../../services/boards';
 
 @Component({
   selector: 'app-layout',
@@ -11,8 +12,10 @@ import { CalendarService } from '../../services/calendars';
 })
 export class AppLayoutComponent implements OnInit {
   private calendarService = inject(CalendarService);
+  private boardService = inject(BoardService);
 
   ngOnInit() {
     this.calendarService.fetchAll();
+    this.boardService.fetchUserBoards();
   }
 }

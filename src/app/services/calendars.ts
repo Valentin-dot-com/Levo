@@ -193,8 +193,8 @@ export class CalendarService {
         .from('tasks')
         .select('*')
         .in('calendar_id', calendarIds)
-        .gte('scheduled_at', start)
-        .lte('scheduled_at', end);
+        .gte('date', start)
+        .lte('date', end);
 
       if (error) throw error;
       this.updateCache(key, data ?? []);
