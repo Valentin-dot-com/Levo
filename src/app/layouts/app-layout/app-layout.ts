@@ -18,8 +18,8 @@ export class AppLayoutComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      this.calendarService.fetchAll();
-      this.boardService.fetchUserBoards();
+      await this.calendarService.fetchAll();
+      await this.boardService.fetchUserBoards();
     } catch (error) {
       console.error('Failed to initialize app data:', error);
       this.initError.set('Failed to load your data. Please refresh the page.');

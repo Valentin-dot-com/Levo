@@ -14,15 +14,12 @@ export class BoardService {
   private auth = inject(AuthService);
 
   private _boards = signal<Board[]>([]);
-  private _loading = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
   readonly boards = this._boards.asReadonly();
-  readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
 
   async fetchUserBoards(): Promise<void> {
-    this._loading.set(true);
     this._error.set(null);
 
     try {
@@ -42,8 +39,6 @@ export class BoardService {
       this._boards.set(data ?? []);
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to fetch boards');
-    } finally {
-      this._loading.set(false);
     }
   }
 
@@ -53,7 +48,6 @@ export class BoardService {
   }
 
   async createBoard(calendarId: UUID, title: string): Promise<Board | null> {
-    this._loading.set(true);
     this._error.set(null);
 
     try {
@@ -80,13 +74,10 @@ export class BoardService {
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to create board');
       return null;
-    } finally {
-      this._loading.set(false);
     }
   }
 
   async updateBoard(id: UUID, title: string): Promise<Board | null> {
-    this._loading.set(true);
     this._error.set(null);
 
     try {
@@ -104,13 +95,10 @@ export class BoardService {
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to update board');
       return null;
-    } finally {
-      this._loading.set(false);
     }
   }
 
   async deleteBoard(id: UUID): Promise<boolean> {
-    this._loading.set(true);
     this._error.set(null);
 
     try {
@@ -123,8 +111,6 @@ export class BoardService {
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to delete board');
       return false;
-    } finally {
-      this._loading.set(false);
     }
   }
 }
