@@ -2,12 +2,16 @@ import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Board } from '../models/board';
 import { UUID } from '../models/primitives';
+import { CalendarService } from './calendars';
+import { AuthService } from './authenticate';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardService {
   private supabase = inject(SupabaseService);
+  private calendar = inject(CalendarService);
+  private auth = inject(AuthService);
 
   private _boards = signal<Board[]>([]);
   private _loading = signal<boolean>(false);
@@ -22,14 +26,7 @@ export class BoardService {
     this._error.set(null);
 
     try {
-      const userId = (await this.supabase.supabaseClient.auth.getUser()).data?.user?.id;
-
-      const { data: memberships } = await this.supabase.supabaseClient
-        .from('calendar_memberships')
-        .select('calendar_id')
-        .eq('user_id', userId);
-
-      const calendarIds: UUID[] = (memberships ?? []).map((m) => m.calendar_id);
+      const calendarIds = await this.calendar.getUserCalendarIds();
 
       if (calendarIds.length === 0) {
         this._boards.set([]);
@@ -60,7 +57,11 @@ export class BoardService {
     this._error.set(null);
 
     try {
-      const userId = (await this.supabase.supabaseClient.auth.getUser()).data?.user?.id;
+      const userId = this.auth.getUserId();
+
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
 
       const { data, error } = await this.supabase.supabaseClient
         .from('boards')
@@ -117,7 +118,6 @@ export class BoardService {
 
       if (error) throw error;
 
-      // Remove from local state
       this._boards.update((boards) => boards.filter((board) => board.id !== id));
       return true;
     } catch (err) {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
 import { SupabaseService } from './supabase';
+import { UUID } from '../models/primitives';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,7 @@ export class AuthService {
 
     this._session$.next(data.session);
     this._currentUser$.next(data.session?.user ?? null);
+
     this._isLoading$.next(false);
 
     this.supabase.supabaseClient.auth.onAuthStateChange((_event, session) => {
@@ -46,6 +48,14 @@ export class AuthService {
   get isAuthenticated(): boolean {
     return this._currentUser$.getValue() !== null;
   }
+
+  getUserId(): UUID {
+      const userId = this.currentUser?.id;
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+      return userId;
+    }
 
   async getSession() {
     const { data } = await this.supabase.supabaseClient.auth.getSession();

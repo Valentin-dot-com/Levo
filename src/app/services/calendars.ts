@@ -4,22 +4,22 @@ import { Calendar } from '../models/calendar';
 import { Task } from '../models/task';
 import { CalendarWithTasks } from '../models/responses';
 import { UUID } from '../models/primitives';
+import { AuthService } from './authenticate';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
   private supabase = inject(SupabaseService);
+  private auth = inject(AuthService);
 
   private _calendars = signal<Calendar[]>([]);
   private _loading = signal<boolean>(false);
   private _error = signal<string | null>(null);
 
-  // Current view position
   private _currentYear = signal<number>(new Date().getFullYear());
   private _currentMonth = signal<number>(new Date().getMonth());
 
-  // Cache: "2026-0" -> Task[]
   private _taskCache = signal<Map<string, Task[]>>(new Map());
 
   readonly calendars = this._calendars.asReadonly();
@@ -28,7 +28,6 @@ export class CalendarService {
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
 
-  // Get tasks for current month from cache
   readonly tasks = computed<Task[]>(() => {
     const key = this.getMonthKey(this._currentYear(), this._currentMonth());
     return this._taskCache().get(key) ?? [];
@@ -56,14 +55,25 @@ export class CalendarService {
     return { start: start.toISOString(), end: end.toISOString() };
   }
 
-  // Navigate to a specific month
+  async getUserCalendarIds(): Promise<UUID[]> {
+    const userId = this.auth.getUserId();
+
+    const { data: memberships, error } = await this.supabase.supabaseClient
+      .from('calendar_memberships')
+      .select('calendar_id')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+
+    return (memberships ?? []).map((m) => m.calendar_id);
+  }
+
   async goToMonth(year: number, month: number): Promise<void> {
     this._currentYear.set(year);
     this._currentMonth.set(month);
 
     await this.fetchTasksForMonth(year, month);
 
-    // Prefetch adjacent months in background (don't await)
     this.prefetchAdjacentMonths(year, month);
   }
 
@@ -117,14 +127,27 @@ export class CalendarService {
     });
   }
 
-  // Optional: Clear old cached months to save memory
   clearOldCache(keepMonths = 6): void {
-    const currentKey = this.getMonthKey(this._currentYear(), this._currentMonth());
+    const currentYear = this._currentYear();
+    const currentMonth = this._currentMonth();
+
+    const keysToKeep = new Set<string>();
+    for (let i = 0; i < keepMonths; i++) {
+      const date = new Date(currentYear, currentMonth - i, 1);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      keysToKeep.add(this.getMonthKey(year, month));
+    }
+
     this._taskCache.update((cache) => {
       if (cache.size <= keepMonths) return cache;
 
       const newCache = new Map<string, Task[]>();
-      newCache.set(currentKey, cache.get(currentKey) ?? []);
+      for (const [key, tasks] of cache.entries()) {
+        if (keysToKeep.has(key)) {
+          newCache.set(key, tasks);
+        }
+      }
       return newCache;
     });
   }
@@ -134,20 +157,11 @@ export class CalendarService {
     this._error.set(null);
 
     try {
-      const userId = (await this.supabase.supabaseClient.auth.getUser()).data?.user?.id;
-
-      const { data: memberships } = await this.supabase.supabaseClient
-        .from('calendar_memberships')
-        .select('calendar_id')
-        .eq('user_id', userId);
-
-      const calendarIds = memberships?.map((m) => m.calendar_id) ?? [];
+      const calendarIds = await this.getUserCalendarIds();
 
       const { data, error } = await this.supabase.supabaseClient
         .from('calendars')
-        .select('id, owner_id, name, is_shared, created_at', {
-          count: 'exact',
-        })
+        .select('id, owner_id, name, is_shared, created_at')
         .in('id', calendarIds);
 
       if (error) throw error;
@@ -173,18 +187,10 @@ export class CalendarService {
     try {
       const { start, end } = this.getMonthRange(year, month);
 
-      const userId = (await this.supabase.supabaseClient.auth.getUser()).data?.user?.id;
-
-      const { data: memberships, error: membershipError } = await this.supabase.supabaseClient
-        .from('calendar_memberships')
-        .select('calendar_id')
-        .eq('user_id', userId);
-
-      if (membershipError) throw membershipError;
-
-      const calendarIds: UUID[] = (memberships ?? []).map((m) => m.calendar_id);
+      const calendarIds = await this.getUserCalendarIds();
 
       if (calendarIds.length === 0) {
+        this._error.set('No calendars found for the current user.');
         this.updateCache(key, []);
         return;
       }
