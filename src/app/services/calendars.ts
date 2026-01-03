@@ -18,6 +18,7 @@ export class CalendarService {
   private _currentMonth = signal<number>(new Date().getMonth());
   private _taskCache = signal<Map<string, Task[]>>(new Map());
   private _calendarIds = signal<UUID[]>([]);
+  private _pendingRequests = new Map<string, Promise<void>>();
 
   readonly calendars = this._calendars.asReadonly();
   readonly error = this._error.asReadonly();
@@ -96,11 +97,13 @@ export class CalendarService {
     const nextMonth = month === 11 ? 0 : month + 1;
     const nextYear = month === 11 ? year + 1 : year;
 
-    // Fetch if not cached (fire and forget)
-    if (!this._taskCache().has(this.getMonthKey(prevYear, prevMonth))) {
+    const prevKey = this.getMonthKey(prevYear, prevMonth);
+    if (!this._taskCache().has(prevKey) && !this._pendingRequests.has(prevKey)) {
       this.fetchTasksForMonth(prevYear, prevMonth);
     }
-    if (!this._taskCache().has(this.getMonthKey(nextYear, nextMonth))) {
+
+    const nextKey = this.getMonthKey(nextYear, nextMonth);
+    if (!this._taskCache().has(nextKey) && !this._pendingRequests.has(nextKey)) {
       this.fetchTasksForMonth(nextYear, nextMonth);
     }
   }
@@ -144,32 +147,45 @@ export class CalendarService {
       return;
     }
 
+    // If there's already a pending request for this month, wait for it
+    const pendingRequest = this._pendingRequests.get(key);
+    if (pendingRequest) {
+      return pendingRequest;
+    }
+
     this._error.set(null);
 
-    try {
-      const { start, end } = this.getMonthRange(year, month);
+    const fetchPromise = (async () => {
+      try {
+        const { start, end } = this.getMonthRange(year, month);
 
-      const calendarIds = this._calendarIds();
+        const calendarIds = this._calendarIds();
 
-      if (calendarIds.length === 0) {
-        this._error.set(
-          'No calendar-memberships found for the current user. Could not fetch any tasks'
-        );
-        return;
+        if (calendarIds.length === 0) {
+          this._error.set(
+            'No calendar-memberships found for the current user. Could not fetch any tasks'
+          );
+          return;
+        }
+
+        const { data, error } = await this.supabase.supabaseClient
+          .from('tasks')
+          .select('*')
+          .in('calendar_id', calendarIds)
+          .gte('date', start)
+          .lte('date', end);
+
+        if (error) throw error;
+        this.updateCache(key, data ?? []);
+      } catch (err) {
+        this._error.set(err instanceof Error ? err.message : 'Failed to fetch tasks');
+      } finally {
+        this._pendingRequests.delete(key);
       }
+    })();
 
-      const { data, error } = await this.supabase.supabaseClient
-        .from('tasks')
-        .select('*')
-        .in('calendar_id', calendarIds)
-        .gte('date', start)
-        .lte('date', end);
-
-      if (error) throw error;
-      this.updateCache(key, data ?? []);
-    } catch (err) {
-      this._error.set(err instanceof Error ? err.message : 'Failed to fetch tasks');
-    }
+    this._pendingRequests.set(key, fetchPromise);
+    return fetchPromise;
   }
 
   async fetchAll(): Promise<void> {

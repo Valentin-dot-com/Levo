@@ -19,6 +19,9 @@
     </ul>
   </nav>
   <main class="content">
+    @if (initError()) {
+    <div class="error-banner">{{ initError() }}</div>
+    }
     <router-outlet />
   </main>
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
@@ -14,25 +14,15 @@ export class AppLayoutComponent implements OnInit {
   private calendarService = inject(CalendarService);
   private boardService = inject(BoardService);
 
-  public initializationError: unknown = null;
-  public initializationErrorMessage = '';
+  initError = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
     try {
-      await Promise.all([
-        this.calendarService.fetchAll(),
-        this.boardService.fetchUserBoards(),
-      ]);
-      // Clear any previous initialization error on successful load
-      this.initializationError = null;
-      this.initializationErrorMessage = '';
+      this.calendarService.fetchAll();
+      this.boardService.fetchUserBoards();
     } catch (error) {
-      this.initializationError = error;
-      this.initializationErrorMessage =
-        'Failed to load initial application data. Some features may not be available.';
-      console.error('Failed to initialize app layout data', error);
-      // Provide immediate feedback to the user that initialization failed
-      window.alert(this.initializationErrorMessage);
+      console.error('Failed to initialize app data:', error);
+      this.initError.set('Failed to load your data. Please refresh the page.');
     }
   }
 }
