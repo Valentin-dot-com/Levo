@@ -1,3 +1,10 @@
 <h1>Levo</h1>
 
+<div>Your calendars:</div>
+<ul>
+  @for (cal of calendars(); track cal.id) {
+    <li>{{ cal.name }}</li>
+  }
+</ul>
+
 <button (click)="signOut()">Logga ut</button>

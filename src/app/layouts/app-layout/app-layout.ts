@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { CalendarService } from '../../services/calendars';
 
 @Component({
   selector: 'app-layout',
@@ -8,4 +9,10 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './app-layout.html',
   styleUrl: './app-layout.scss',
 })
-export class AppLayoutComponent {}
+export class AppLayoutComponent implements OnInit {
+  private calendarService = inject(CalendarService);
+
+  ngOnInit() {
+    this.calendarService.fetchAll();
+  }
+}

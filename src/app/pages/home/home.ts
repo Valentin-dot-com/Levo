@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
+import { CalendarService } from '../../services/calendars';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,9 @@ import { AuthService } from '../../services/authenticate';
 })
 export class HomeComponent {
   private auth = inject(AuthService);
+  private calendarService = inject(CalendarService);
+
+  calendars = this.calendarService.calendars;
 
   signOut() {
     this.auth.signOut();
