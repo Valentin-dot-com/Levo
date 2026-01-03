@@ -1,3 +1,22 @@
 <h1>Levo</h1>
 
+<div>Your calendars:</div>
+<ul>
+  @for (calendar of calendars(); track calendar.id) {
+    <li>{{ calendar.name }}</li>
+  }
+</ul>
+Tasks:
+<ul>
+  @for (task of tasks(); track task.id) {
+    <li>{{ task.title }}</li>
+  }
+</ul>
+Boards:
+<ul>
+  @for (board of boards(); track board.id) {
+    <li>{{ board.title }}</li>
+  }
+</ul>
+
 <button (click)="signOut()">Logga ut</button>
