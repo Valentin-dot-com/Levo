@@ -2,7 +2,6 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Calendar } from '../models/calendar';
 import { Task } from '../models/task';
-import { CalendarWithTasks } from '../models/responses';
 import { UUID } from '../models/primitives';
 import { AuthService } from './authenticate';
 
@@ -14,34 +13,21 @@ export class CalendarService {
   private auth = inject(AuthService);
 
   private _calendars = signal<Calendar[]>([]);
-  private _loading = signal<boolean>(false);
   private _error = signal<string | null>(null);
-
   private _currentYear = signal<number>(new Date().getFullYear());
   private _currentMonth = signal<number>(new Date().getMonth());
-
   private _taskCache = signal<Map<string, Task[]>>(new Map());
+  private _calendarIds = signal<UUID[]>([]);
 
   readonly calendars = this._calendars.asReadonly();
-  readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
+  readonly calendarIds = this._calendarIds.asReadonly();
 
   readonly tasks = computed<Task[]>(() => {
     const key = this.getMonthKey(this._currentYear(), this._currentMonth());
     return this._taskCache().get(key) ?? [];
-  });
-
-  // For filtering purposes
-  readonly calendarsWithTasks = computed<CalendarWithTasks[]>(() => {
-    const calendars = this._calendars();
-    const tasks = this.tasks();
-
-    return calendars.map((calendar) => ({
-      ...calendar,
-      tasks: tasks.filter((task) => task.calendar_id === calendar.id),
-    }));
   });
 
   private getMonthKey(year: number, month: number): string {
@@ -55,7 +41,7 @@ export class CalendarService {
     return { start: start.toISOString(), end: end.toISOString() };
   }
 
-  async getUserCalendarIds(): Promise<UUID[]> {
+  async fetchUserCalendarIds(): Promise<void> {
     const userId = this.auth.getUserId();
 
     const { data: memberships, error } = await this.supabase.supabaseClient
@@ -65,7 +51,7 @@ export class CalendarService {
 
     if (error) throw error;
 
-    return (memberships ?? []).map((m) => m.calendar_id);
+    this._calendarIds.set((memberships ?? []).map((m) => m.calendar_id));
   }
 
   async goToMonth(year: number, month: number): Promise<void> {
@@ -127,37 +113,16 @@ export class CalendarService {
     });
   }
 
-  clearOldCache(keepMonths = 6): void {
-    const currentYear = this._currentYear();
-    const currentMonth = this._currentMonth();
-
-    const keysToKeep = new Set<string>();
-    for (let i = 0; i < keepMonths; i++) {
-      const date = new Date(currentYear, currentMonth - i, 1);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      keysToKeep.add(this.getMonthKey(year, month));
-    }
-
-    this._taskCache.update((cache) => {
-      if (cache.size <= keepMonths) return cache;
-
-      const newCache = new Map<string, Task[]>();
-      for (const [key, tasks] of cache.entries()) {
-        if (keysToKeep.has(key)) {
-          newCache.set(key, tasks);
-        }
-      }
-      return newCache;
-    });
-  }
-
   async fetchUserCalendars(): Promise<void> {
-    this._loading.set(true);
     this._error.set(null);
 
     try {
-      const calendarIds = await this.getUserCalendarIds();
+      const calendarIds = this._calendarIds();
+
+      if (calendarIds.length === 0) {
+        this._error.set('No calendar-memberships for current user, could not fetch any calendars');
+        return;
+      }
 
       const { data, error } = await this.supabase.supabaseClient
         .from('calendars')
@@ -168,8 +133,6 @@ export class CalendarService {
       this._calendars.set(data ?? []);
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to fetch calendars');
-    } finally {
-      this._loading.set(false);
     }
   }
 
@@ -181,17 +144,17 @@ export class CalendarService {
       return;
     }
 
-    this._loading.set(true);
     this._error.set(null);
 
     try {
       const { start, end } = this.getMonthRange(year, month);
 
-      const calendarIds = await this.getUserCalendarIds();
+      const calendarIds = this._calendarIds();
 
       if (calendarIds.length === 0) {
-        this._error.set('No calendars found for the current user.');
-        this.updateCache(key, []);
+        this._error.set(
+          'No calendar-memberships found for the current user. Could not fetch any tasks'
+        );
         return;
       }
 
@@ -206,13 +169,12 @@ export class CalendarService {
       this.updateCache(key, data ?? []);
     } catch (err) {
       this._error.set(err instanceof Error ? err.message : 'Failed to fetch tasks');
-    } finally {
-      this._loading.set(false);
     }
   }
 
   async fetchAll(): Promise<void> {
     const now = new Date();
+    await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
     await this.goToMonth(now.getFullYear(), now.getMonth());
   }

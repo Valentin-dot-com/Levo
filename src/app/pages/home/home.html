@@ -2,8 +2,8 @@
 
 <div>Your calendars:</div>
 <ul>
-  @for (cal of calendars(); track cal.id) {
-    <li>{{ cal.name }}</li>
+  @for (calendar of calendars(); track calendar.id) {
+    <li>{{ calendar.name }}</li>
   }
 </ul>
 Tasks:

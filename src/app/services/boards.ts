@@ -26,7 +26,7 @@ export class BoardService {
     this._error.set(null);
 
     try {
-      const calendarIds = await this.calendar.getUserCalendarIds();
+      const calendarIds = this.calendar.calendarIds();
 
       if (calendarIds.length === 0) {
         this._boards.set([]);

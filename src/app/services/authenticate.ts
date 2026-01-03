@@ -50,12 +50,12 @@ export class AuthService {
   }
 
   getUserId(): UUID {
-      const userId = this.currentUser?.id;
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
-      return userId;
+    const userId = this.currentUser?.id;
+    if (!userId) {
+      throw new Error('User not authenticated');
     }
+    return userId;
+  }
 
   async getSession() {
     const { data } = await this.supabase.supabaseClient.auth.getSession();
