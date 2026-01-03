@@ -151,8 +151,7 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          this.updateCache(key, []);
-          throw new Error('No calendar-memberships for current user. Could not fetch tasks')
+          throw new Error('No calendar memberships for current user. Could not fetch tasks')
         }
 
         const { data, error } = await this.supabase.supabaseClient
@@ -173,7 +172,7 @@ export class CalendarService {
     return fetchPromise;
   }
 
-  async fetchAll(): Promise<void> {
+  async initCalendarData(): Promise<void> {
     const now = new Date();
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();

@@ -21,8 +21,7 @@ export class BoardService {
     const calendarIds = this.calendarService.calendarIds();
 
     if (calendarIds.length === 0) {
-      this._boards.set([]);
-      throw new Error('No calendar-memberships for current user. Could not fetch boards');
+      throw new Error('No calendar memberships for current user. Could not fetch boards');
     }
 
     const { data, error } = await this.supabase.supabaseClient
@@ -44,7 +43,7 @@ export class BoardService {
 
     if (!userId) {
       throw new Error(
-        'No user-ID for current user. User not authenticated, could not create board'
+        'No user ID for current user. User not authenticated, could not create board'
       );
     }
 
