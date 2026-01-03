@@ -14,7 +14,6 @@ export class HomeComponent {
   private calendarService = inject(CalendarService);
   private boardService = inject(BoardService);
 
-
   calendars = this.calendarService.calendars;
   tasks = this.calendarService.tasks;
   boards = this.boardService.boards;
