@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-boards',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './boards.html',
   styleUrl: './boards.scss',
 })
