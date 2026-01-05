@@ -1,6 +1,6 @@
 // responses.ts
 import { Board } from './board';
-import { Calendar } from './calendar';
+import { Calendar } from './calendar.model';
 import { CalendarMembership } from './calendarMembership';
 import { UUID, DateOnly, Timestamptz } from './primitives';
 import { Task, TaskStatus } from './task';

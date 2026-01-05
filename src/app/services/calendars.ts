@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Calendar } from '../models/calendar';
+import { Calendar } from '../models/calendar.model';
 import { Task } from '../models/task';
 import { UUID } from '../models/primitives';
 import { AuthService } from './authenticate';
@@ -51,6 +51,11 @@ export class CalendarService {
     if (error) throw error;
 
     this._calendarIds.set((memberships ?? []).map((m) => m.calendar_id));
+  }
+
+  public getCachedTasksForMonth(year: number, month: number): Task[] {
+    const key = this.getMonthKey(year, month);
+    return this._taskCache().get(key) ?? [];
   }
 
   async goToMonth(year: number, month: number): Promise<void> {

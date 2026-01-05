@@ -1,0 +1,28 @@
+<h2>{{ `${currentMonth()} ${currentYear()}` }}</h2>
+<button (click)="scrollToToday()">Today</button>
+
+<cdk-virtual-scroll-viewport itemSize="200" class="weekly-viewport" minBufferPx="800" maxBufferPx="1200">
+  <div *cdkVirtualFor="let row of rowsComputed(); let i = index; trackBy: trackByIndex" class="week-row">
+    <section class="month">
+      @switch (row.type) {
+        @case ('month') {
+          <h2>{{ row.label }}</h2>
+        }
+        @case ('week') {
+          <article class="week">
+            <h3>{{ `w. ${row.week.weekNumber}` }}</h3>
+            @for (day of row.week.days; track day.date) {
+              <div class="week-day">
+                <h4>{{ day.dayNumber }}</h4>
+              </div>
+              @let tasks = tasksForDate(day.date);
+              @for (task of tasks; track task.id) {
+                <p>{{ task.title }}</p>
+              }
+            }
+          </article>
+        }
+      }
+    </section>
+  </div>
+</cdk-virtual-scroll-viewport>

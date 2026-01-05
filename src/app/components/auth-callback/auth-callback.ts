@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
-import { filter, take, timeout } from 'rxjs';
+import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'app-auth-callback',
@@ -17,8 +17,7 @@ export class AuthCallbackComponent {
     this.auth.session$
       .pipe(
         filter((session) => !!session),
-        take(1),
-        timeout(1000)
+        take(1)
       )
       .subscribe({
         next: () => this.router.navigate(['/home']),
