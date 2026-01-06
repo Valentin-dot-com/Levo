@@ -1,0 +1,39 @@
+@use '../../styles/variables.scss' as *;
+
+// LOADING ANIMATION from https://css-loaders.com
+.loader {
+  width:28px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: $color-success;
+  animation: l9 2s infinite;
+}
+@keyframes l9 {
+  0%   {box-shadow:
+          0 -16px $color-primary, calc(16px*0.707) calc(-16px*0.707) $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent}
+  12.5%   {box-shadow:
+          0 0 $color-primary, calc(16px*0.707) calc(-16px*0.707) $color-accent,16px 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent}
+  25%   {box-shadow:
+          0 0 $color-primary, 0 0 $color-accent,16px 0 $color-primary, calc(16px*0.707) calc(16px*0.707) $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent}
+  37.5% {box-shadow:
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, calc(16px*0.707) calc(16px*0.707) $color-accent,
+          0 16px $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent}
+  50%   {box-shadow:
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 16px $color-primary, calc(-16px*0.707) calc(16px*0.707) $color-accent,0 0 $color-primary, 0 0 $color-accent}
+  62.5% {box-shadow:
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, calc(-16px*0.707) calc(16px*0.707) $color-accent,-16px 0 $color-primary, 0 0 $color-accent}
+  75%   {box-shadow:
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,-16px 0 $color-primary, calc(-16px*0.707) calc(-16px*0.707) $color-accent}
+  87.5% {box-shadow:
+          0 -16px $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, calc(-16px*0.707) calc(-16px*0.707) $color-accent}
+  100% {box-shadow:
+          0 -16px $color-primary, calc(16px*0.707) calc(-16px*0.707) $color-accent,0 0 $color-primary, 0 0 $color-accent,
+          0 0 $color-primary, 0 0 $color-accent,0 0 $color-primary, 0 0 $color-accent}
+}

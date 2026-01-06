@@ -14,10 +14,11 @@ import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
 import { CommonModule } from '@angular/common';
 import { CalendarMonth } from '../../../models/calendar.model';
+import { LoaderComponent } from '../../loader/loader';
 
 @Component({
   selector: 'app-weekly-calendar',
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
@@ -29,7 +30,7 @@ export class WeeklyCalendarComponent {
   @Output() nearTop = new EventEmitter<void>();
   @Output() nearBottom = new EventEmitter<void>();
 
-  private readonly THRESHOLD = 300;
+  private readonly THRESHOLD = 500;
   private isEmittingTop = false;
   private isEmittingBottom = false;
 

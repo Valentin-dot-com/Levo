@@ -1,3 +1,7 @@
+<div class="loading-overlay" [class.visible]="loading()">
+  <app-loader />
+</div>
+
 <section class="weekly-calendar">
 
   <h2>{{ `${currentMonth()} ${currentYear()}` }}</h2>
