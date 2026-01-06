@@ -1,94 +1,108 @@
-import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import {
   Component,
-  // AfterViewInit,
-  ViewChild,
   Input,
   Signal,
   inject,
-  computed,
-  effect,
   signal,
+  Output,
+  EventEmitter,
+  computed,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
-import { format, isWithinInterval } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
-import { CalendarService } from '../../../services/calendars';
 import { CommonModule } from '@angular/common';
-import { WeeklyRow } from '../../../pages/calendar/calendar';
+import { CalendarMonth } from '../../../models/calendar.model';
 
 @Component({
   selector: 'app-weekly-calendar',
-  imports: [CommonModule, ScrollingModule],
+  imports: [CommonModule],
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
 export class WeeklyCalendarComponent {
   private calendarView = inject(CalendarViewService);
-  private calendarService = inject(CalendarService);
 
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport!: CdkVirtualScrollViewport;
+  @Input({ required: true }) monthsToRender!: Signal<CalendarMonth[]>;
 
-  @Input({ required: true }) weeksToRender!: Signal<WeeklyRow[]>;
-  readonly rowsComputed = computed(() => this.weeksToRender());
+  @Output() nearTop = new EventEmitter<void>();
+  @Output() nearBottom = new EventEmitter<void>();
 
-  // readonly weeks = computed(() => this.allWeeks);
-  readonly weeks = computed(() => this.weeksToRender());
+  private readonly THRESHOLD = 300;
+  private isEmittingTop = false;
+  private isEmittingBottom = false;
+
   readonly currentMonth = this.calendarView.monthName;
-  readonly currentYear = this.calendarService.currentYear;
+  readonly currentYear = this.calendarView.currentYear;
   readonly loading = signal(true);
+  readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
 
-  constructor() {
-    effect(() => {
-      const rows = this.rowsComputed();
+  @ViewChild('scrollContainer', { static: true })
+  container!: ElementRef<HTMLElement>;
 
-      if (!rows.length || !this.viewport || this.hasInitialScroll) return;
+  @ViewChild('todayAnchor')
+  set todayAnchor(el: ElementRef<HTMLElement> | undefined) {
+    if (!el || this.hasInitialScroll) return;
 
-      requestAnimationFrame(() => this.scrollToToday());
+    const weekEl = el.nativeElement.closest('.week');
+
+    if (!weekEl) return;
+
+    weekEl.scrollIntoView({
+      block: 'start',
+      behavior: 'auto', // instant on initial load
     });
+
+    this.loading.set(false);
+    this.hasInitialScroll = true;
   }
-
-  // ngAfterViewInit() {
-
-  //   // prefetch around the visible window on scroll
-  //   // this.viewport.scrolledIndexChange.subscribe((index) => {
-  //   //   this.prefetchAround(index);
-  //   // });
-  // }
 
   tasksForDate(date: Date) {
     const iso = format(date, 'yyyy-MM-dd');
     return this.calendarView.tasks().filter((t) => t.date === iso) ?? [];
   }
 
-  scrollToToday() {
-    const today = new Date();
+  onScroll() {
+    if (!this.hasInitialScroll) return;
 
-    const index = this.rowsComputed().findIndex(
-      (row) =>
-        row.type === 'week' && isWithinInterval(today, { start: row.week.start, end: row.week.end })
-    );
+    const el = this.container.nativeElement;
 
-    if (index < 0 || !this.viewport) return;
+    const top = el.scrollTop;
+    const bottom = el.scrollHeight - el.scrollTop - el.clientHeight;
 
-    if (!this.hasInitialScroll) {
-      this.viewport.scrollToIndex(index, 'auto');
-      this.hasInitialScroll = true;
+    if (top < this.THRESHOLD && !this.isEmittingTop) {
+      this.isEmittingTop = true;
+      this.nearTop.emit();
 
-      requestAnimationFrame(() => {
-        this.loading.set(false);
-      })
-    } else {
-      this.viewport.scrollToIndex(index, 'smooth');
+      setTimeout(() => (this.isEmittingTop = false), 500);
+    }
+
+    if (bottom < this.THRESHOLD && !this.isEmittingBottom) {
+      this.isEmittingBottom = true;
+      this.nearBottom.emit();
+
+      setTimeout(() => (this.isEmittingBottom = false), 500);
     }
   }
 
-  // simple index trackBy
-  trackByIndex = (i: number) => i;
+  scrollToToday() {
+    const el = this.container.nativeElement.querySelector('[data-today]');
 
-  // expose weekday names (Mon..Sun)
+    if (!el) return;
+
+    const weekEl = el.closest('.week');
+
+    if (!weekEl) return;
+
+    weekEl.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
+    });
+  }
+
   get weekDayNames() {
     return this.calendarView.weekDays;
   }

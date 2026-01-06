@@ -1,2 +1,2 @@
 <!-- <app-monthly-calendar [monthsToRender]="monthsToRender()"/> -->
-<app-weekly-calendar [weeksToRender]="weeksToRender"/>
+<app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />

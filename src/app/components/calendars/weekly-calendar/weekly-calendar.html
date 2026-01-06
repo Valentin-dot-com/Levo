@@ -1,28 +1,40 @@
-<h2>{{ `${currentMonth()} ${currentYear()}` }}</h2>
-<button (click)="scrollToToday()">Today</button>
+<section class="weekly-calendar">
 
-<cdk-virtual-scroll-viewport itemSize="200" class="weekly-viewport" minBufferPx="800" maxBufferPx="1200">
-  <div *cdkVirtualFor="let row of rowsComputed(); let i = index; trackBy: trackByIndex" class="week-row">
+  <h2>{{ `${currentMonth()} ${currentYear()}` }}</h2>
+  <button (click)="scrollToToday()">Today</button>
+
+  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">
+    @for (month of monthsToRender(); track month.id) {
     <section class="month">
-      @switch (row.type) {
-        @case ('month') {
-          <h2>{{ row.label }}</h2>
-        }
-        @case ('week') {
-          <article class="week">
-            <h3>{{ `w. ${row.week.weekNumber}` }}</h3>
-            @for (day of row.week.days; track day.date) {
-              <div class="week-day">
-                <h4>{{ day.dayNumber }}</h4>
-              </div>
-              @let tasks = tasksForDate(day.date);
-              @for (task of tasks; track task.id) {
-                <p>{{ task.title }}</p>
-              }
-            }
-          </article>
-        }
+      <h2>{{ month.name }}</h2>
+
+      @for (week of month.weeks; track week.weekNumber) {
+      <article class="week">
+        <h3>w. {{ week.weekNumber }}</h3>
+
+        <div class="week-days">
+          @for (day of week.days; track day.date) {
+          @if (day.isToday) {
+          <div #todayAnchor class="day today" data-today>
+            <p>{{ day.dayNumber }}</p>
+            <p>{{ day.inMonth }}</p>
+          </div>
+          } @else {
+          <div class="day">
+            <p>{{ day.dayNumber }}</p>
+            <p>{{ day.inMonth }}</p>
+          </div>
+          }
+          @let tasks = tasksForDate(day.date);
+          @for (task of tasks; track task.id) {
+          <p>{{ task.title }}</p>
+          }
+          }
+        </div>
+      </article>
       }
     </section>
+    }
   </div>
-</cdk-virtual-scroll-viewport>
+
+</section>

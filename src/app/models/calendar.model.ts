@@ -20,6 +20,7 @@ export interface CalendarWeek {
   start: Date;
   end: Date;
   weekNumber: number;
+  year: number;
   monthKey: string;
   monthLabel: string;
   days: CalendarDay[];
