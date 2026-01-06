@@ -8,10 +8,11 @@ import {
 import { CalendarMonth } from '../../models/calendar.model';
 import { WeeklyCalendarComponent } from '../../components/calendars/weekly-calendar/weekly-calendar';
 import { CalendarService } from '../../services/calendars';
+import { MonthlyCalendarComponent } from '../../components/calendars/monthly-calendar/monthly-calendar';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, WeeklyCalendarComponent],
+  imports: [CommonModule, WeeklyCalendarComponent, MonthlyCalendarComponent],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })
