@@ -52,9 +52,16 @@ export class WeeklyCalendarComponent {
 
     if (!weekEl) return;
 
-    weekEl.scrollIntoView({
-      block: 'start',
-      behavior: 'auto', // instant on initial load
+    const container = this.container.nativeElement;
+
+    const weekTop =
+      weekEl.getBoundingClientRect().top -
+      container.getBoundingClientRect().top +
+      container.scrollTop;
+
+    container.scrollTo({
+      top: weekTop - this.remToPx(3),
+      behavior: 'auto',
     });
 
     this.loading.set(false);
@@ -98,10 +105,21 @@ export class WeeklyCalendarComponent {
 
     if (!weekEl) return;
 
-    weekEl.scrollIntoView({
-      block: 'start',
+    const container = this.container.nativeElement;
+
+    const weekTop =
+      weekEl.getBoundingClientRect().top -
+      container.getBoundingClientRect().top +
+      container.scrollTop;
+
+    container.scrollTo({
+      top: weekTop - this.remToPx(3),
       behavior: 'smooth',
     });
+  }
+
+  private remToPx(rem: number): number {
+    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
   }
 
   get weekDayNames() {

@@ -3,9 +3,8 @@
 </div>
 
 <section class="weekly-calendar">
-
-  <h2>{{ `${currentMonth()} ${currentYear()}` }}</h2>
-  <button (click)="scrollToToday()">Today</button>
+  <!-- <h2>{{ `${currentMonth()} ${currentYear()}` }}</h2> -->
+  <button class="go-to-today-btn" (click)="scrollToToday()" role="button">Go to today</button>
 
   <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">
     @for (month of monthsToRender(); track month.id) {
@@ -18,21 +17,23 @@
 
         <div class="week-days">
           @for (day of week.days; track day.date) {
-          @if (day.isToday) {
-          <div #todayAnchor class="day today" data-today>
-            <p>{{ day.dayNumber }}</p>
-            <p>{{ day.inMonth }}</p>
-          </div>
-          } @else {
-          <div class="day">
-            <p>{{ day.dayNumber }}</p>
-            <p>{{ day.inMonth }}</p>
-          </div>
-          }
-          @let tasks = tasksForDate(day.date);
-          @for (task of tasks; track task.id) {
-          <p>{{ task.title }}</p>
-          }
+            <article class="day-card">
+              @if (day.isToday) {
+                <h4 #todayAnchor class="day today" data-today>
+                  <span>{{ day.weekdayLabel }}</span>
+                  <span class="date">{{ `${day.dayNumber} ${day.inMonth}.` }}</span>
+                </h4>
+              } @else {
+                <h4 class="day">
+                  <span>{{ day.weekdayLabel }}</span>
+                  <span class="date">{{ `${day.dayNumber} ${day.inMonth}.` }}</span>
+                </h4>
+              }
+              @let tasks = tasksForDate(day.date);
+              @for (task of tasks; track task.id) {
+                <p>{{ task.title }}</p>
+              }
+            </article>
           }
         </div>
       </article>

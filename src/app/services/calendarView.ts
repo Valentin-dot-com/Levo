@@ -48,7 +48,8 @@ export class CalendarViewService {
       return {
         date: d,
         dayNumber: getDate(d),
-        inMonth: format(d, 'MMMM'),
+        weekdayLabel: format(d, 'EEEE'),
+        inMonth: format(d, 'MMM'),
         isCurrentMonth: isSameMonth(d, date),
         isToday: isToday(d),
       };
