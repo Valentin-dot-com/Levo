@@ -3,11 +3,25 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
 import { CalendarViewService } from '../../services/calendarView';
+import { HomeIconComponent } from '../../icons/homeIcon';
+import { AddIconComponent } from '../../icons/addIcon';
+import { CalendarIconComponent } from '../../icons/calendarIcon';
+import { BoardIconComponent } from '../../icons/boardIcon';
+import { ProfileIconComponent } from '../../icons/profileIcon';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    HomeIconComponent,
+    AddIconComponent,
+    CalendarIconComponent,
+    BoardIconComponent,
+    ProfileIconComponent,
+],
   templateUrl: './app-layout.html',
   styleUrl: './app-layout.scss',
 })
