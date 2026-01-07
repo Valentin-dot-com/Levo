@@ -19,10 +19,38 @@
   }
 }
 
+.calendar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+
+  .go-to-today-btn {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $color-accent;
+    border: none;
+    border-radius: $border-radius-S;
+    padding: 0.25rem 1rem;
+    color: $color-white;
+    cursor: pointer;
+    z-index: 99;
+
+    &:hover {
+      background-color: $color-primary;
+      transition: background-color 0.2s ease-in-out;
+    }
+  }
+}
+
 nav {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  z-index: 4;
+  width: 100%;
 
   .calendar-nav-btn {
     display: flex;
@@ -45,6 +73,12 @@ nav {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   padding: 1rem 0;
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  width: 100%;
+  background-color: $color-white;
+  z-index: 3;
 
   .weekdays-day {
     text-align: center;
@@ -56,20 +90,36 @@ nav {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  margin-bottom: 3rem;
 
   h2 {
     text-align: center;
-    position: sticky;
-    top: 0;
     width: 100%;
     background-color: $color-white;
-    height: 3rem;
+    height: 4rem;
+  }
+
+  .weeks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .week {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid $color-grey;
+    padding-bottom: 1rem;
+
+    h3 {
+      font-size: $font-size-S;
+      color: $color-text-secondary;
+    }
   }
 
   .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
     flex: 1;
   }
 
@@ -85,6 +135,35 @@ nav {
     color: $color-text;
     position: relative;
     transition: background-color 0.2 ease-in-out;
+    aspect-ratio: 1 / 1;
+
+    &.weekday-0 {
+      grid-column: 1 / span 1;
+    }
+
+    &.weekday-1 {
+      grid-column: 2 / span 1;
+    }
+
+    &.weekday-2 {
+      grid-column: 3 / span 1;
+    }
+
+    &.weekday-3 {
+      grid-column: 4 / span 1;
+    }
+
+    &.weekday-4 {
+      grid-column: 5 / span 1;
+    }
+
+    &.weekday-5 {
+      grid-column: 6 / span 1;
+    }
+
+    &.weekday-6 {
+      grid-column: 7 / span 1;
+    }
 
     &.today {
       // background-color: $color-accent;
@@ -134,81 +213,8 @@ nav {
   }
 }
 
-.calendar {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-
-  .go-to-today-btn {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: $color-accent;
-    border: none;
-    border-radius: $border-radius-S;
-    padding: 0.25rem 1rem;
-    color: $color-white;
-    cursor: pointer;
-    z-index: 99;
-
-    &:hover {
-      background-color: $color-primary;
-      transition: background-color 0.2s ease-in-out;
-    }
-  }
-}
-
 .calendar-scroll {
   height: 100%;
   max-height: 100%;
   overflow: auto;
 }
-
-.month {
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-
-  .week {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid $color-grey;
-
-    h3 {
-      font-size: 0.75rem;
-    }
-
-    .week-days {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-
-      .day-card {
-        padding-left: 1rem;
-        border-left: 1px solid $color-primary;
-      }
-
-      .day {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        font-weight: bold;
-      }
-
-      .today {
-        color: $color-accent;
-        // margin: 1rem 0;
-      }
-
-      .date {
-        display: flex;
-        gap: 0.5rem;
-      }
-    }
-  }
-}
-

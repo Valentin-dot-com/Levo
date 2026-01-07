@@ -37,6 +37,7 @@ export class MonthlyCalendarComponent {
   readonly currentMonth = this.calendarView.monthName;
   readonly currentYear = this.calendarView.currentYear;
   readonly loading = signal(true);
+  readonly isBtnScrolling = signal(false);
   readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
@@ -60,7 +61,7 @@ export class MonthlyCalendarComponent {
       container.scrollTop;
 
     container.scrollTo({
-      top: monthTop - this.remToPx(3),
+      top: monthTop,
       behavior: 'auto',
     });
 
@@ -75,6 +76,7 @@ export class MonthlyCalendarComponent {
 
   onScroll() {
     if (!this.hasInitialScroll) return;
+    if (this.isBtnScrolling()) return;
 
     const el = this.container.nativeElement;
 
@@ -94,10 +96,13 @@ export class MonthlyCalendarComponent {
 
       setTimeout(() => (this.isEmittingBottom = false), 500);
     }
+
+    this.updateCurrentMonthYear();
   }
 
   scrollToToday() {
     this.calendarView.goToToday();
+    this.isBtnScrolling.set(true);
 
     requestAnimationFrame(() => {
       const el = this.container.nativeElement.querySelector('[data-today]');
@@ -114,18 +119,37 @@ export class MonthlyCalendarComponent {
         container.scrollTop;
 
       container.scrollTo({
-        top: top - this.remToPx(3),
+        top: top,
         behavior: 'smooth',
       });
-    });
-  }
 
-  private remToPx(rem: number): number {
-    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+      this.isBtnScrolling.set(false);
+    });
   }
 
   get weekDayNames() {
     return this.calendarView.weekDays;
+  }
+
+  private updateCurrentMonthYear() {
+    const container = this.container.nativeElement;
+    const monthSections = Array.from(container.querySelectorAll<HTMLElement>('.calendar-monthly'));
+
+    const containerTop = container.getBoundingClientRect().top;
+
+    const visibleMonth = monthSections.find((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.bottom > containerTop + 150;
+    });
+
+    if (!visibleMonth) return;
+
+    const monthId = visibleMonth.dataset['month'];
+    if (!monthId) return;
+
+    const [year, month] = monthId.split('-');
+
+    this.calendarView.goToMonth(Number(year), Number(month) - 1);
   }
 
   async goToPrevious() {
@@ -152,7 +176,7 @@ export class MonthlyCalendarComponent {
       el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
 
     container.scrollTo({
-      top: weekTop - this.remToPx(3),
+      top: weekTop,
       behavior: 'smooth',
     });
   }

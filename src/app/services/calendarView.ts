@@ -11,6 +11,7 @@ import {
   format,
   getDate,
   getISOWeek,
+  getDay,
 } from 'date-fns';
 import { CalendarDay, CalendarMonth, CalendarWeek } from '../models/calendar.model';
 
@@ -49,6 +50,7 @@ export class CalendarViewService {
         date: d,
         dayNumber: getDate(d),
         weekdayLabel: format(d, 'EEEE'),
+        weekdayIndex: (getDay(d) + 6) % 7,
         inMonth: format(d, 'MMM'),
         isCurrentMonth: isSameMonth(d, date),
         isToday: isToday(d),

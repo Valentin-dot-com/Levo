@@ -12,6 +12,7 @@ export interface CalendarDay {
   date: Date;
   dayNumber: number;
   weekdayLabel: string;
+  weekdayIndex: number;
   inMonth: string;
   isCurrentMonth: boolean;
   isToday: boolean;
