@@ -1,0 +1,39 @@
+@use '../../styles/variables.scss' as *;
+
+.calendar-page {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .view-toggle {
+    display: inline-flex;
+    background: $color-text;
+    border-radius: 999px;
+    padding: 4px;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      color: $color-grey;
+      font-weight: 600;
+      font-size: $font-size-S;
+      transition: background 0.2s, color 0.2s;
+
+      &.active {
+        background: $color-primary;
+        color: $color-white;
+      }
+    }
+  }
+}
