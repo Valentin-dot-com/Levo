@@ -1,22 +1,47 @@
-<div class="app-layout">
-  <nav class="sidebar">
-    <div class="logo">
-      <h1>Levo</h1>
-    </div>
-    <ul class="nav-links">
+<section class="app-layout">
+  <h1>Levo</h1>
+  <nav class="main-nav">
+    <menu class="nav-links">
       <li>
-        <a routerLink="/home" routerLinkActive="active">Home</a>
+        <a routerLink="/home" routerLinkActive="active">
+          <span class="material-symbols-outlined">
+            home
+          </span>
+          <span>Home</span>
+        </a>
       </li>
       <li>
-        <a routerLink="/calendar" routerLinkActive="active">Calendar</a>
+        <a routerLink="/calendar" routerLinkActive="active">
+          <span class="material-symbols-outlined">
+            calendar_today
+          </span>
+          <span>Calendar</span>
+        </a>
       </li>
       <li>
-        <a routerLink="/boards" routerLinkActive="active">Boards</a>
+        <button>
+          <span class="material-symbols-outlined">
+            add
+          </span>
+        </button>
       </li>
       <li>
-        <a routerLink="/profile" routerLinkActive="active">Profile</a>
+        <a routerLink="/boards" routerLinkActive="active">
+          <span class="material-symbols-outlined">
+            note_stack
+          </span>
+          <span>Boards</span>
+        </a>
       </li>
-    </ul>
+      <li>
+        <a routerLink="/profile" routerLinkActive="active">
+          <span class="material-symbols-outlined">
+            person
+          </span>
+          <span>Profile</span>
+        </a>
+      </li>
+    </menu>
   </nav>
   <main class="content">
     @if (initError()) {
@@ -24,4 +49,4 @@
     }
     <router-outlet />
   </main>
-</div>
+</section>
