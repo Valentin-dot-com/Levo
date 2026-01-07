@@ -1,11 +1,16 @@
 @use '../../styles/variables.scss' as *;
 
 .app-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-  max-height: 100dvh;
-  width: 100dvw;
+  position: relative;
+  min-height: 0;
+  height: 100dvh;
+
+  h1 {
+    height: 3rem;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .main-nav {
@@ -85,4 +90,10 @@
       }
     }
   }
+}
+
+main.content {
+  min-height: 0;
+  padding: 2rem;
+  height: calc(100dvh - 3rem);
 }
