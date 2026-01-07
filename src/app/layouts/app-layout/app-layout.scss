@@ -94,6 +94,12 @@
 
 main.content {
   min-height: 0;
-  padding: 2rem;
+  padding: 1rem;
   height: calc(100dvh - 3rem);
+}
+
+@media screen and (min-width: 1300px) {
+  main.content {
+    padding: 2rem 20rem;
+  }
 }

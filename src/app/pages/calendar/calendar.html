@@ -6,17 +6,19 @@
     </div>
   </nav>
 
-  @if (viewMode() === 'weekly') {
-    <app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
-  }
-  @else {
-    <app-monthly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
-  }
+  <div class="content-container">
+      @if (viewMode() === 'weekly') {
+        <app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+      }
+      @else {
+        <app-monthly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+      }
 
-  @if (isDesktop()) {
-    <!-- Aside: Upcoming tasks -->
-     <aside>
-      Upcoming Tasks
-     </aside>
-  }
+      @if (isDesktop() === true) {
+        <!-- Aside: Upcoming tasks -->
+        <aside class="desktop-aside">
+          <p>Upcoming tasks</p>
+        </aside>
+      }
+  </div>
 </section>
