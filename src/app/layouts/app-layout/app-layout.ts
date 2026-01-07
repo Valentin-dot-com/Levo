@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
+import { CalendarViewService } from '../../services/calendarView';
 
 @Component({
   selector: 'app-layout',
@@ -12,6 +13,7 @@ import { BoardService } from '../../services/boards';
 })
 export class AppLayoutComponent implements OnInit {
   private calendarService = inject(CalendarService);
+  private calendarView = inject(CalendarViewService);
   private boardService = inject(BoardService);
 
   initError = signal<string | null>(null);
@@ -19,6 +21,7 @@ export class AppLayoutComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       await this.calendarService.initCalendarData();
+      await this.calendarView.initialize();
       await this.boardService.fetchUserBoards();
     } catch (error) {
       console.error('Failed to initialize app data:', error);

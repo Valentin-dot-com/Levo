@@ -1,0 +1,85 @@
+<div class="loading-overlay" [class.visible]="loading()">
+  <app-loader />
+</div>
+
+<section class="calendar">
+  <button class="go-to-today-btn" (click)="scrollToToday()" role="button">Go to today</button>
+
+  <nav class="calendar-navigation">
+    <button class="calendar-nav-btn back" (click)="goToPrevious()" aria-label="Go to previous month">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+
+    <h2>{{ currentMonth() }}, {{ currentYear() }}</h2>
+
+    <button class="calendar-nav-btn forward" (click)="goToNext()" aria-label="Go to next month">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </nav>
+
+  <div class="calendar-weekdays">
+    @for (dayLabel of weekDayNames; track $index) {
+    <div class="weekdays-day">{{ dayLabel }}</div>
+    }
+  </div>
+
+  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">
+    @for (month of monthsToRender(); track month.id) {
+      <section class="calendar-monthly" [attr.data-month]="month.id">
+        <h2>{{ month.name }}</h2>
+
+        <div class="weeks">
+          @for (week of month.weeks; track $index) {
+            <section class="week">
+              <h3>w. {{ week.weekNumber }}</h3>
+              <div class="week-days calendar-grid">
+                @for (day of week.days; track $index) {
+                  <article class="calendar-day" [class.today]="day.isToday" [class]="'weekday-' + day.weekdayIndex">
+                    @if (day.isToday) {
+                      <h4 class="calendar-day-number today" #todayAnchor data-today>{{ day.dayNumber }}</h4>
+                    }
+                    @else {
+                      <h4 class="calendar-day-number">{{ day.dayNumber }}</h4>
+                    }
+
+                    @let tasks = tasksForDate(day.date);
+                    @if (tasks.length > 0) {
+                      <div class="calendar-tasks">
+                        @for (task of tasks; track task.id) {
+                          <span class="task-dot"></span>
+                        }
+                      </div>
+                    }
+                  </article>
+                }
+              </div>
+            </section>
+          }
+        </div>
+
+        <!-- <div class="calendar-grid">
+          @for (day of month.days; track day.date) {
+            <article class="calendar-day" [class.today]="day.isToday">
+              @if (day.isToday) {
+                <h4 class="calendar-day-number today" #todayAnchor data-today>{{ day.dayNumber }}</h4>
+              }
+              @else {
+                <h4 class="calendar-day-number">{{ day.dayNumber }}</h4>
+              }
+
+              @let tasks = tasksForDate(day.date);
+              @if (tasks.length > 0) {
+                <div class="calendar-tasks">
+                  @for (task of tasks; track task.id) {
+                    <span class="task-dot"></span>
+                  }
+                </div>
+              }
+            </article>
+          }
+        </div> -->
+      </section>
+    }
+  </div>
+
+</section>

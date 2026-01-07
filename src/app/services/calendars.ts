@@ -1,6 +1,6 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Calendar } from '../models/calendar';
+import { Calendar } from '../models/calendar.model';
 import { Task } from '../models/task';
 import { UUID } from '../models/primitives';
 import { AuthService } from './authenticate';
@@ -13,21 +13,17 @@ export class CalendarService {
   private auth = inject(AuthService);
 
   private _calendars = signal<Calendar[]>([]);
-  private _currentYear = signal<number>(new Date().getFullYear());
-  private _currentMonth = signal<number>(new Date().getMonth());
   private _taskCache = signal<Map<string, Task[]>>(new Map());
   private _calendarIds = signal<UUID[]>([]);
   private _pendingRequests = new Map<string, Promise<void>>();
 
   readonly calendars = this._calendars.asReadonly();
-  readonly currentYear = this._currentYear.asReadonly();
-  readonly currentMonth = this._currentMonth.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
 
-  readonly tasks = computed<Task[]>(() => {
-    const key = this.getMonthKey(this._currentYear(), this._currentMonth());
-    return this._taskCache().get(key) ?? [];
-  });
+  // readonly tasks = computed<Task[]>(() => {
+  //   const key = this.getMonthKey(this.calendarView.currentYear(), this.calendarView.currentMonth());
+  //   return this._taskCache().get(key) ?? [];
+  // });
 
   private getMonthKey(year: number, month: number): string {
     return `${year}-${month}`;
@@ -53,40 +49,12 @@ export class CalendarService {
     this._calendarIds.set((memberships ?? []).map((m) => m.calendar_id));
   }
 
-  async goToMonth(year: number, month: number): Promise<void> {
-    this._currentYear.set(year);
-    this._currentMonth.set(month);
-
-    await this.fetchTasksForMonth(year, month);
-
-    this.prefetchAdjacentMonths(year, month);
+  public getCachedTasksForMonth(year: number, month: number): Task[] {
+    const key = this.getMonthKey(year, month);
+    return this._taskCache().get(key) ?? [];
   }
 
-  async goToPreviousMonth(): Promise<void> {
-    let year = this._currentYear();
-    let month = this._currentMonth() - 1;
-
-    if (month < 0) {
-      month = 11;
-      year--;
-    }
-
-    await this.goToMonth(year, month);
-  }
-
-  async goToNextMonth(): Promise<void> {
-    let year = this._currentYear();
-    let month = this._currentMonth() + 1;
-
-    if (month > 11) {
-      month = 0;
-      year++;
-    }
-
-    await this.goToMonth(year, month);
-  }
-
-  private prefetchAdjacentMonths(year: number, month: number): void {
+  prefetchAdjacentMonths(year: number, month: number): void {
     // Previous month
     const prevMonth = month === 0 ? 11 : month - 1;
     const prevYear = month === 0 ? year - 1 : year;
@@ -151,7 +119,7 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          throw new Error('No calendar memberships for current user. Could not fetch tasks')
+          throw new Error('No calendar memberships for current user. Could not fetch tasks');
         }
 
         const { data, error } = await this.supabase.supabaseClient
@@ -173,9 +141,9 @@ export class CalendarService {
   }
 
   async initCalendarData(): Promise<void> {
-    const now = new Date();
+    // const now = new Date();
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
-    await this.goToMonth(now.getFullYear(), now.getMonth());
+    // await this.calendarView.goToMonth(now.getFullYear(), now.getMonth());
   }
 }
