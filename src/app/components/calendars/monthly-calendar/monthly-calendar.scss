@@ -3,7 +3,7 @@
 .loading-overlay {
   width: 100%;
   height: 90%;
-  z-index: 99;
+  z-index: 5;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -33,14 +33,19 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(0);
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1), background-color 160ms ease;
     background-color: $color-accent;
     border: none;
     border-radius: $border-radius-S;
     padding: 0.25rem 1rem;
     color: $color-white;
     cursor: pointer;
-    z-index: 99;
+    z-index: 2;
+
+    &.visible {
+      transform: translateX(-50%) translateY(-7rem);
+    }
 
     &:hover {
       background-color: $color-primary;
@@ -52,7 +57,8 @@
 .calendar-navigation {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-inline: 3rem;
   z-index: 4;
 
   .calendar-nav-btn {
@@ -63,11 +69,16 @@
     border: none;
     background-color: $color-primary;
     padding: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-accent;
+    }
 
     span {
       text-align: center;
       color: $color-white;
-      font-size: $font-size-L;
+      font-size: $font-size-M;
     }
   }
 }
@@ -76,7 +87,7 @@
   flex: 1 1 auto;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   background-color: $color-white;
 
   .weekdays-day {
@@ -109,7 +120,7 @@
     padding-bottom: 1rem;
 
     h3 {
-      font-size: $font-size-S;
+      font-size: $font-size-text;
       color: $color-text-secondary;
     }
   }
@@ -133,6 +144,7 @@
     position: relative;
     transition: background-color 0.2 ease-in-out;
     aspect-ratio: 1 / 1;
+    transition: background-color 0.2s ease-in-out;
 
     &.weekday-0 {
       grid-column: 1 / span 1;
@@ -163,37 +175,24 @@
     }
 
     &.today {
-      // background-color: $color-accent;
-
-      .calendar-day-number {
-        height: 4rem;
-        width: 4rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $color-white;
-        background-color: $color-accent;
-        border-radius: 100%;
-      }
-
-      &:hover {
-        background-color: $color-accent;
-      }
+      background-color: $color-accent;
+      color: $color-white;
     }
 
     .calendar-day-number {
-      font-size: $font-size-M;
+      font-size: $font-size-S;
     }
 
     &:hover {
       background-color: $color-grey;
+      color: $color-text;
       cursor: pointer;
     }
 
     .calendar-tasks {
       position: absolute;
       left: 50%;
-      bottom: 35%;
+      bottom: 10%;
       transform: translateX(-50%);
       z-index: 1;
       display: flex;

@@ -9,6 +9,7 @@ import {
   computed,
   ViewChild,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
@@ -22,7 +23,7 @@ import { LoaderComponent } from '../../loader/loader';
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
-export class WeeklyCalendarComponent {
+export class WeeklyCalendarComponent implements OnDestroy {
   private calendarView = inject(CalendarViewService);
 
   @Input({ required: true }) monthsToRender!: Signal<CalendarMonth[]>;
@@ -33,11 +34,13 @@ export class WeeklyCalendarComponent {
   private readonly THRESHOLD = 300;
   private isEmittingTop = false;
   private isEmittingBottom = false;
+  private todayObserver?: IntersectionObserver;
 
   readonly currentMonth = this.calendarView.monthName;
   readonly currentYear = this.calendarView.currentYear;
   readonly loading = signal(true);
   readonly isBtnScrolling = signal(false);
+  readonly isTodayVisible = signal(true);
   readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
@@ -64,9 +67,25 @@ export class WeeklyCalendarComponent {
       top: weekTop - this.remToPx(3),
       behavior: 'auto',
     });
-
     this.loading.set(false);
-    this.hasInitialScroll = true;
+
+    setTimeout(() => {
+      this.hasInitialScroll = true;
+    }, 400);
+
+    this.todayObserver?.disconnect();
+
+    this.todayObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.isTodayVisible.set(entry.isIntersecting);
+      },
+      {
+        root: this.container.nativeElement, // 🔑 viktigt
+        threshold: 0.1, // räcker att lite syns
+      }
+    );
+
+    this.todayObserver.observe(el.nativeElement);
   }
 
   tasksForDate(date: Date) {
@@ -122,7 +141,7 @@ export class WeeklyCalendarComponent {
       });
 
       this.isBtnScrolling.set(false);
-    })
+    });
   }
 
   private remToPx(rem: number): number {
@@ -131,5 +150,9 @@ export class WeeklyCalendarComponent {
 
   get weekDayNames() {
     return this.calendarView.weekDays;
+  }
+
+  ngOnDestroy() {
+    this.todayObserver?.disconnect();
   }
 }
