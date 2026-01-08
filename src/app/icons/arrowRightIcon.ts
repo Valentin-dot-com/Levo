@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-2 0 32 32"
+      viewBox="-1 0 32 32"
       fill="none"
       stroke="currentColor"
       stroke-linecap="round"

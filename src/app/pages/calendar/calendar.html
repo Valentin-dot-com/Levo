@@ -1,8 +1,8 @@
 <section class="calendar-page">
   <nav>
     <div class="view-toggle">
-      <button [class.active]="viewMode() === 'weekly'" (click)="setView('weekly')">Weekly view</button>
-      <button [class.active]="viewMode() === 'monthly'" (click)="setView('monthly')">Monthly view</button>
+      <button [class.active]="viewMode() === 'weekly'" (click)="setView('weekly')" aria-label="See weekly view">Week</button>
+      <button [class.active]="viewMode() === 'monthly'" (click)="setView('monthly')" aria-label="See monthly view">Month</button>
     </div>
   </nav>
 

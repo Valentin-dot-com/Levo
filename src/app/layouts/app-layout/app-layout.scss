@@ -1,4 +1,5 @@
 @use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
 
 .app-layout {
   position: relative;
@@ -23,16 +24,8 @@
   .nav-links {
     list-style: none;
     background-color: $color-white;
-    // padding: 0.75rem 1.5rem;
     padding: 0.5rem 1rem;
-    // border-radius: 55rem;
     margin: 0;
-
-    // position: absolute;
-    // left: 50%;
-    // bottom: 0;
-    // transform: translateX(-50%);
-
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -52,15 +45,19 @@
         width: 4rem;
         transition: color 0.2s ease;
         font-size: $font-size-text;
+        font-weight: 600;
         border-bottom: 2px solid transparent;
+        fill: transparent;
+        transition: all 0.2s ease-in-out;
+
+        @include hover-supported {
+          color: $color-accent;
+        }
 
         &.active {
           color: $color-primary;
           border-bottom: 2px solid $color-primary;
-        }
-
-        &:hover {
-          color: $color-accent;
+          fill: $color-primary;
         }
       }
 
@@ -84,7 +81,7 @@
           align-items: center;
         }
 
-        &:hover {
+        @include hover-supported {
           background-color: $color-primary;
         }
       }
@@ -101,5 +98,45 @@ main.content {
 @media screen and (min-width: 1300px) {
   main.content {
     padding: 2rem 20rem;
+  }
+
+  .main-nav {
+    right: 0;
+    bottom: 50%;
+    transform: translateY(50%);
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .nav-links {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      li {
+        margin: 0;
+        a {
+          border-radius: 100%;
+          height: 5rem;
+          width: 5rem;
+          background-color: $color-grey;
+          border: none;
+
+          &.active {
+            background-color: $color-primary;
+            color: $color-white;
+            border: none;
+            margin: 2rem 0;
+          }
+        }
+        .add-new-btn {
+          height: 5rem;
+        }
+      }
+
+    }
   }
 }

@@ -8,9 +8,11 @@
 @use 'app/styles/variables.scss' as *;
 @use 'app/styles/vendor/reset.scss' as *;
 
-
 html {
   height: 100%;
+  width: 100%;
+  overflow: hidden;
+
   @include mat.theme((
     color: (
       primary: mat.$cyan-palette,
@@ -28,10 +30,14 @@ body {
   color: $color-text;
   margin: 0;
   height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 app-root {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 h1,
