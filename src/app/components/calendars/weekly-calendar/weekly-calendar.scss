@@ -1,4 +1,5 @@
 @use '../../../styles/variables.scss' as *;
+@use '../../../styles/mixins.scss' as *;
 
 .loading-overlay {
   width: 100%;
@@ -38,7 +39,7 @@
     z-index: 1;
     background-color: $color-accent;
     border: none;
-    border-radius: $border-radius-S;
+    border-radius: $border-radius-XL;
     padding: 0.5rem 1rem;
     color: $color-white;
     opacity: 0;
@@ -49,7 +50,7 @@
       opacity: 1;
     }
 
-    &:hover {
+    @include hover-supported {
       background-color: $color-primary;
       transition: background-color 0.2s ease-in-out;
     }
@@ -61,7 +62,6 @@
   max-height: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0 1rem;
 }
 
 .month {
@@ -75,6 +75,7 @@
     top: 0;
     width: 100%;
     background-color: $color-white;
+    color: $color-primary;
     height: 3rem;
   }
 

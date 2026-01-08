@@ -1,4 +1,5 @@
 @use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
 
 .app-layout {
   position: relative;
@@ -52,15 +53,19 @@
         width: 4rem;
         transition: color 0.2s ease;
         font-size: $font-size-text;
+        font-weight: 600;
         border-bottom: 2px solid transparent;
+        fill: transparent;
+        transition: all 0.2s ease-in-out;
+
+        @include hover-supported {
+          color: $color-accent;
+        }
 
         &.active {
           color: $color-primary;
           border-bottom: 2px solid $color-primary;
-        }
-
-        &:hover {
-          color: $color-accent;
+          fill: $color-primary;
         }
       }
 
@@ -84,7 +89,7 @@
           align-items: center;
         }
 
-        &:hover {
+        @include hover-supported {
           background-color: $color-primary;
         }
       }

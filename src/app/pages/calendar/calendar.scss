@@ -1,4 +1,5 @@
 @use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
 
 .calendar-page {
   height: 100%;
@@ -37,7 +38,7 @@ nav {
 
   .view-toggle {
     display: inline-flex;
-    background: $color-text;
+    background: $color-grey;
     border-radius: 999px;
     padding: 4px;
 
@@ -47,13 +48,18 @@ nav {
       padding: 0.5rem 1rem;
       border-radius: 999px;
       cursor: pointer;
-      color: $color-white;
-      // font-weight: 600;
+      color: $color-text;
+      font-weight: 600;
       font-size: $font-size-text;
       transition: background 0.2s, color 0.2s;
 
       &.active {
-        background: $color-primary;
+        background: $color-fff;
+        color: $color-primary;
+      }
+
+      @include hover-supported {
+        background-color: $color-primary;
         color: $color-white;
       }
     }
