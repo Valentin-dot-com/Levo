@@ -34,17 +34,19 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%) translateY(0);
-    transition: transform 260ms cubic-bezier(.2,.8,.2,1), background-color 160ms ease;
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
     background-color: $color-accent;
     border: none;
     border-radius: $border-radius-S;
     padding: 0.25rem 1rem;
     color: $color-white;
+    opacity: 0;
     cursor: pointer;
     z-index: 2;
 
     &.visible {
       transform: translateX(-50%) translateY(-7rem);
+      opacity: 1;
     }
 
     &:hover {
