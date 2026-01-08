@@ -13,6 +13,7 @@
 }
 
 .content-container {
+  padding-top: 2rem;
   height: 100%;
   max-width: 100%;
   max-height: 100%;
@@ -27,7 +28,8 @@ app-weekly-calendar, app-monthly-calendar {
 
 .desktop-aside {
   flex: 1;
-  background-color: red;
+  background-color: $color-grey;
+  border-radius: $border-radius-XL;
 }
 
 nav {
@@ -35,6 +37,9 @@ nav {
   justify-content: center;
   z-index: 6;
   margin-bottom: 1rem;
+  position: absolute;
+  top: -2rem;
+  right: 0;
 
   .view-toggle {
     display: inline-flex;
@@ -63,5 +68,11 @@ nav {
         color: $color-white;
       }
     }
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  nav {
+    right: 52%;
   }
 }
