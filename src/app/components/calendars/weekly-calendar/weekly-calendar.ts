@@ -30,13 +30,14 @@ export class WeeklyCalendarComponent {
   @Output() nearTop = new EventEmitter<void>();
   @Output() nearBottom = new EventEmitter<void>();
 
-  private readonly THRESHOLD = 500;
+  private readonly THRESHOLD = 300;
   private isEmittingTop = false;
   private isEmittingBottom = false;
 
   readonly currentMonth = this.calendarView.monthName;
   readonly currentYear = this.calendarView.currentYear;
   readonly loading = signal(true);
+  readonly isBtnScrolling = signal(false);
   readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
@@ -75,6 +76,7 @@ export class WeeklyCalendarComponent {
 
   onScroll() {
     if (!this.hasInitialScroll) return;
+    if (this.isBtnScrolling()) return;
 
     const el = this.container.nativeElement;
 
@@ -97,25 +99,30 @@ export class WeeklyCalendarComponent {
   }
 
   scrollToToday() {
-    const el = this.container.nativeElement.querySelector('[data-today]');
+    this.isBtnScrolling.set(true);
+    requestAnimationFrame(() => {
+      const el = this.container.nativeElement.querySelector('[data-today]');
 
-    if (!el) return;
+      if (!el) return;
 
-    const weekEl = el.closest('.week');
+      const weekEl = el.closest('.week');
 
-    if (!weekEl) return;
+      if (!weekEl) return;
 
-    const container = this.container.nativeElement;
+      const container = this.container.nativeElement;
 
-    const weekTop =
-      weekEl.getBoundingClientRect().top -
-      container.getBoundingClientRect().top +
-      container.scrollTop;
+      const weekTop =
+        weekEl.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop;
 
-    container.scrollTo({
-      top: weekTop - this.remToPx(3),
-      behavior: 'smooth',
-    });
+      container.scrollTo({
+        top: weekTop - this.remToPx(3),
+        behavior: 'smooth',
+      });
+
+      this.isBtnScrolling.set(false);
+    })
   }
 
   private remToPx(rem: number): number {
