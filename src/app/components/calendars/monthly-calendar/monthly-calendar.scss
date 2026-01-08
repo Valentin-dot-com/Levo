@@ -2,8 +2,8 @@
 
 .loading-overlay {
   width: 100%;
-  height: 100%;
-  z-index: 99;
+  height: 90%;
+  z-index: 5;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -23,20 +23,31 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
   max-height: 100%;
+  max-width: 100%;
+
 
   .go-to-today-btn {
     position: absolute;
-    bottom: 2rem;
+    bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(0);
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
     background-color: $color-accent;
     border: none;
     border-radius: $border-radius-S;
     padding: 0.25rem 1rem;
     color: $color-white;
+    opacity: 0;
     cursor: pointer;
-    z-index: 99;
+    z-index: 2;
+
+    &.visible {
+      transform: translateX(-50%) translateY(-7rem);
+      opacity: 1;
+    }
 
     &:hover {
       background-color: $color-primary;
@@ -45,12 +56,12 @@
   }
 }
 
-nav {
+.calendar-navigation {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-inline: 3rem;
   z-index: 4;
-  width: 100%;
 
   .calendar-nav-btn {
     display: flex;
@@ -59,26 +70,29 @@ nav {
     border-radius: 100%;
     border: none;
     background-color: $color-primary;
-    padding: 0.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
 
-    span {
-      text-align: center;
+    app-icon-arrow-left,
+    app-icon-arrow-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: $color-white;
-      font-size: $font-size-L;
+    }
+
+    &:hover {
+      background-color: $color-accent;
     }
   }
 }
 
 .calendar-weekdays {
+  flex: 1 1 auto;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 1rem 0;
-  position: fixed;
-  top: 3rem;
-  left: 0;
-  width: 100%;
+  padding: 0.5rem 0;
   background-color: $color-white;
-  z-index: 3;
 
   .weekdays-day {
     text-align: center;
@@ -88,8 +102,6 @@ nav {
 .calendar-monthly {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
   margin-bottom: 3rem;
 
   h2 {
@@ -112,7 +124,7 @@ nav {
     padding-bottom: 1rem;
 
     h3 {
-      font-size: $font-size-S;
+      font-size: $font-size-text;
       color: $color-text-secondary;
     }
   }
@@ -136,6 +148,7 @@ nav {
     position: relative;
     transition: background-color 0.2 ease-in-out;
     aspect-ratio: 1 / 1;
+    transition: background-color 0.2s ease-in-out;
 
     &.weekday-0 {
       grid-column: 1 / span 1;
@@ -166,37 +179,24 @@ nav {
     }
 
     &.today {
-      // background-color: $color-accent;
-
-      .calendar-day-number {
-        height: 4rem;
-        width: 4rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $color-white;
-        background-color: $color-accent;
-        border-radius: 100%;
-      }
-
-      &:hover {
-        background-color: $color-accent;
-      }
+      background-color: $color-accent;
+      color: $color-white;
     }
 
     .calendar-day-number {
-      font-size: $font-size-M;
+      font-size: $font-size-S;
     }
 
     &:hover {
       background-color: $color-grey;
+      color: $color-text;
       cursor: pointer;
     }
 
     .calendar-tasks {
       position: absolute;
       left: 50%;
-      bottom: 35%;
+      bottom: 10%;
       transform: translateX(-50%);
       z-index: 1;
       display: flex;
@@ -214,7 +214,8 @@ nav {
 }
 
 .calendar-scroll {
-  height: 100%;
-  max-height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }

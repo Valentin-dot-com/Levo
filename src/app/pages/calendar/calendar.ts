@@ -9,6 +9,7 @@ import { CalendarMonth } from '../../models/calendar.model';
 import { WeeklyCalendarComponent } from '../../components/calendars/weekly-calendar/weekly-calendar';
 import { CalendarService } from '../../services/calendars';
 import { MonthlyCalendarComponent } from '../../components/calendars/monthly-calendar/monthly-calendar';
+import { ScreenSizeService } from '../../services/ScreenSize';
 
 @Component({
   selector: 'app-calendar',
@@ -19,8 +20,17 @@ import { MonthlyCalendarComponent } from '../../components/calendars/monthly-cal
 export class CalendarComponent implements OnInit {
   protected calendarView = inject(CalendarViewService);
   private calendarService = inject(CalendarService);
+  private screensizeService = inject(ScreenSizeService);
+
+  isDesktop = this.screensizeService.isDesktop;
+
+  viewMode = signal<'weekly' | 'monthly'>('weekly');
 
   monthsToRender = signal<CalendarMonth[]>([]);
+
+  setView(mode: 'weekly' | 'monthly') {
+    this.viewMode.set(mode);
+  }
 
   async ngOnInit() {
     await this.calendarView.initialize();

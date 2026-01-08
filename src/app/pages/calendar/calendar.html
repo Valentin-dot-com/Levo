@@ -1,2 +1,24 @@
-<!-- <app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" /> -->
-<app-monthly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+<section class="calendar-page">
+  <nav>
+    <div class="view-toggle">
+      <button [class.active]="viewMode() === 'weekly'" (click)="setView('weekly')">Weekly view</button>
+      <button [class.active]="viewMode() === 'monthly'" (click)="setView('monthly')">Monthly view</button>
+    </div>
+  </nav>
+
+  <div class="content-container">
+      @if (viewMode() === 'weekly') {
+        <app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+      }
+      @else {
+        <app-monthly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+      }
+
+      @if (isDesktop() === true) {
+        <!-- Aside: Upcoming tasks -->
+        <aside class="desktop-aside">
+          <p>Upcoming tasks</p>
+        </aside>
+      }
+  </div>
+</section>

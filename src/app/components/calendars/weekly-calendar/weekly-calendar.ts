@@ -9,6 +9,7 @@ import {
   computed,
   ViewChild,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
@@ -22,7 +23,7 @@ import { LoaderComponent } from '../../loader/loader';
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
-export class WeeklyCalendarComponent {
+export class WeeklyCalendarComponent implements OnDestroy {
   private calendarView = inject(CalendarViewService);
 
   @Input({ required: true }) monthsToRender!: Signal<CalendarMonth[]>;
@@ -30,13 +31,16 @@ export class WeeklyCalendarComponent {
   @Output() nearTop = new EventEmitter<void>();
   @Output() nearBottom = new EventEmitter<void>();
 
-  private readonly THRESHOLD = 500;
+  private readonly THRESHOLD = 300;
   private isEmittingTop = false;
   private isEmittingBottom = false;
+  private todayObserver?: IntersectionObserver;
 
   readonly currentMonth = this.calendarView.monthName;
   readonly currentYear = this.calendarView.currentYear;
   readonly loading = signal(true);
+  readonly isBtnScrolling = signal(false);
+  readonly isTodayVisible = signal(true);
   readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
@@ -63,9 +67,25 @@ export class WeeklyCalendarComponent {
       top: weekTop - this.remToPx(3),
       behavior: 'auto',
     });
-
     this.loading.set(false);
-    this.hasInitialScroll = true;
+
+    setTimeout(() => {
+      this.hasInitialScroll = true;
+    }, 400);
+
+    this.todayObserver?.disconnect();
+
+    this.todayObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.isTodayVisible.set(entry.isIntersecting);
+      },
+      {
+        root: this.container.nativeElement, // 🔑 viktigt
+        threshold: 0.1, // räcker att lite syns
+      }
+    );
+
+    this.todayObserver.observe(el.nativeElement);
   }
 
   tasksForDate(date: Date) {
@@ -75,6 +95,7 @@ export class WeeklyCalendarComponent {
 
   onScroll() {
     if (!this.hasInitialScroll) return;
+    if (this.isBtnScrolling()) return;
 
     const el = this.container.nativeElement;
 
@@ -97,24 +118,29 @@ export class WeeklyCalendarComponent {
   }
 
   scrollToToday() {
-    const el = this.container.nativeElement.querySelector('[data-today]');
+    this.isBtnScrolling.set(true);
+    requestAnimationFrame(() => {
+      const el = this.container.nativeElement.querySelector('[data-today]');
 
-    if (!el) return;
+      if (!el) return;
 
-    const weekEl = el.closest('.week');
+      const weekEl = el.closest('.week');
 
-    if (!weekEl) return;
+      if (!weekEl) return;
 
-    const container = this.container.nativeElement;
+      const container = this.container.nativeElement;
 
-    const weekTop =
-      weekEl.getBoundingClientRect().top -
-      container.getBoundingClientRect().top +
-      container.scrollTop;
+      const weekTop =
+        weekEl.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop;
 
-    container.scrollTo({
-      top: weekTop - this.remToPx(3),
-      behavior: 'smooth',
+      container.scrollTo({
+        top: weekTop - this.remToPx(3),
+        behavior: 'smooth',
+      });
+
+      this.isBtnScrolling.set(false);
     });
   }
 
@@ -124,5 +150,9 @@ export class WeeklyCalendarComponent {
 
   get weekDayNames() {
     return this.calendarView.weekDays;
+  }
+
+  ngOnDestroy() {
+    this.todayObserver?.disconnect();
   }
 }
