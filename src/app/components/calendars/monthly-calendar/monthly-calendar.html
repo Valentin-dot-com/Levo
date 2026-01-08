@@ -7,13 +7,13 @@
 
   <nav class="calendar-navigation">
     <button class="calendar-nav-btn back" (click)="goToPrevious()" aria-label="Go to previous month">
-      <span class="material-symbols-outlined">chevron_left</span>
+      <app-icon-arrow-left />
     </button>
 
     <h2>{{ currentMonth() }}, {{ currentYear() }}</h2>
 
     <button class="calendar-nav-btn forward" (click)="goToNext()" aria-label="Go to next month">
-      <span class="material-symbols-outlined">chevron_right</span>
+      <app-icon-arrow-right />
     </button>
   </nav>
 

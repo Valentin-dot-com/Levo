@@ -68,17 +68,19 @@
     border-radius: 100%;
     border: none;
     background-color: $color-primary;
-    padding: 0.5rem;
+    padding: 0.25rem;
     cursor: pointer;
+
+    app-icon-arrow-left,
+    app-icon-arrow-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $color-white;
+    }
 
     &:hover {
       background-color: $color-accent;
-    }
-
-    span {
-      text-align: center;
-      color: $color-white;
-      font-size: $font-size-M;
     }
   }
 }

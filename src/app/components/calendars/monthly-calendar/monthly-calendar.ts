@@ -15,10 +15,12 @@ import { format } from 'date-fns';
 import { CalendarMonth } from '../../../models/calendar.model';
 import { CalendarViewService } from '../../../services/calendarView';
 import { LoaderComponent } from '../../loader/loader';
+import { ArrowLeftIconComponent } from '../../../icons/arrowLeftIcon';
+import { ArrowRightIconComponent } from '../../../icons/arrowRightIcon';
 
 @Component({
   selector: 'app-monthly-calendar',
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, ArrowLeftIconComponent, ArrowRightIconComponent],
   templateUrl: './monthly-calendar.html',
   styleUrl: './monthly-calendar.scss',
 })
@@ -135,7 +137,7 @@ export class MonthlyCalendarComponent implements OnDestroy {
         container.scrollTop;
 
       container.scrollTo({
-        top: top - this.remToPx(4),
+        top: top + this.remToPx(4),
         behavior: 'smooth',
       });
 
