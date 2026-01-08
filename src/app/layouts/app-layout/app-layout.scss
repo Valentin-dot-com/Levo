@@ -24,7 +24,7 @@
     list-style: none;
     background-color: $color-white;
     // padding: 0.75rem 1.5rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
     // border-radius: 55rem;
     margin: 0;
 
@@ -49,17 +49,18 @@
         color: $color-text;
         text-decoration: none;
         height: 4rem;
-        width: 5rem;
+        width: 4rem;
         transition: color 0.2s ease;
         font-size: $font-size-text;
+        border-bottom: 2px solid transparent;
+
+        &.active {
+          color: $color-primary;
+          border-bottom: 2px solid $color-primary;
+        }
 
         &:hover {
           color: $color-accent;
-        }
-
-        &.active {
-          color: $color-fff;
-          border-bottom: 2px solid $color-fff;
         }
       }
 
@@ -74,6 +75,8 @@
         height: 4rem;
         aspect-ratio: 1 / 1;
         color: $color-white;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
 
         app-icon-add {
           display: flex;
@@ -81,9 +84,8 @@
           align-items: center;
         }
 
-        svg {
-          width: 2rem;
-          height: 2rem;
+        &:hover {
+          background-color: $color-primary;
         }
       }
     }
