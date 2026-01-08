@@ -47,6 +47,13 @@ h4,
 h5,
 h6 {
   font-family: $font-primary;
+  color: $color-primary;
+}
+
+h1 {
+  font-size: $font-size-L;
+  line-height: normal;
+  margin-bottom: 0.5rem;
 }
 
 button,
