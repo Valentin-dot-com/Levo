@@ -1,7 +1,7 @@
 @if (isLoading$ | async) {
   <div class="loading-screen">
     <h1>Levo</h1>
-    <p>loading</p>
+    <app-loader />
   </div>
 } @else {
   <router-outlet />
