@@ -10,6 +10,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
+  h1 {
+    line-height: normal;
+    margin-bottom: 1rem;
+  }
 }
 
 .content-container {

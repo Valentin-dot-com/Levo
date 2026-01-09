@@ -83,6 +83,7 @@
   .week {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid $color-grey;
 
