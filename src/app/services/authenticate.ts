@@ -1,9 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
 import { SupabaseService } from './supabase';
 import { UUID } from '../models/primitives';
+import { Profile } from '../models/profile';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,12 @@ export class AuthService {
   private _currentUser$ = new BehaviorSubject<User | null>(null);
   private _session$ = new BehaviorSubject<Session | null>(null);
   private _isLoading$ = new BehaviorSubject<boolean>(true);
+  private _profile$ = signal<Profile | null>(null);
 
   user$ = this._currentUser$.asObservable();
   session$ = this._session$.asObservable();
   isLoading$ = this._isLoading$.asObservable();
+  profile = this._profile$.asReadonly()
 
   constructor() {
     this.initAuthListener();
@@ -32,21 +35,47 @@ export class AuthService {
     this._session$.next(data.session);
     this._currentUser$.next(data.session?.user ?? null);
 
+    if (data.session?.user) {
+      await this.getProfile();
+    }
+
     this._isLoading$.next(false);
 
-    this.supabase.supabaseClient.auth.onAuthStateChange((_event, session) => {
+    this.supabase.supabaseClient.auth.onAuthStateChange(async (_event, session) => {
       this._session$.next(session);
       this._currentUser$.next(session?.user ?? null);
+
+      if (session?.user) {
+        await this.getProfile();
+      } else {
+        this._profile$.set(null);
+      }
     });
   }
 
-  // Sync getters - use for quick checks when its redundant to subscribe to a observable
   get currentUser(): User | null {
     return this._currentUser$.getValue();
   }
 
   get isAuthenticated(): boolean {
     return this._currentUser$.getValue() !== null;
+  }
+
+  async getProfile() {
+    const user = this.currentUser;
+
+    if (!user) return;
+
+
+    const { data, error } = await this.supabase.supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('user_id', user.id)
+    .single();
+
+    if (error) throw error;
+
+    this._profile$.set(data ?? null);
   }
 
   getUserId(): UUID {

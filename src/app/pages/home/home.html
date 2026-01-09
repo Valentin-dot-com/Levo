@@ -1,5 +1,26 @@
 <section class="home-page">
-  <h1>Hi, Username</h1>
+  <h1>Hi, {{currentUser?.first_name}}</h1>
+  <section class="today-container">
+    <h2 class="weekday-label">{{ today()?.weekdayLabel }}</h2>
+    <p class="date">{{ `${today()?.dayNumber} ${thisWeek().monthLabel}, ${thisWeek().year}` }}</p>
+
+    <!-- <span class="date-container">
+      <p>{{ today()?.dayNumber }}</p>
+      <p>{{ thisWeek().monthLabel }}</p>
+      <p>{{ thisWeek().year }}</p>
+    </span> -->
+  </section>
+  <div class="week-row">
+    @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
+      <span class="day" [class.today]="day.isToday">
+        <p>{{ weekdays[i] }}</p>
+        <!-- TODO: Add routerlink to that days' view -->
+        <a>{{ day.dayNumber }}</a>
+      </span>
+    }
+  </div>
+
+  <a routerLink="/calendar">See your calendar <app-icon-calendar /></a>
 </section>
 
 <h1>Today's activites</h1>
