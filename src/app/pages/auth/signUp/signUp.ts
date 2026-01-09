@@ -58,7 +58,7 @@ export class SignUpComponent {
         'Account created successfully! Please check your email to verify your account.'
       );
       this.signUpForm.reset();
-      setTimeout(() => this.router.navigate(['/login']), 10000);
+      setTimeout(() => this.router.navigate(['/login']), 3000);
     } catch (error: unknown) {
       this.errorMessage.set(this.getErrorMessage(error));
     } finally {
