@@ -1,47 +1,79 @@
 <section class="home-page">
-  <h1>Hi, {{currentUser?.first_name}}</h1>
+  <h1 class="greeting">Hi, {{currentUser?.first_name}}</h1>
   <section class="today-container">
-    <h2 class="weekday-label">{{ today()?.weekdayLabel }}</h2>
-    <p class="date">{{ `${today()?.dayNumber} ${thisWeek().monthLabel}, ${thisWeek().year}` }}</p>
-
-    <!-- <span class="date-container">
-      <p>{{ today()?.dayNumber }}</p>
-      <p>{{ thisWeek().monthLabel }}</p>
-      <p>{{ thisWeek().year }}</p>
-    </span> -->
-  </section>
-  <div class="week-row">
-    @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
-      <span class="day" [class.today]="day.isToday">
-        <p>{{ weekdays[i] }}</p>
-        <!-- TODO: Add routerlink to that days' view -->
-        <a>{{ day.dayNumber }}</a>
+    <h2 class="weekday-label">
+      <span class="weekday">
+        {{ today()?.weekdayLabel }}
       </span>
-    }
-  </div>
-
-  <a routerLink="/calendar">See your calendar <app-icon-calendar /></a>
+      <span class="date">{{ `${today()?.dayNumber} ${thisWeek().monthLabel}, ${thisWeek().year}` }}</span>
+    </h2>
+    <div class="week-row">
+      @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
+        <span class="day" [class.today]="day.isToday">
+          <p>{{ weekdays[i] }}</p>
+          <!-- TODO: Add routerlink to that days' view -->
+          <a>{{ day.dayNumber }}</a>
+        </span>
+      }
+    </div>
+    <a class="calendar-link" routerLink="/calendar">See your calendar <app-icon-calendar /></a>
+    <article class="todays-tasks">
+      <h3>Today's tasks</h3>
+      <ul class="tasks">
+        @if (tasks().length) {
+          @for (task of tasks(); track task.id) {
+            @let taskCalendar = getCalendar(task.calendar_id);
+            <li class="task" [class.completed]="task.status === 'completed'">
+              <h4>
+                {{ task.title }}
+              </h4>
+              @if (taskCalendar?.is_shared) {
+                <span class="is-shared-container">
+                  <app-icon-shared />
+                </span>
+              }
+              @if (task.scheduled_at) {
+                <span class="scheduled-at">{{ formatTime(task.scheduled_at) }}</span>
+              }
+              <div class="status-toggle">
+                <label class="checkbox styled">
+                  <input type="checkbox"/>
+                  <div class="checkbox__checkmark"></div>
+                </label>
+              </div>
+            </li>
+          }
+        } @else {
+          <li class="no-tasks">
+            <p>You have no tasks planned for today</p>
+          </li>
+        }
+        <li class="add-task-today">
+          <button>
+            <app-icon-add />
+            <span class="add-text">Add new task for today</span>
+          </button>
+        </li>
+      </ul>
+    </article>
+  </section>
+  <section class="boards">
+    <h2>Your boards</h2>
+    <ul class="boards-list">
+      @for (board of boards(); track board.id) {
+      <li class="board">
+        <a routerLink="/board">
+          <span class="board-calendar">
+            {{ getCalendar(board.calendar_id)?.name }}
+          </span>
+          <h3 class="board-title">
+            {{ board.title }}
+          </h3>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  <button (click)="signOut()">Logga ut</button>
 </section>
 
-<h1>Today's activites</h1>
-
-<div>Your calendars:</div>
-<ul>
-  @for (calendar of calendars(); track calendar.id) {
-    <li>{{ calendar.name }}</li>
-  }
-</ul>
-Tasks:
-<ul>
-  @for (task of tasks(); track task.id) {
-    <li>{{ task.title }}</li>
-  }
-</ul>
-Boards:
-<ul>
-  @for (board of boards(); track board.id) {
-    <li>{{ board.title }}</li>
-  }
-</ul>
-
-<button (click)="signOut()">Logga ut</button>
