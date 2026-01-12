@@ -30,6 +30,31 @@ export class CalendarViewService {
     return this.calendarService.getCachedTasksForMonth(this.currentYear(), this.currentMonth());
   });
 
+  readonly thisWeek = computed(() => {
+    const today = new Date();
+    const weekStart = startOfWeek(today, { weekStartsOn: 1 });
+    const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
+    const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
+
+    return {
+      start: weekStart,
+      end: weekEnd,
+      weekNumber: getISOWeek(weekStart),
+      year: weekStart.getFullYear(),
+      monthKey: format(today, 'yyyy-MM'),
+      monthLabel: format(today, 'MMMM'),
+      days: days.map((d) => ({
+        date: d,
+        dayNumber: getDate(d),
+        weekdayLabel: format(d, 'EEEE'),
+        weekdayIndex: (getDay(d) + 6) % 7,
+        inMonth: format(d, 'MMM'),
+        isCurrentMonth: isSameMonth(d, today),
+        isToday: isToday(d),
+      })),
+    } as CalendarWeek;
+  });
+
   readonly weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   readonly monthName = computed(() => {

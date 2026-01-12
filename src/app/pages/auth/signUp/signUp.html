@@ -1,0 +1,93 @@
+<form [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
+  <h1>Create your Levo account:</h1>
+  @if (!loading()) {
+    <div class="input-container">
+      <label for="firstName">First name</label>
+      <input
+        id="firstName"
+        type="text"
+        formControlName="firstName"
+        required
+        autocomplete="given-name"
+        class="sign-up-input"
+        [class.error]="signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched"
+      />
+      @if (signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched) {
+        <span class="feedback-invalid">First name is required</span>
+      }
+    </div>
+
+    <div class="input-container">
+      <label for="lastName">Last name</label>
+      <input
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        required
+        autocomplete="family-name"
+        class="sign-up-input"
+        [class.error]="signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched"
+      />
+      @if (signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched) {
+        <span class="feedback-invalid">Last name is required</span>
+      }
+    </div>
+
+    <div class="input-container">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        required
+        autocomplete="email"
+        class="sign-up-input"
+        [class.error]="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched"
+      />
+      @if (signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched) {
+        <span class="feedback-invalid">Please enter a valid email</span>
+      }
+    </div>
+
+    <div class="input-container">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        required
+        autocomplete="new-password"
+        class="sign-up-input"
+        [class.error]="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched"
+      />
+      @if (signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched) {
+        <span class="feedback-invalid">Password must be at least 8 characters</span>
+
+      }
+    </div>
+
+    <button class="submit-btn" [class.success]="successMessage()" type="submit" [disabled]="signUpForm.invalid || loading()">
+      Create account
+    </button>
+  }
+
+  @if (successMessage() && !loading()) {
+    <span class="success submit-msg">
+      <p>Good news!</p>
+      <p>{{ successMessage() }}</p>
+    </span>
+  }
+
+  @if (errorMessage() && !loading()) {
+    <span class="error submit-msg">
+      <p>{{ errorMessage() }}</p>
+    </span>
+  }
+
+  @if (loading()) {
+    <span class="loading-container">
+      <p>Trying to create your account...</p>
+      <app-loader />
+    </span>
+  }
+</form>

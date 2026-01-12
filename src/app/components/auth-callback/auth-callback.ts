@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs';
+import { LoaderComponent } from '../loader/loader';
 
 @Component({
   selector: 'app-auth-callback',
-  imports: [],
+  imports: [LoaderComponent],
   templateUrl: './auth-callback.html',
   styleUrl: './auth-callback.scss',
 })

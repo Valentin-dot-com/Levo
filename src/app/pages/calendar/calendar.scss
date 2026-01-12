@@ -10,10 +10,14 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
+  h1 {
+    line-height: normal;
+    margin-bottom: 1rem;
+  }
 }
 
 .content-container {
-  padding-top: 2rem;
   height: 100%;
   max-width: 100%;
   max-height: 100%;
@@ -36,9 +40,8 @@ nav {
   display: flex;
   justify-content: center;
   z-index: 6;
-  margin-bottom: 1rem;
   position: absolute;
-  top: -2rem;
+  top: 0;
   right: 0;
 
   .view-toggle {

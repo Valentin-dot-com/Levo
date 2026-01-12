@@ -1,24 +1,17 @@
 <div class="auth-container">
-  <div class="auth-card">
-    <h1>{{ isLoginView ? 'Sign In' : 'Sign Up' }}</h1>
+    @if (isLoginView) {
+      <app-log-in />
+    } @else {
+      <app-sign-up />
+    }
 
-    <form (ngSubmit)="onSubmit()">
-      <label class="email-input">
-        <span>Email address</span>
-        <input type="email" [(ngModel)]="email" name="email" placeholder="your@email.com" [disabled]="loading">
-      </label>
 
-      <label class="password-input">
-        <span>Password</span>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="SuperNonPersonalPassword123"
-          [disabled]="loading">
-      </label>
-
+    @if (isLoginView) {
       <div class="divider">
         <p>or</p>
       </div>
-
-      <button class="gsi-material-button" type="button" (click)="signInWithGoogle()">
+      
+      <button class="gsi-material-button" type="button" (click)="signInWithGoogle()" (keyup.enter)="signInWithGoogle()">
         <div class="gsi-material-button-state"></div>
         <div class="gsi-material-button-content-wrapper">
           <div class="gsi-material-button-icon">
@@ -42,24 +35,14 @@
           <span class="gsi-material-button-contents">Sign in with Google</span>
         </div>
       </button>
-
-      @if (errorMessage) {
-      <p class="error-message">{{ errorMessage }}</p>
-      }
-
-      <button type="submit" class="submit-button" [disabled]="loading">
-        {{ loading ? 'Loading animation will go here' : (isLoginView ? 'Sign In' : 'Sign Up') }}
-      </button>
-      <!-- TODO: Add success feedback that mail was sent -->
-    </form>
+    }
 
     <div class="toggle-container">
       <p class="toggle-text">
         {{ isLoginView ? "Don't have an account?" : 'Already have an account?' }}
       </p>
-      <button (click)="toggleMode()" (keyup.enter)="toggleMode()" class="toggle-button">
-        {{ isLoginView ? 'Sign Up' : 'Sign In' }}
+      <button type="button" (click)="toggleMode()" (keyup.enter)="toggleMode()" class="toggle-btn">
+        {{ isLoginView ? 'Create an account' : 'Sign In' }}
       </button>
     </div>
-  </div>
 </div>

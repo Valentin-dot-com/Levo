@@ -33,9 +33,9 @@
     // bottom: -5rem;
     // left: 1rem;
     left: 50%;
-    transform: translateX(-50%) translateY(0);
-    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
     bottom: 0;
+    transform: translateX(-50%) translateY(1rem);
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
     z-index: 1;
     background-color: $color-accent;
     border: none;
@@ -46,7 +46,7 @@
     cursor: pointer;
 
     &.visible {
-      transform: translateX(-50%) translateY(-7rem);
+      transform: translateX(-50%) translateY(-3rem);
       opacity: 1;
     }
 
@@ -77,11 +77,13 @@
     background-color: $color-white;
     color: $color-primary;
     height: 3rem;
+    font-size: $font-size-M;
   }
 
   .week {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid $color-grey;
 
