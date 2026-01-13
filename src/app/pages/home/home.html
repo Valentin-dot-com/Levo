@@ -16,7 +16,6 @@
         </span>
       }
     </div>
-    <a class="calendar-link" routerLink="/calendar">See your calendar <app-icon-calendar /></a>
     <article class="todays-tasks">
       <h3>Today's tasks</h3>
       <ul class="tasks">
@@ -45,7 +44,7 @@
           }
         } @else {
           <li class="no-tasks">
-            <p>You have no tasks planned for today</p>
+            <h4>You have no tasks planned for today</h4>
           </li>
         }
         <li class="add-task-today">
@@ -61,10 +60,16 @@
     <h2>Your boards</h2>
     <ul class="boards-list">
       @for (board of boards(); track board.id) {
+      @let boardCalendar = getCalendar(board.calendar_id);
       <li class="board">
         <a routerLink="/board">
           <span class="board-calendar">
-            {{ getCalendar(board.calendar_id)?.name }}
+            {{ boardCalendar?.name }}
+            @if (boardCalendar?.is_shared) {
+              <span class="is-shared-container">
+                <app-icon-shared />
+              </span>
+            }
           </span>
           <h3 class="board-title">
             {{ board.title }}
