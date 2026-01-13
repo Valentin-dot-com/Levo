@@ -9,8 +9,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { SupabaseService } from '../../../services/supabase';
 import { LoaderComponent } from '../../../components/loader/loader';
+import { AuthService } from '../../../services/authenticate';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,7 +19,7 @@ import { LoaderComponent } from '../../../components/loader/loader';
   styleUrl: './signUp.scss',
 })
 export class SignUpComponent {
-  private supabase = inject(SupabaseService);
+  private auth = inject(AuthService);
   private router = inject(Router);
 
   loading = signal(false);
@@ -41,16 +41,18 @@ export class SignUpComponent {
     try {
       const { firstName, lastName, email, password } = this.signUpForm.value;
 
-      const { error } = await this.supabase.supabaseClient.auth.signUp({
-        email: email!,
-        password: password!,
-        options: {
-          data: {
-            first_name: firstName!,
-            last_name: lastName!,
-          },
-        },
-      });
+      // const { error } = await this.supabase.supabaseClient.auth.signUp({
+      //   email: email!,
+      //   password: password!,
+      //   options: {
+      //     data: {
+      //       first_name: firstName!,
+      //       last_name: lastName!,
+      //     },
+      //   },
+      // });
+
+      const { error } = await this.auth.signUp(email!, password!, firstName!, lastName!);
 
       if (error) throw error;
 

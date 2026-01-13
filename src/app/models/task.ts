@@ -15,3 +15,12 @@ export interface Task {
   updated_at?: Timestamptz | null;
   status?: TaskStatus;
 }
+
+export interface CreateTask {
+  calendar_id: UUID;
+  title: string;
+  description: string | null;
+  location: string | null;
+  date: string | null;
+  scheduled_at: string | null;
+}

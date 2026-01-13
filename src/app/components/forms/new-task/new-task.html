@@ -1,0 +1,92 @@
+<form [formGroup]="newTaskForm" (submit)="onCreate()">
+  <div class="input-container">
+    <label for="calendar_id">Calendar</label>
+    <select
+      id="calendar_id"
+      formControlName="calendar_id"
+      required
+      class="newTaskInput"
+      [class.error]="newTaskForm.get('calendar_id')?.invalid && newTaskForm.get('calendar_id')?.touched"
+    >
+      @for (cal of calendars(); track cal) {
+        <option [value]="cal.id">{{ cal.name }}</option>
+      }
+    </select>
+    @if (newTaskForm.get('calendar_id')?.invalid && newTaskForm.get('calendar_id')?.touched) {
+      <span class="feedback-invalid">Calendar is required</span>
+    }
+  </div>
+
+  <div class="input-container">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      type="text"
+      formControlName="title"
+      required
+      class="newTaskInput"
+      [class.error]="newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched"
+    />
+    @if (newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched) {
+      <span class="feedback-invalid">Title is required</span>
+    }
+  </div>
+
+  <div class="input-container">
+    <label for="description">Description</label>
+    <input
+      id="description"
+      type="text"
+      formControlName="description"
+      class="newTaskInput"
+    />
+  </div>
+
+  <div class="input-container">
+    <label for="location">Location</label>
+    <input
+      id="location"
+      type="text"
+      formControlName="location"
+      class="newTaskInput"
+    />
+  </div>
+
+  <div class="input-container">
+    <label for="date">Date</label>
+    <input
+      id="date"
+      type="text"
+      formControlName="date"
+      class="newTaskInput"
+    />
+  </div>
+  <mat-form-field>
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date">
+    <mat-datepicker-toggle matIconSuffix [for]="picker">
+      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="input-container">
+    <label for="scheduled_at">Begins</label>
+    <input
+      id="scheduled_at"
+      type="text"
+      formControlName="scheduled_at"
+      class="newTaskInput"
+    />
+  </div>
+
+  <button class="submit-btn" type="submit" [disabled]="newTaskForm.invalid || loading()">
+    Create task
+  </button>
+
+  @if (errorMessage()) {
+    <span>
+      <p>{{ errorMessage() }}</p>
+    </span>
+  }
+</form>

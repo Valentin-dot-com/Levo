@@ -14,7 +14,7 @@
         </a>
       </li>
       <li>
-        <button class="add-new-btn">
+        <button class="add-new-btn" (click)="toggleCreateNew()">
           <app-icon-add />
         </button>
       </li>
@@ -35,6 +35,9 @@
   <main class="content">
     @if (initError()) {
     <div class="error-banner">{{ initError() }}</div>
+    }
+    @if (openCreateNew()) {
+      <app-create-new />
     }
     <router-outlet />
   </main>

@@ -1,0 +1,20 @@
+<aside class="create-new-overlay">
+  <h2>Create</h2>
+  <div class="choices">
+    @for (choice of choices; track $index) {
+      <button (click)="setCurrentChoice(choice)" [class.active]="currentChoice() === choice">
+        New {{ choice }}
+      </button>
+    }
+  </div>
+
+  @switch (currentChoice()) {
+    @case ('task') {
+      <app-new-task />
+    }
+    @case ('board') {
+      <app-new-board />
+    }
+  }
+
+</aside>

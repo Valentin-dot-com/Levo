@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Calendar } from '../models/calendar.model';
-import { Task } from '../models/task';
+import { CreateTask, Task } from '../models/task';
 import { UUID } from '../models/primitives';
 import { AuthService } from './authenticate';
 
@@ -16,9 +16,11 @@ export class CalendarService {
   private _taskCache = signal<Map<string, Task[]>>(new Map());
   private _calendarIds = signal<UUID[]>([]);
   private _pendingRequests = new Map<string, Promise<void>>();
+  private _todoTasks = signal<Task[]>([]);
 
   readonly calendars = this._calendars.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
+  readonly todoTasks = this._todoTasks.asReadonly();
 
   // readonly tasks = computed<Task[]>(() => {
   //   const key = this.getMonthKey(this.calendarView.currentYear(), this.calendarView.currentMonth());
@@ -138,6 +140,47 @@ export class CalendarService {
 
     this._pendingRequests.set(key, fetchPromise);
     return fetchPromise;
+  }
+
+  async fetchTodoTasks(): Promise<void> {
+    const calendarIds = this._calendarIds();
+
+    if (!calendarIds) return;
+
+    const { data, error } = await this.supabase.supabaseClient
+    .from('tasks')
+    .select('*')
+    .in('calendar_id', calendarIds)
+    .is('date', null);
+
+    if (error) throw error;
+
+    this._todoTasks.set(data ?? []);
+  }
+
+  async createTask(task: CreateTask) {
+    const { data, error } = await this.supabase.supabaseClient
+    .from('tasks')
+    .insert({
+      calendar_id: task.calendar_id,
+      title: task.title,
+      description: task.description ?? null,
+      location: task.location ?? null,
+      date: task.date ?? null,
+      scheduled_at: task.scheduled_at ?? null,
+    })
+    .select()
+    .single();
+
+    if (error) throw error;
+
+    if (data.date) {
+      // Add to taskCache
+    } else {
+      this._todoTasks.update(tasks => [...tasks, data]);
+    }
+
+    return data;
   }
 
   async initCalendarData(): Promise<void> {

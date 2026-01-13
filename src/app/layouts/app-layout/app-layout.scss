@@ -28,7 +28,7 @@
     margin: 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center ;
 
     li {
       // Remove for desktop ?
@@ -87,6 +87,13 @@
       }
     }
   }
+}
+
+app-create-new {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
 }
 
 main.content {

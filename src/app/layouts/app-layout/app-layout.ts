@@ -8,6 +8,7 @@ import { AddIconComponent } from '../../icons/addIcon';
 import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { BoardIconComponent } from '../../icons/boardIcon';
 import { ProfileIconComponent } from '../../icons/profileIcon';
+import { CreateNewComponent } from '../../components/quick-create-new/create-new';
 
 @Component({
   selector: 'app-layout',
@@ -21,6 +22,7 @@ import { ProfileIconComponent } from '../../icons/profileIcon';
     CalendarIconComponent,
     BoardIconComponent,
     ProfileIconComponent,
+    CreateNewComponent
 ],
   templateUrl: './app-layout.html',
   styleUrl: './app-layout.scss',
@@ -31,6 +33,11 @@ export class AppLayoutComponent implements OnInit {
   private boardService = inject(BoardService);
 
   initError = signal<string | null>(null);
+  openCreateNew = signal(false);
+
+  toggleCreateNew() {
+    this.openCreateNew.update(value => !value);
+  }
 
   async ngOnInit(): Promise<void> {
     try {

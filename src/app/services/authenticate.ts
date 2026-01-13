@@ -99,8 +99,17 @@ export class AuthService {
     return this.supabase.supabaseClient.auth.signInWithPassword({ email, password });
   }
 
-  signUp(email: string, password: string) {
-    return this.supabase.supabaseClient.auth.signUp({ email, password });
+  async signUp(email: string, password: string, firstName: string, lastName: string) {
+    return this.supabase.supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+        }
+      }
+    });
   }
 
   async signOut() {
