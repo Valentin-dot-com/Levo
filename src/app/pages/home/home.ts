@@ -6,13 +6,12 @@ import { CommonModule } from '@angular/common';
 import { CalendarViewService } from '../../services/calendarView';
 import { compareAsc, format, isToday, parseISO } from 'date-fns';
 import { RouterLink } from '@angular/router';
-import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, CalendarIconComponent, AddIconComponent, SharedIconComponent],
+  imports: [CommonModule, RouterLink, AddIconComponent, SharedIconComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -36,7 +35,7 @@ export class HomeComponent {
       this.calendarView.tasks().filter((task) => task.date && isToday(task.date)) || [];
 
     if (tasksForToday.length === 0) return tasksForToday;
-    
+
     return [...tasksForToday].sort((a, b) => {
       if (!a.scheduled_at && !b.scheduled_at) return 0;
       if (!a.scheduled_at) return 1;

@@ -5,9 +5,12 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-height: 95%;
+  overflow: auto;
+  padding-bottom: 3rem;
 
   .greeting {
-    font-size: $font-size-L;
+    font-size: 3rem;
     margin: 0;
   }
 
@@ -25,11 +28,11 @@
     line-height: normal;
 
     .weekday {
-      font-size: $font-size-M;
+      font-size: $font-size-L;
     }
 
     .date {
-      font-size: $font-size-S;
+      font-size: $font-size-M;
       font-weight: 500;
     }
   }
@@ -63,6 +66,8 @@
         border-radius: 50%;
         aspect-ratio: 1 / 1;
         width: 100%;
+        max-height: 5rem;
+        max-width: 5rem;
       }
 
       &.today {
@@ -73,30 +78,6 @@
           background-color: $color-accent;
         }
       }
-    }
-  }
-
-  .calendar-link {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    line-height: normal;
-    fill: none;
-    font-size: $font-size-text;
-    font-weight: 500;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: $color-primary;
-    color: $color-white;
-    border-radius: $border-radius-XL;
-    transition: background 0.2s ease;
-
-    @include hover-supported {
-      background-color: $color-accent;
     }
   }
 
@@ -117,6 +98,15 @@
       gap: 0.75rem;
     }
 
+    .no-tasks {
+      list-style: none;
+
+      h4 {
+        font-weight: 500;
+        font-size: $font-size-S;
+      }
+    }
+
     .task,
     .add-task-today {
       list-style: none;
@@ -133,7 +123,8 @@
       &.completed {
         background-color: $color-success;
 
-        h4, span {
+        h4,
+        span {
           color: $color-white;
           text-decoration: line-through;
         }
@@ -141,24 +132,6 @@
 
       h4 {
         font-size: $font-size-text;
-      }
-
-      .is-shared-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid $color-accent;
-        padding: 0.25rem 0.5rem;
-        border-radius: $border-radius-S;
-
-        app-icon-shared {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          color: $color-accent;
-          fill: none;
-        }
       }
 
       .scheduled-at {
@@ -230,7 +203,7 @@
       flex-direction: column;
       gap: 0.5rem;
       padding: 0;
-      margin: 0  ;
+      margin: 0;
     }
 
     .board {
@@ -259,7 +232,12 @@
       }
 
       .board-calendar {
+        display: flex;
+        align-items: center;justify-content: space-between;
+        gap: 0.5rem;
         font-size: $font-size-text;
+        height: 2rem;
+        fill: none;
       }
 
       .board-title {
@@ -267,8 +245,25 @@
       }
     }
   }
-}
 
+  .is-shared-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $color-accent;
+    padding: 0.25rem 0.5rem;
+    border-radius: $border-radius-S;
+
+    app-icon-shared {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: $color-accent;
+      fill: none;
+    }
+  }
+}
 /*
 ------------- Custom Checkbox ------------
 */
@@ -317,7 +312,7 @@
   border-radius: 50%;
 }
 .checkbox.styled .checkbox__checkmark:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0.75rem;
   top: 0.55rem;
@@ -330,3 +325,55 @@
   transition: opacity 0.25s ease;
 }
 
+@media screen and (min-width: 1300px) {
+  .home-page {
+    gap: 4rem;
+
+    .greeting {
+      font-size: $font-size-L;
+    }
+
+    .today-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+      position: relative;
+
+      .weekday-label {
+        flex-basis: 100%;
+
+        .weekday {
+          font-size: $font-size-XL;
+        }
+      }
+
+      .week-row {
+        flex-basis: calc(50% - 1rem);
+
+        .day {
+          p {
+            font-size: $font-size-S;
+          }
+        }
+      }
+
+      .todays-tasks {
+        position: absolute;
+        top: 1rem;
+        right: 0;
+        width: calc(50% - 1rem);
+      }
+    }
+
+    .boards {
+      .boards-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 2rem;
+
+        .board {
+          flex-basis: calc(50% - 1rem);
+        }
+      }
+    }
+  }
+}
