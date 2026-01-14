@@ -1,11 +1,11 @@
-<form [formGroup]="newTaskForm" (submit)="onCreate()">
+<form class="create-task-form" [formGroup]="newTaskForm" (submit)="onCreate()">
   <div class="input-container">
-    <label for="calendar_id">Calendar</label>
+    <label for="calendar_id">Calendar*</label>
     <select
       id="calendar_id"
       formControlName="calendar_id"
       required
-      class="newTaskInput"
+      class="new-task-input"
       [class.error]="newTaskForm.get('calendar_id')?.invalid && newTaskForm.get('calendar_id')?.touched"
     >
       @for (cal of calendars(); track cal) {
@@ -18,13 +18,13 @@
   </div>
 
   <div class="input-container">
-    <label for="title">Title</label>
+    <label for="title">Title*</label>
     <input
       id="title"
       type="text"
       formControlName="title"
       required
-      class="newTaskInput"
+      class="new-task-input"
       [class.error]="newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched"
     />
     @if (newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched) {
@@ -38,7 +38,7 @@
       id="description"
       type="text"
       formControlName="description"
-      class="newTaskInput"
+      class="new-task-input"
     />
   </div>
 
@@ -48,36 +48,18 @@
       id="location"
       type="text"
       formControlName="location"
-      class="newTaskInput"
+      class="new-task-input"
     />
+  </div>
+
+  <div class="input-container time">
+    <label for="scheduled_at">Begins at</label>
+    <app-time-picker formControlName="scheduled_at" />
   </div>
 
   <div class="input-container">
     <label for="date">Date</label>
-    <input
-      id="date"
-      type="text"
-      formControlName="date"
-      class="newTaskInput"
-    />
-  </div>
-  <mat-form-field>
-    <mat-label>Date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="date">
-    <mat-datepicker-toggle matIconSuffix [for]="picker">
-      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-    </mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <div class="input-container">
-    <label for="scheduled_at">Begins</label>
-    <input
-      id="scheduled_at"
-      type="text"
-      formControlName="scheduled_at"
-      class="newTaskInput"
-    />
+    <app-date-picker formControlName="date" />
   </div>
 
   <button class="submit-btn" type="submit" [disabled]="newTaskForm.invalid || loading()">
@@ -85,8 +67,14 @@
   </button>
 
   @if (errorMessage()) {
-    <span>
+    <span class="error-msg">
       <p>{{ errorMessage() }}</p>
+    </span>
+  }
+
+  @if (successMessage()) {
+    <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+      <p>{{ successMessage() }}</p>
     </span>
   }
 </form>

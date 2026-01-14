@@ -39,6 +39,12 @@ export class AppLayoutComponent implements OnInit {
     this.openCreateNew.update(value => !value);
   }
 
+  closeCreateOnNavClick() {
+    if (this.openCreateNew()) {
+      this.openCreateNew.set(false);
+    }
+  }
+
   async ngOnInit(): Promise<void> {
     try {
       await this.calendarService.initCalendarData();

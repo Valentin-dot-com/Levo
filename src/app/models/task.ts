@@ -1,4 +1,4 @@
-import { UUID, DateOnly, Timestamptz } from "./primitives";
+import { UUID, DateOnly, Timestamptz, Time } from "./primitives";
 
 export type TaskStatus = 'pending' | 'completed';
 
@@ -10,7 +10,7 @@ export interface Task {
   description?: string | null;
   location?: string | null;
   date?: DateOnly | null;
-  scheduled_at?: Timestamptz | null;
+  scheduled_at?: Time | null;
   created_at?: Timestamptz | null;
   updated_at?: Timestamptz | null;
   status?: TaskStatus;

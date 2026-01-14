@@ -1,0 +1,62 @@
+<div class="timepicker">
+  <button
+    type="button"
+    class="timepicker-trigger"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="isOpen()"
+    (click)="open()"
+  >
+    <span class="value" [class.placeholder]="!displayValue()">
+      <span>{{ hour() }}</span>
+      <span>:</span>
+      <span>{{ minute() }}</span>
+    </span>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="timepicker-dialog"
+      role="dialog"
+      aria-modal="true"
+      (keydown)="onKeydown($event)"
+      animate.enter="enter-animation"
+      animate.leave="leave-animation"
+    >
+      <div class="column" #hourList>
+        <h3>Hours</h3>
+        @for (h of hours; track h) {
+          <button
+            type="button"
+            class="option"
+            [class.selected]="hour() === h"
+            [attr.data-value]="h"
+            (click)="selectHour(h)"
+            [attr.tabindex]="activeColumn() === 'hour' && focusedHour() === h ? 0 : -1"
+            (focus)="activeColumn.set('hour'); focusedHour.set(h)"
+            [attr.aria-label]="'Select hour ' + pad(h)"
+          >
+            {{ pad(h) }}
+          </button>
+        }
+      </div>
+
+      <div class="column" #minuteList>
+        <h3>Minutes</h3>
+        @for (m of minutes; track m) {
+          <button
+            type="button"
+            class="option"
+            [class.selected]="minute() === m"
+            [attr.data-value]="m"
+            (click)="selectMinute(m)"
+            [attr.tabindex]="activeColumn() === 'minute' && focusedMinute() === m ? 0 : -1"
+            (focus)="activeColumn.set('minute'); focusedMinute.set(m)"
+            [attr.aria-label]="'Select minute ' + pad(m)"
+          >
+            {{ pad(m) }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

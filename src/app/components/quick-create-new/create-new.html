@@ -1,5 +1,11 @@
 <aside class="create-new-overlay">
   <h2>Create</h2>
+
+  <button type="button" class="close" (click)="close()">
+    <span>Close</span>
+    <app-icon-add />
+  </button>
+
   <div class="choices">
     @for (choice of choices; track $index) {
       <button (click)="setCurrentChoice(choice)" [class.active]="currentChoice() === choice">

@@ -2,30 +2,30 @@
   <nav class="main-nav">
     <menu class="nav-links">
       <li>
-        <a routerLink="/home" routerLinkActive="active">
+        <a routerLink="/home" routerLinkActive="active" (click)="closeCreateOnNavClick()">
           <app-icon-home />
           <span>Home</span>
         </a>
       </li>
       <li>
-        <a routerLink="/calendar" routerLinkActive="active">
+        <a routerLink="/calendar" routerLinkActive="active" (click)="closeCreateOnNavClick()">
           <app-icon-calendar />
           <span>Calendar</span>
         </a>
       </li>
       <li>
-        <button class="add-new-btn" (click)="toggleCreateNew()">
+        <button class="add-new-btn" (click)="toggleCreateNew()" [class.open]="openCreateNew()">
           <app-icon-add />
         </button>
       </li>
       <li>
-        <a routerLink="/boards" routerLinkActive="active">
+        <a routerLink="/boards" routerLinkActive="active" (click)="closeCreateOnNavClick()">
           <app-icon-board />
           <span>Boards</span>
         </a>
       </li>
       <li>
-        <a routerLink="/profile" routerLinkActive="active">
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeCreateOnNavClick()">
           <app-icon-profile />
           <span>Profile</span>
         </a>
@@ -37,7 +37,9 @@
     <div class="error-banner">{{ initError() }}</div>
     }
     @if (openCreateNew()) {
-      <app-create-new />
+    <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
+      <app-create-new (closed)="openCreateNew.set(false)" />
+    </div>
     }
     <router-outlet />
   </main>
