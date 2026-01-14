@@ -1,0 +1,80 @@
+<form class="create-task-form" [formGroup]="newTaskForm" (submit)="onCreate()">
+  <div class="input-container">
+    <label for="calendar_id">Calendar*</label>
+    <select
+      id="calendar_id"
+      formControlName="calendar_id"
+      required
+      class="new-task-input"
+      [class.error]="newTaskForm.get('calendar_id')?.invalid && newTaskForm.get('calendar_id')?.touched"
+    >
+      @for (cal of calendars(); track cal) {
+        <option [value]="cal.id">{{ cal.name }}</option>
+      }
+    </select>
+    @if (newTaskForm.get('calendar_id')?.invalid && newTaskForm.get('calendar_id')?.touched) {
+      <span class="feedback-invalid">Calendar is required</span>
+    }
+  </div>
+
+  <div class="input-container">
+    <label for="title">Title*</label>
+    <input
+      id="title"
+      type="text"
+      formControlName="title"
+      required
+      class="new-task-input"
+      [class.error]="newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched"
+    />
+    @if (newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched) {
+      <span class="feedback-invalid">Title is required</span>
+    }
+  </div>
+
+  <div class="input-container">
+    <label for="description">Description</label>
+    <input
+      id="description"
+      type="text"
+      formControlName="description"
+      class="new-task-input"
+    />
+  </div>
+
+  <div class="input-container">
+    <label for="location">Location</label>
+    <input
+      id="location"
+      type="text"
+      formControlName="location"
+      class="new-task-input"
+    />
+  </div>
+
+  <div class="input-container time">
+    <label for="scheduled_at">Begins at</label>
+    <app-time-picker formControlName="scheduled_at" />
+  </div>
+
+  <div class="input-container">
+    <label for="date">Date</label>
+    <app-date-picker formControlName="date" />
+  </div>
+
+  <button class="submit-btn" type="submit" [disabled]="newTaskForm.invalid || loading()">
+    Create task
+  </button>
+
+  @if (errorMessage()) {
+    <span class="error-msg">
+      <p>{{ errorMessage() }}</p>
+    </span>
+  }
+
+  @if (successMessage()) {
+    <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+      <p>{{ successMessage() }}</p>
+    </span>
+  }
+</form>

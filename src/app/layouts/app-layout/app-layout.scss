@@ -72,9 +72,14 @@
         height: 3.25rem;
         aspect-ratio: 1 / 1;
         color: $color-white;
-        transition: background-color 0.2s ease-in-out;
+        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
         cursor: pointer;
 
+        &.open {
+          transform: rotate(45deg);
+          background-color: $color-error;
+        }
+        
         app-icon-add {
           display: flex;
           justify-content: center;
@@ -84,9 +89,28 @@
         @include hover-supported {
           background-color: $color-primary;
         }
+
       }
     }
   }
+}
+
+.overlay {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.enter-animation {
+  @include slide-in-animation();
+}
+
+.leave-animation {
+  @include slide-out-animation();
 }
 
 main.content {
@@ -136,7 +160,6 @@ main.content {
           height: 5rem;
         }
       }
-
     }
   }
 }

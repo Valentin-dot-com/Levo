@@ -1,0 +1,44 @@
+@use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+.create-new-overlay {
+  background-color: $color-white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-radius: $border-radius-XL;
+  position: absolute;
+  width: calc(100%);
+  left: 0;
+  bottom: 0;
+  height: 90dvh;
+  z-index: 15;
+
+  .close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: transparent;
+    font: $font-size-S;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+
+    app-icon-add {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: rotate(45deg);
+    }
+
+    @include hover-supported {
+      color: $color-error;
+    }
+  }
+}

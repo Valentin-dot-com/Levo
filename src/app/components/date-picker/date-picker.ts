@@ -1,0 +1,256 @@
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  ViewChild,
+  ElementRef,
+  forwardRef,
+  OnDestroy,
+  Renderer2,
+} from '@angular/core';
+import { CalendarViewService } from '../../services/calendarView';
+import { CommonModule } from '@angular/common';
+import { CalendarDay } from '../../models/calendar.model';
+import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
+import { ArrowRightIconComponent } from '../../icons/arrowRightIcon';
+import { format, isValid, parseISO } from 'date-fns';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+@Component({
+  selector: 'app-date-picker',
+  imports: [CommonModule, ArrowLeftIconComponent, ArrowRightIconComponent],
+  templateUrl: './date-picker.html',
+  styleUrls: ['./date-picker.scss'],
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatePickerComponent), multi: true },
+  ],
+})
+export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
+  private calendarView = inject(CalendarViewService);
+  private renderer = inject(Renderer2);
+  private hostRef = inject(ElementRef);
+  private documentClickUnlisten: (() => void) | null = null;
+
+  @ViewChild('input', { static: true })
+  inputRef!: ElementRef<HTMLInputElement>;
+
+  readonly isOpen = signal(false);
+  readonly selectedDate = signal<Date | null>(null);
+  readonly focusedDate = signal<Date | null>(null);
+
+  readonly currentYear = this.calendarView.currentYear;
+  readonly currentMonth = this.calendarView.currentMonth;
+  readonly monthLabel = this.calendarView.monthName;
+
+  readonly loading = signal(true);
+
+  readonly month = computed(() =>
+    this.calendarView.generateMonth(new Date(this.currentYear(), Number(this.currentMonth())))
+  );
+
+  readonly days = computed(() => this.month().days);
+
+  private onChange?: (value: string | null) => void;
+  private onTouched?: () => void;
+
+  writeValue(value: string | null): void {
+    if (!value) {
+      this.selectedDate.set(null);
+      this.focusedDate.set(null);
+      return;
+    }
+
+    const parsed = parseISO(value);
+    if (!isValid(parsed)) return;
+
+    this.selectedDate.set(parsed);
+    this.focusedDate.set(parsed);
+    this.calendarView.goToMonth(parsed.getFullYear(), parsed.getMonth());
+  }
+
+  registerOnChange(fn: (value: string | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(disabled: boolean): void {
+    if (disabled) {
+      this.inputRef.nativeElement.disabled = true;
+    }
+  }
+
+  ngOnDestroy() {
+    this.removeDocumentClickListener();
+  }
+
+  open() {
+    this.isOpen.set(true);
+
+    const initial =
+      this.selectedDate() ??
+      this.days().find((d) => d.isToday)?.date ??
+      this.days().find((d) => d.isCurrentMonth)?.date ??
+      new Date();
+
+    if (initial) this.focusedDate.set(initial);
+    this.addDocumentClickListener();
+    this.focusActiveDayButton();
+  }
+
+  close() {
+    this.isOpen.set(false);
+    // this.inputRef.nativeElement.focus();
+    this.removeDocumentClickListener();
+  }
+
+  private addDocumentClickListener() {
+    if (this.documentClickUnlisten) return;
+    this.documentClickUnlisten = this.renderer.listen(
+      'document',
+      'mousedown',
+      (event: MouseEvent) => {
+        if (!this.hostRef.nativeElement.contains(event.target)) {
+          this.close();
+        }
+      }
+    );
+  }
+
+  private removeDocumentClickListener() {
+    if (this.documentClickUnlisten) {
+      this.documentClickUnlisten();
+      this.documentClickUnlisten = null;
+    }
+  }
+
+  onInput(value: string) {
+    const parsed = parseISO(value);
+    if (!isValid(parsed)) return;
+
+    this.selectedDate.set(parsed);
+    this.focusedDate.set(parsed);
+    this.calendarView.goToMonth(parsed.getFullYear(), parsed.getMonth());
+
+    this.onChange?.(value);
+  }
+
+  // TODO: Look up if this format is acceptable for Supabase timestamptz
+  get inputValue(): string {
+    return this.selectedDate() ? format(this.selectedDate()!, 'yyyy-MM-dd') : '';
+  }
+
+  select(day: CalendarDay) {
+    const value = format(day.date, 'yyyy-MM-dd');
+
+    this.selectedDate.set(day.date);
+    this.focusedDate.set(day.date);
+
+    this.onChange?.(value);
+    this.onTouched?.();
+
+    this.close();
+  }
+
+  onKeydown(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'ArrowRight':
+        this.moveFocus(1);
+        break;
+      case 'ArrowLeft':
+        this.moveFocus(-1);
+        break;
+      case 'ArrowDown':
+        this.moveFocus(7);
+        break;
+      case 'ArrowUp':
+        this.moveFocus(-7);
+        break;
+      case 'Home':
+        this.moveToWeekEdge(true);
+        break;
+      case 'End':
+        this.moveToWeekEdge(false);
+        break;
+      case 'PageDown':
+        this.calendarView.goToNextMonth();
+        break;
+      case 'PageUp':
+        this.calendarView.goToPreviousMonth();
+        break;
+      case 'Enter':
+      case ' ':
+        this.selectFocused();
+        break;
+      case 'Escape':
+        this.close();
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+  }
+
+  isFocused(day: CalendarDay): boolean {
+    return !!this.focusedDate() && day.date.toDateString() === this.focusedDate()!.toDateString();
+  }
+
+  isSelected(day: CalendarDay): boolean {
+    return !!this.selectedDate() && day.date.toDateString() === this.selectedDate()!.toDateString();
+  }
+
+  private focusActiveDayButton() {
+    setTimeout(() => {
+      const active = this.hostRef.nativeElement.querySelector('.calendar-day[tabindex="0"]');
+      if (active) (active as HTMLElement).focus();
+    });
+  }
+
+  private moveFocus(offset: number) {
+    const flat = this.days();
+    const index = flat.findIndex((d) => this.isFocused(d));
+    const next = flat[index + offset];
+
+    if (!next) return;
+
+    this.focusedDate.set(next.date);
+
+    if (!next.isCurrentMonth) {
+      this.calendarView.goToMonth(next.date.getFullYear(), next.date.getMonth());
+    }
+    this.focusActiveDayButton();
+  }
+
+  private moveToWeekEdge(start: boolean) {
+    const flat = this.days();
+    const index = flat.findIndex((d) => this.isFocused(d));
+    if (index === -1) return;
+
+    const weekStart = Math.floor(index / 7) * 7;
+    const target = start ? flat[weekStart] : flat[weekStart + 6];
+
+    if (target) this.focusedDate.set(target.date);
+    this.focusActiveDayButton();
+  }
+
+  private selectFocused() {
+    const day = this.days().find((d) => this.isFocused(d));
+    if (day) this.select(day);
+  }
+
+  get weekDayNames() {
+    return this.calendarView.weekDays;
+  }
+
+  async goToPrevious() {
+    await this.calendarView.goToPreviousMonth();
+  }
+
+  async goToNext() {
+    await this.calendarView.goToNextMonth();
+  }
+}
