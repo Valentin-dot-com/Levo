@@ -1,9 +1,9 @@
 // responses.ts
-import { Board } from './board';
+import { Board } from './board.model';
 import { Calendar } from './calendar.model';
-import { CalendarMembership } from './calendarMembership';
-import { UUID, DateOnly, Timestamptz } from './primitives';
-import { Task, TaskStatus } from './task';
+import { CalendarMembership } from './calendarMembership.model';
+import { UUID, DateOnly, Timestamptz } from './primitives.model';
+import { Task, TaskStatus } from './task.model';
 
 export interface CalendarWithTasks extends Calendar {
   tasks: Task[];

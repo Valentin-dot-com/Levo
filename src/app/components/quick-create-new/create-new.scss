@@ -3,17 +3,24 @@
 
 .create-new-overlay {
   background-color: $color-white;
-  padding: 1rem;
+  padding: 1rem 1rem;
+  margin-bottom: 6rem;
+  overflow-y: auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  border-radius: $border-radius-XL;
+  justify-content: flex-start;
+  gap: 1rem;
+  border-radius: $border-radius-XL $border-radius-XL 0 0;
   position: absolute;
   width: calc(100%);
   left: 0;
   bottom: 0;
-  height: 90dvh;
+  width: 100%;
+  height: calc(98% - 6rem);
+  max-height:  calc(98% - 6rem);
   z-index: 15;
+  box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22);
 
   .close {
     position: absolute;
@@ -40,5 +47,55 @@
     @include hover-supported {
       color: $color-error;
     }
+  }
+
+  .choices {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .choice-btn {
+      padding: 0.5rem 0.75rem;
+      border-radius: $border-radius-XL;
+      border: 2px solid transparent;
+      font-size: $font-size-text;
+      font-weight: 600;
+      color: $color-text;
+      background-color: $color-grey;
+      transition: background 0.2s ease-in-out;
+
+      @include hover-supported {
+        cursor: pointer;
+        background-color: $color-primary;
+        color: $color-fff;
+      }
+
+      &.active {
+        border-color: $color-primary;
+        background-color: $color-fff;
+        color: $color-primary;
+        cursor: auto;
+      }
+    }
+  }
+}
+
+.slide-in-animation {
+  @include slide-in-animation();
+}
+
+.slide-out-animation {
+  @include slide-in-animation();
+}
+
+@media screen and (min-width: 1300px) {
+  .create-new-overlay {
+    width: 30%;
+    max-width: 32rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: $border-radius-XL;
+    box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22), 0 10px 14px rgba($color-primary, $alpha: 0.22);
   }
 }

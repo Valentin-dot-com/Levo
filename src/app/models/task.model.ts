@@ -1,4 +1,4 @@
-import { UUID, DateOnly, Timestamptz, Time } from "./primitives";
+import { UUID, DateOnly, Timestamptz, Time } from "./primitives.model";
 
 export type TaskStatus = 'pending' | 'completed';
 

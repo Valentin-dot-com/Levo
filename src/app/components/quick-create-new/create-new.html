@@ -8,7 +8,7 @@
 
   <div class="choices">
     @for (choice of choices; track $index) {
-      <button (click)="setCurrentChoice(choice)" [class.active]="currentChoice() === choice">
+      <button (click)="setCurrentChoice(choice)" class="choice-btn" [class.active]="currentChoice() === choice">
         New {{ choice }}
       </button>
     }

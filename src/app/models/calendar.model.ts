@@ -1,4 +1,4 @@
-import { Timestamptz, UUID } from "./primitives";
+import { Timestamptz, UUID } from "./primitives.model";
 
 export interface Calendar {
   id: UUID;

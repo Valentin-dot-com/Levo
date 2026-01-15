@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { User } from '@supabase/supabase-js';
-import { Profile } from '../models/profile';
+import { Profile } from '../models/profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {

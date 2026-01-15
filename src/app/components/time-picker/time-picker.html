@@ -12,6 +12,9 @@
       <span>{{ minute() }}</span>
     </span>
   </button>
+  <button type="button" class="clear-btn" (click)="clear()" aria-label="Clear time">
+    <app-icon-delete />
+  </button>
 
   @if (isOpen()) {
     <div

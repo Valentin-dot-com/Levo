@@ -11,15 +11,25 @@ import {
 } from '@angular/core';
 import { CalendarViewService } from '../../services/calendarView';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CalendarDay } from '../../models/calendar.model';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { ArrowRightIconComponent } from '../../icons/arrowRightIcon';
+import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { format, isValid, parseISO } from 'date-fns';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-date-picker',
-  imports: [CommonModule, ArrowLeftIconComponent, ArrowRightIconComponent],
+  imports: [
+    CommonModule,
+    ArrowLeftIconComponent,
+    ArrowRightIconComponent,
+    CalendarIconComponent,
+    FormsModule,
+    DeleteIconComponent,
+  ],
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.scss'],
   providers: [
@@ -27,6 +37,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
+  inputText = '';
   private calendarView = inject(CalendarViewService);
   private renderer = inject(Renderer2);
   private hostRef = inject(ElementRef);
@@ -58,6 +69,7 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     if (!value) {
       this.selectedDate.set(null);
       this.focusedDate.set(null);
+      this.inputText = '';
       return;
     }
 
@@ -67,6 +79,7 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     this.selectedDate.set(parsed);
     this.focusedDate.set(parsed);
     this.calendarView.goToMonth(parsed.getFullYear(), parsed.getMonth());
+    this.inputText = this.formatDate(parsed);
   }
 
   registerOnChange(fn: (value: string | null) => void): void {
@@ -87,6 +100,14 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     this.removeDocumentClickListener();
   }
 
+  toggleOpen() {
+    if (this.isOpen()) {
+      this.close();
+    } else {
+      this.open();
+    }
+  }
+
   open() {
     this.isOpen.set(true);
 
@@ -105,6 +126,16 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     this.isOpen.set(false);
     // this.inputRef.nativeElement.focus();
     this.removeDocumentClickListener();
+  }
+
+  clear() {
+    this.inputText = '';
+    this.selectedDate.set(null);
+    this.focusedDate.set(null);
+    this.onChange?.(null);
+    this.onTouched?.();
+    const today = new Date();
+    this.calendarView.goToMonth(today.getFullYear(), today.getMonth());
   }
 
   private addDocumentClickListener() {
@@ -128,30 +159,32 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
   }
 
   onInput(value: string) {
+    this.inputText = value;
     const parsed = parseISO(value);
-    if (!isValid(parsed)) return;
-
-    this.selectedDate.set(parsed);
-    this.focusedDate.set(parsed);
-    this.calendarView.goToMonth(parsed.getFullYear(), parsed.getMonth());
-
-    this.onChange?.(value);
+    if (isValid(parsed)) {
+      this.selectedDate.set(parsed);
+      this.focusedDate.set(parsed);
+      this.calendarView.goToMonth(parsed.getFullYear(), parsed.getMonth());
+      this.onChange?.(value);
+    } else {
+      this.selectedDate.set(null);
+      this.focusedDate.set(null);
+      this.onChange?.(null);
+    }
   }
 
   // TODO: Look up if this format is acceptable for Supabase timestamptz
-  get inputValue(): string {
-    return this.selectedDate() ? format(this.selectedDate()!, 'yyyy-MM-dd') : '';
+  formatDate(date: Date): string {
+    return format(date, 'yyyy-MM-dd');
   }
 
   select(day: CalendarDay) {
-    const value = format(day.date, 'yyyy-MM-dd');
-
+    const value = this.formatDate(day.date);
     this.selectedDate.set(day.date);
     this.focusedDate.set(day.date);
-
+    this.inputText = value;
     this.onChange?.(value);
     this.onTouched?.();
-
     this.close();
   }
 

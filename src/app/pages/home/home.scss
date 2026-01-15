@@ -4,13 +4,13 @@
 .home-page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   max-height: 95%;
   overflow: auto;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 
   .greeting {
-    font-size: 3rem;
+    font-size: $font-size-M;
     margin: 0;
   }
 

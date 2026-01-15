@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
 import { SupabaseService } from './supabase';
-import { UUID } from '../models/primitives';
-import { Profile } from '../models/profile';
+import { UUID } from '../models/primitives.model';
+import { Profile } from '../models/profile.model';
 
 @Injectable({
   providedIn: 'root',
