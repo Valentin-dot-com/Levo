@@ -57,6 +57,14 @@
       }
     }
 
+    .dropdown {
+
+      option {
+        font-family: $font-primary;
+        color: red;
+      }
+    }
+
     .feedback-invalid {
       font-size: $font-size-S;
       font-weight: 600;
@@ -90,22 +98,10 @@
     }
   }
 
+  .success-msg,
   .error-msg {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: $color-error;
-
-    p {
-      font-size: $font-size-S;
-      font-weight: bold;
-    }
-  }
-
-  .success-msg {
     position: absolute;
-    bottom: 7rem;
+    bottom: 5rem;
     left: 0;
     width: 100%;
     display: flex;
@@ -117,7 +113,14 @@
       background-color: $color-success;
       padding: 0.5rem 1rem;
       color: $color-white;
+      font-size: $font-size-S;
       border-radius: $border-radius-XL;
+    }
+  }
+
+  .error-msg {
+    p {
+      background-color: $color-error;
     }
   }
 }

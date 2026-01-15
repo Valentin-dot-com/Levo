@@ -6,3 +6,8 @@ export interface Board {
   calendar_id: UUID;
   title: string;
 }
+
+export interface CreateBoard {
+  calendar_id: UUID;
+  title: string;
+}

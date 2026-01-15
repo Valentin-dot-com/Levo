@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Board } from '../models/board.model';
+import { Board, CreateBoard } from '../models/board.model';
 import { UUID } from '../models/primitives.model';
 import { CalendarService } from './calendars';
 import { AuthService } from './authenticate';
@@ -38,21 +38,12 @@ export class BoardService {
     return this._boards().filter((board) => board.calendar_id === calendarId);
   }
 
-  async createBoard(calendarId: UUID, title: string): Promise<Board | null> {
-    const userId = this.auth.getUserId();
-
-    if (!userId) {
-      throw new Error(
-        'No user ID for current user. User not authenticated, could not create board'
-      );
-    }
-
+  async createBoard(board: CreateBoard): Promise<Board | null> {
     const { data, error } = await this.supabase.supabaseClient
       .from('boards')
       .insert({
-        calendar_id: calendarId,
-        owner_id: userId,
-        title,
+        calendar_id: board.calendar_id,
+        title: board.title,
       })
       .select()
       .single();

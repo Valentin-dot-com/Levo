@@ -1,0 +1,52 @@
+<form class="create-board-form" [formGroup]="newBoardForm" (submit)="onCreate()">
+  <span class="inputs">
+    <div class="input-container">
+      <label for="calendar_id">Calendar*</label>
+      <select
+        id="calendar_id"
+        formControlName="calendar_id"
+        required
+        class="new-board-input"
+        [class.error]="newBoardForm.get('calendar_id')?.invalid && newBoardForm.get('calendar_id')?.touched"
+      >
+      @for (cal of calendars(); track cal.id) {
+        <option [value]="cal.id">{{ cal.name }}</option>
+      }
+      </select>
+      @if (newBoardForm.get('calendar_id')?.invalid && newBoardForm.get('calendar_id')?.touched) {
+        <span class="feedback-invalid">Calendar is required</span>
+      }
+    </div>
+
+    <div class="input-container">
+      <label for="title">Title*</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        required
+        class="new-board-input"
+        [class.error]="newBoardForm.get('title')?.invalid && newBoardForm.get('title')?.touched"
+      />
+      @if (newBoardForm.get('title')?.invalid && newBoardForm.get('title')?.touched) {
+        <span class="feedback-invalid">Title is required</span>
+      }
+    </div>
+  </span>
+
+  <button class="submit-btn" type="submit" [disabled]="newBoardForm.invalid || loading()">
+    Create task
+  </button>
+
+  @if (errorMessage()) {
+    <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+      <p>{{ errorMessage() }}</p>
+    </span>
+  }
+
+  @if (successMessage()) {
+    <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+      <p>{{ successMessage() }}</p>
+    </span>
+  }
+</form>
