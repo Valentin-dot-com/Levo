@@ -79,7 +79,7 @@
           transform: rotate(45deg);
           background-color: $color-error;
         }
-        
+
         app-icon-add {
           display: flex;
           justify-content: center;
@@ -102,7 +102,7 @@
   justify-content: center;
   inset: 0;
   z-index: 5;
-  background: rgba(0, 0, 0, 0.6);
+  // background: rgba(0, 0, 0, 0.6);
 }
 
 .enter-animation {
