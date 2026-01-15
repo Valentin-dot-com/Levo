@@ -6,7 +6,7 @@
         id="calendar_id"
         formControlName="calendar_id"
         required
-        class="new-board-input"
+        class="new-board-input dropdown"
         [class.error]="newBoardForm.get('calendar_id')?.invalid && newBoardForm.get('calendar_id')?.touched"
       >
       @for (cal of calendars(); track cal.id) {

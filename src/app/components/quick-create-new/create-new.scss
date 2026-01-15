@@ -65,10 +65,17 @@
       background-color: $color-grey;
       transition: background 0.2s ease-in-out;
 
+      @include hover-supported {
+        cursor: pointer;
+        background-color: $color-primary;
+        color: $color-fff;
+      }
+
       &.active {
         border-color: $color-primary;
         background-color: $color-fff;
         color: $color-primary;
+        cursor: auto;
       }
     }
   }
@@ -80,4 +87,15 @@
 
 .slide-out-animation {
   @include slide-in-animation();
+}
+
+@media screen and (min-width: 1300px) {
+  .create-new-overlay {
+    width: 30%;
+    max-width: 32rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: $border-radius-XL;
+    box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22), 0 10px 14px rgba($color-primary, $alpha: 0.22);
+  }
 }

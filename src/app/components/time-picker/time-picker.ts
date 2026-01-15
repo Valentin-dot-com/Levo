@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-time-picker',
-  imports: [CommonModule],
+  imports: [CommonModule, DeleteIconComponent],
   templateUrl: './time-picker.html',
   styleUrls: ['./time-picker.scss'],
   providers: [
@@ -81,6 +82,13 @@ export class TimePickerComponent implements ControlValueAccessor {
 
   close() {
     this.isOpen.set(false);
+    this.onTouched?.();
+  }
+
+  clear() {
+    this.hour.set(null);
+    this.minute.set(null);
+    this.onChange?.('');
     this.onTouched?.();
   }
 

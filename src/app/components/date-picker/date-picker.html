@@ -2,8 +2,11 @@
   <div class="datepicker-input-wrapper">
     <input #input type="text" placeholder="YYYY-MM-DD" [(ngModel)]="inputText" aria-haspopup="dialog"
       [attr.aria-expanded]="isOpen()" (blur)="onInput(inputText)" />
-    <button type="button" class="calendar-open-btn" (click)="toggleOpen()" aria-label="Open calendar">
+    <button type="button" class="calendar-open-btn" [class.open]="isOpen()" (click)="toggleOpen()" aria-label="Open calendar">
       <app-icon-calendar />
+    </button>
+    <button type="button" class="clear-btn" (click)="clear()" aria-label="Clear date">
+      <app-icon-delete />
     </button>
   </div>
 

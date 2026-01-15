@@ -50,6 +50,10 @@
       }
     }
 
+    .dropdown {
+      cursor: pointer;
+    }
+
     .feedback-invalid {
       font-size: $font-size-S;
       font-weight: 600;

@@ -18,6 +18,7 @@ import { ArrowRightIconComponent } from '../../icons/arrowRightIcon';
 import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { format, isValid, parseISO } from 'date-fns';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-date-picker',
@@ -27,6 +28,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     ArrowRightIconComponent,
     CalendarIconComponent,
     FormsModule,
+    DeleteIconComponent,
   ],
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.scss'],
@@ -124,6 +126,16 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     this.isOpen.set(false);
     // this.inputRef.nativeElement.focus();
     this.removeDocumentClickListener();
+  }
+
+  clear() {
+    this.inputText = '';
+    this.selectedDate.set(null);
+    this.focusedDate.set(null);
+    this.onChange?.(null);
+    this.onTouched?.();
+    const today = new Date();
+    this.calendarView.goToMonth(today.getFullYear(), today.getMonth());
   }
 
   private addDocumentClickListener() {
