@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Board } from '../models/board';
-import { UUID } from '../models/primitives';
+import { Board } from '../models/board.model';
+import { UUID } from '../models/primitives.model';
 import { CalendarService } from './calendars';
 import { AuthService } from './authenticate';
 

@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Calendar } from '../models/calendar.model';
-import { CreateTask, Task } from '../models/task';
-import { UUID } from '../models/primitives';
+import { CreateTask, Task } from '../models/task.model';
+import { UUID } from '../models/primitives.model';
 import { AuthService } from './authenticate';
 
 @Injectable({

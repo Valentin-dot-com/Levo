@@ -8,7 +8,7 @@ import {
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { CreateTask } from '../../../models/task';
+import { CreateTask } from '../../../models/task.model';
 import { DatePickerComponent } from '../../date-picker/date-picker';
 import { TimePickerComponent } from '../../time-picker/time-picker';
 

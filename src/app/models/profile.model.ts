@@ -1,4 +1,4 @@
-import { UUID, Timestamptz } from "./primitives";
+import { UUID, Timestamptz } from "./primitives.model";
 
 export interface Profile {
   user_id: UUID;

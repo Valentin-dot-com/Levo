@@ -1,4 +1,4 @@
-import { UUID } from "./primitives";
+import { UUID } from "./primitives.model";
 
 export interface Board {
   id: UUID;
