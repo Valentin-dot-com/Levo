@@ -1,10 +1,6 @@
 @use '../../styles/variables.scss' as *;
 @use '../../styles/mixins.scss' as *;
 
-:host {
-  width: calc(100% - 2rem);
-}
-
 .create-new-overlay {
   background-color: $color-white;
   padding: 1rem 1rem;
@@ -13,8 +9,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 1rem;
-  border-radius: $border-radius-XL;
+  border-radius: $border-radius-XL $border-radius-XL 0 0;
   position: absolute;
   width: calc(100%);
   left: 0;
@@ -51,4 +48,36 @@
       color: $color-error;
     }
   }
+
+  .choices {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .choice-btn {
+      padding: 0.5rem 0.75rem;
+      border-radius: $border-radius-XL;
+      border: 2px solid transparent;
+      font-size: $font-size-text;
+      font-weight: 600;
+      color: $color-text;
+      background-color: $color-grey;
+      transition: background 0.2s ease-in-out;
+
+      &.active {
+        border-color: $color-primary;
+        background-color: $color-fff;
+        color: $color-primary;
+      }
+    }
+  }
+}
+
+.slide-in-animation {
+  @include slide-in-animation();
+}
+
+.slide-out-animation {
+  @include slide-in-animation();
 }

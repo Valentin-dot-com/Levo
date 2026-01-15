@@ -1,6 +1,11 @@
 <div class="datepicker">
-  <input #input type="text" placeholder="YYYY-MM-DD" [value]="inputValue" aria-haspopup="dialog"
-    [attr.aria-expanded]="isOpen()" (focus)="open()" (input)="onInput($any($event.target).value)" />
+  <div class="datepicker-input-wrapper">
+    <input #input type="text" placeholder="YYYY-MM-DD" [(ngModel)]="inputText" aria-haspopup="dialog"
+      [attr.aria-expanded]="isOpen()" (blur)="onInput(inputText)" />
+    <button type="button" class="calendar-open-btn" (click)="toggleOpen()" aria-label="Open calendar">
+      <app-icon-calendar />
+    </button>
+  </div>
 
   @if (isOpen()) {
   <div

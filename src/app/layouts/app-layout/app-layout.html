@@ -38,7 +38,7 @@
     }
     @if (openCreateNew()) {
     <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
-      <app-create-new (closed)="openCreateNew.set(false)" />
+      <app-create-new (closed)="openCreateNew.set(false)"/>
     </div>
     }
     <router-outlet />

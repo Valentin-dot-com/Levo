@@ -16,18 +16,48 @@
   width: 100%;
   max-width: 100%;
 
-  > input {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border-radius: $border-radius-S;
-    background-color: $color-grey;
-    line-height: normal;
-    border: 2px solid transparent;
-    transition: border 0.2s ease;
+  .datepicker-input-wrapper {
 
-    &:focus {
-      outline: none;
-      border-color: $color-accent;
+    display: flex;
+    gap: 0.75rem;
+
+    > input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: $border-radius-S;
+      background-color: $color-grey;
+      line-height: normal;
+      border: 2px solid transparent;
+      transition: border 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $color-accent;
+      }
+    }
+
+    .calendar-open-btn {
+      border: none;
+      aspect-ratio: 1 / 1;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      fill: none;
+      color: $color-text;
+      background-color: $color-grey;
+      transition: color 0.2s ease-in-out;
+      cursor: pointer;
+
+      app-icon-calendar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @include hover-supported {
+        color: $color-accent;
+      }
     }
   }
 }

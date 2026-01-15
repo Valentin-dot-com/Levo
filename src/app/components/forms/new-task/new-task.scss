@@ -1,11 +1,22 @@
 @use '../../../styles/variables.scss' as *;
-@use  '../../../styles/mixins.scss' as *;
+@use '../../../styles/mixins.scss' as *;
+
+:host {
+  height: 100%;
+}
 
 .create-task-form {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.5rem;
+  justify-content: space-between;
+  height: 100%;
+
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
 
   .input-container {
     display: flex;
@@ -16,6 +27,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      margin: 1rem 0 0.5rem;
     }
 
     label {
@@ -102,7 +114,6 @@
     z-index: 20;
 
     p {
-
       background-color: $color-success;
       padding: 0.5rem 1rem;
       color: $color-white;

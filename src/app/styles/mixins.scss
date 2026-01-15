@@ -10,7 +10,7 @@
   animation: slide-in $duration $easing;
   @keyframes slide-in {
     from {
-      opacity: 0;
+      opacity: 0.5;
       transform: translateY(30dvh);
     }
     to {
@@ -30,6 +30,30 @@
     to {
       opacity: 0;
       transform: translateY(100dvh);
+    }
+  }
+}
+
+@mixin fade-in-animation($duration: 0.5s, $easing: ease-in-out) {
+  animation: fade-in $duration $easing;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin fade-out-animation($duration: 0.5s, $easing: ease-in-out) {
+  animation: fade-out $duration $easing;
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
 }
