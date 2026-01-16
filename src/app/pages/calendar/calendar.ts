@@ -41,7 +41,7 @@ export class CalendarComponent implements OnInit {
 
     for (let i = -4; i <= 4; i++) {
       const date = addMonths(now, i);
-      await this.calendarService.fetchTasksForMonth(date.getFullYear(), date.getMonth());
+      await this.calendarService.fetchEventsForMonth(date.getFullYear(), date.getMonth());
       months.push(this.calendarView.generateMonth(date));
     }
 
@@ -58,7 +58,7 @@ export class CalendarComponent implements OnInit {
 
     for (let i = count; i >= 1; i--) {
       const date = addMonths(firstMonthDate, -i);
-      await this.calendarService.fetchTasksForMonth(date.getFullYear(), date.getMonth());
+      await this.calendarService.fetchEventsForMonth(date.getFullYear(), date.getMonth());
       newMonths.push(this.calendarView.generateMonth(date));
     }
 
@@ -76,7 +76,7 @@ export class CalendarComponent implements OnInit {
 
     for (let i = 1; i <= count; i++) {
       const date = addMonths(lastMonthDate, i);
-      await this.calendarService.fetchTasksForMonth(date.getFullYear(), date.getMonth());
+      await this.calendarService.fetchEventsForMonth(date.getFullYear(), date.getMonth());
       newMonths.push(this.calendarView.generateMonth(date));
     }
 

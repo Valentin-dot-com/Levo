@@ -8,12 +8,12 @@ import {
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { CreateTask } from '../../../models/task.model';
+import { CreateEvent } from '../../../models/event.model';
 import { DatePickerComponent } from '../../date-picker/date-picker';
 import { TimePickerComponent } from '../../time-picker/time-picker';
 
 @Component({
-  selector: 'app-new-task',
+  selector: 'app-new-event',
   imports: [
     CommonModule,
     ɵInternalFormsSharedModule,
@@ -21,10 +21,10 @@ import { TimePickerComponent } from '../../time-picker/time-picker';
     DatePickerComponent,
     TimePickerComponent
   ],
-  templateUrl: './new-task.html',
-  styleUrl: './new-task.scss',
+  templateUrl: './new-event.html',
+  styleUrl: './new-event.scss',
 })
-export class NewTaskComponent {
+export class NewEventComponent {
   private calendarService = inject(CalendarService);
 
   errorMessage = signal('');
@@ -32,7 +32,7 @@ export class NewTaskComponent {
   loading = signal(false);
   calendars = this.calendarService.calendars;
 
-  newTaskForm = new FormGroup({
+  newEventForm = new FormGroup({
     calendar_id: new FormControl(this.calendars()[0].id, [Validators.required]),
     title: new FormControl('', [Validators.required, Validators.minLength(1)]),
     description: new FormControl(''),
@@ -42,14 +42,14 @@ export class NewTaskComponent {
   });
 
   async onCreate() {
-    if (this.newTaskForm.invalid) return;
+    if (this.newEventForm.invalid) return;
     this.loading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
 
     try {
-      const formData = this.newTaskForm.value;
-      const newTask: CreateTask = {
+      const formData = this.newEventForm.value;
+      const newEvent: CreateEvent = {
         calendar_id: formData.calendar_id as string,
         title: formData.title as string,
         description: formData.description ? formData.description : null,
@@ -58,15 +58,15 @@ export class NewTaskComponent {
         scheduled_at: formData.scheduled_at ? `${formData.scheduled_at}:00`: null,
       };
 
-      await this.calendarService.createTask(newTask);
+      await this.calendarService.createEvent(newEvent);
 
-      this.newTaskForm.reset();
-      this.successMessage.set('Task created successfully!');
+      this.newEventForm.reset();
+      this.successMessage.set('Event created successfully!');
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.errorMessage.set(
-          err.message ?? 'An error occured while trying to create task. Please try again.'
+          err.message ?? 'An error occured while trying to create event. Please try again.'
         );
       }
     } finally {

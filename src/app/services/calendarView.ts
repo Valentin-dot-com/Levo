@@ -26,8 +26,8 @@ export class CalendarViewService {
 
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
-  readonly tasks = computed(() => {
-    return this.calendarService.getCachedTasksForMonth(this.currentYear(), this.currentMonth());
+  readonly events = computed(() => {
+    return this.calendarService.getCachedEventsForMonth(this.currentYear(), this.currentMonth());
   });
 
   readonly thisWeek = computed(() => {
@@ -160,7 +160,7 @@ export class CalendarViewService {
     this._currentYear.set(year);
     this._currentMonth.set(month);
 
-    await this.calendarService.fetchTasksForMonth(year, month);
+    await this.calendarService.fetchEventsForMonth(year, month);
 
     this.calendarService.prefetchAdjacentMonths(year, month);
   }

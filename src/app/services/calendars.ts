@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Calendar } from '../models/calendar.model';
-import { CreateTask, Task } from '../models/task.model';
+import { CreateEvent, Event } from '../models/event.model';
 import { UUID } from '../models/primitives.model';
 import { AuthService } from './authenticate';
 
@@ -13,18 +13,18 @@ export class CalendarService {
   private auth = inject(AuthService);
 
   private _calendars = signal<Calendar[]>([]);
-  private _taskCache = signal<Map<string, Task[]>>(new Map());
+  private _eventCache = signal<Map<string, Event[]>>(new Map());
   private _calendarIds = signal<UUID[]>([]);
   private _pendingRequests = new Map<string, Promise<void>>();
-  private _todoTasks = signal<Task[]>([]);
+  private _todoEvents = signal<Event[]>([]);
 
   readonly calendars = this._calendars.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
-  readonly todoTasks = this._todoTasks.asReadonly();
+  readonly todoEvents = this._todoEvents.asReadonly();
 
-  // readonly tasks = computed<Task[]>(() => {
+  // readonly Events = computed<Event[]>(() => {
   //   const key = this.getMonthKey(this.calendarView.currentYear(), this.calendarView.currentMonth());
-  //   return this._taskCache().get(key) ?? [];
+  //   return this._eventCache().get(key) ?? [];
   // });
 
   private getMonthKey(year: number, month: number): string {
@@ -51,9 +51,9 @@ export class CalendarService {
     this._calendarIds.set((memberships ?? []).map((m) => m.calendar_id));
   }
 
-  public getCachedTasksForMonth(year: number, month: number): Task[] {
+  public getCachedEventsForMonth(year: number, month: number): Event[] {
     const key = this.getMonthKey(year, month);
-    return this._taskCache().get(key) ?? [];
+    return this._eventCache().get(key) ?? [];
   }
 
   prefetchAdjacentMonths(year: number, month: number): void {
@@ -66,20 +66,20 @@ export class CalendarService {
     const nextYear = month === 11 ? year + 1 : year;
 
     const prevKey = this.getMonthKey(prevYear, prevMonth);
-    if (!this._taskCache().has(prevKey) && !this._pendingRequests.has(prevKey)) {
-      this.fetchTasksForMonth(prevYear, prevMonth);
+    if (!this._eventCache().has(prevKey) && !this._pendingRequests.has(prevKey)) {
+      this.fetchEventsForMonth(prevYear, prevMonth);
     }
 
     const nextKey = this.getMonthKey(nextYear, nextMonth);
-    if (!this._taskCache().has(nextKey) && !this._pendingRequests.has(nextKey)) {
-      this.fetchTasksForMonth(nextYear, nextMonth);
+    if (!this._eventCache().has(nextKey) && !this._pendingRequests.has(nextKey)) {
+      this.fetchEventsForMonth(nextYear, nextMonth);
     }
   }
 
-  private updateCache(key: string, tasks: Task[]): void {
-    this._taskCache.update((cache) => {
+  private updateCache(key: string, events: Event[]): void {
+    this._eventCache.update((cache) => {
       const newCache = new Map(cache);
-      newCache.set(key, tasks);
+      newCache.set(key, events);
       return newCache;
     });
   }
@@ -100,11 +100,11 @@ export class CalendarService {
     this._calendars.set(data ?? []);
   }
 
-  async fetchTasksForMonth(year: number, month: number): Promise<void> {
+  async fetchEventsForMonth(year: number, month: number): Promise<void> {
     const key = this.getMonthKey(year, month);
 
     // Skip if already cached
-    if (this._taskCache().has(key)) {
+    if (this._eventCache().has(key)) {
       return;
     }
 
@@ -121,11 +121,11 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          throw new Error('No calendar memberships for current user. Could not fetch tasks');
+          throw new Error('No calendar memberships for current user. Could not fetch events');
         }
 
         const { data, error } = await this.supabase.supabaseClient
-          .from('tasks')
+          .from('events')
           .select('*')
           .in('calendar_id', calendarIds)
           .gte('date', start)
@@ -142,32 +142,32 @@ export class CalendarService {
     return fetchPromise;
   }
 
-  async fetchTodoTasks(): Promise<void> {
+  async fetchTodoEvents(): Promise<void> {
     const calendarIds = this._calendarIds();
 
     if (!calendarIds) return;
 
     const { data, error } = await this.supabase.supabaseClient
-    .from('tasks')
+    .from('events')
     .select('*')
     .in('calendar_id', calendarIds)
     .is('date', null);
 
     if (error) throw error;
 
-    this._todoTasks.set(data ?? []);
+    this._todoEvents.set(data ?? []);
   }
 
-  async createTask(task: CreateTask) {
+  async createEvent(event: CreateEvent) {
     const { data, error } = await this.supabase.supabaseClient
-    .from('tasks')
+    .from('events')
     .insert({
-      calendar_id: task.calendar_id,
-      title: task.title,
-      description: task.description ?? null,
-      location: task.location ?? null,
-      date: task.date ?? null,
-      scheduled_at: task.scheduled_at ?? null,
+      calendar_id: event.calendar_id,
+      title: event.title,
+      description: event.description ?? null,
+      location: event.location ?? null,
+      date: event.date ?? null,
+      scheduled_at: event.scheduled_at ?? null,
     })
     .select()
     .single();
@@ -175,9 +175,9 @@ export class CalendarService {
     if (error) throw error;
 
     if (data.date) {
-      // Add to taskCache
+      // Add to eventCache
     } else {
-      this._todoTasks.update(tasks => [...tasks, data]);
+      this._todoEvents.update(events => [...events, data]);
     }
 
     return data;

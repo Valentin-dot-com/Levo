@@ -2,11 +2,11 @@
 import { Board } from './board.model';
 import { Calendar } from './calendar.model';
 import { CalendarMembership } from './calendarMembership.model';
+import { Event } from './event.model';
 import { UUID, DateOnly, Timestamptz } from './primitives.model';
-import { Task, TaskStatus } from './task.model';
 
-export interface CalendarWithTasks extends Calendar {
-  tasks: Task[];
+export interface CalendarWithEvents extends Calendar {
+  events: Event[];
   membership?: CalendarMembership;
 }
 
@@ -15,11 +15,11 @@ export interface CalendarsResponse {
   total: number;
 }
 
-export interface MonthlyTasksResponse {
+export interface MonthlyEventsResponse {
   month: string;
   startDate: string;
   endDate: string;
-  tasks: Task[];
+  events: Event[];
   total: number;
 }
 
@@ -38,7 +38,7 @@ export interface CreateCalendarInput {
   owner_id: UUID;
 }
 
-export interface CreateTaskInput {
+export interface CreateEventInput {
   calendar_id: UUID;
   created_by: UUID;
   title: string;
@@ -46,15 +46,13 @@ export interface CreateTaskInput {
   location?: string;
   date?: DateOnly;
   scheduled_at?: Timestamptz;
-  status?: TaskStatus;
 }
 
-export interface UpdateTaskInput {
+export interface UpdateEventInput {
   id: UUID;
   title?: string;
   description?: string | null;
   location?: string | null;
   date?: DateOnly | null;
   scheduled_at?: Timestamptz | null;
-  status?: TaskStatus;
 }

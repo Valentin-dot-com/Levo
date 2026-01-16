@@ -5,7 +5,7 @@
   height: 100%;
 }
 
-.create-task-form {
+.create-event-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,7 +35,7 @@
       font-weight: 600;
     }
 
-    .new-task-input {
+    .new-event-input {
       border: 2px solid transparent;
       border-radius: $border-radius-S;
       padding: 0.5rem 0.75rem;

@@ -29,9 +29,9 @@
                   <span class="date">{{ `${day.dayNumber} ${day.inMonth}.` }}</span>
                 </h4>
               }
-              @let tasks = tasksForDate(day.date);
-              @for (task of tasks; track task.id) {
-                <p>{{ task.title }}</p>
+              @let events = eventsForDate(day.date);
+              @for (event of events; track event.id) {
+                <p>{{ event.title }}</p>
               }
             </article>
           }

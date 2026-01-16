@@ -42,11 +42,11 @@
                       <h4 class="calendar-day-number">{{ day.dayNumber }}</h4>
                     }
 
-                    @let tasks = tasksForDate(day.date);
-                    @if (tasks.length > 0) {
-                      <div class="calendar-tasks">
-                        @for (task of tasks; track task.id) {
-                          <span class="task-dot"></span>
+                    @let events = eventsForDate(day.date);
+                    @if (events.length > 0) {
+                      <div class="calendar-events">
+                        @for (event of events; track event.id) {
+                          <span class="event-dot"></span>
                         }
                       </div>
                     }
@@ -56,28 +56,6 @@
             </section>
           }
         </div>
-
-        <!-- <div class="calendar-grid">
-          @for (day of month.days; track day.date) {
-            <article class="calendar-day" [class.today]="day.isToday">
-              @if (day.isToday) {
-                <h4 class="calendar-day-number today" #todayAnchor data-today>{{ day.dayNumber }}</h4>
-              }
-              @else {
-                <h4 class="calendar-day-number">{{ day.dayNumber }}</h4>
-              }
-
-              @let tasks = tasksForDate(day.date);
-              @if (tasks.length > 0) {
-                <div class="calendar-tasks">
-                  @for (task of tasks; track task.id) {
-                    <span class="task-dot"></span>
-                  }
-                </div>
-              }
-            </article>
-          }
-        </div> -->
       </section>
     }
   </div>
