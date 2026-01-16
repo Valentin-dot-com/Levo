@@ -29,6 +29,7 @@ export class BoardComponent implements AfterViewInit {
   loadBoard() {
     this.loading.set(true);
     this.boardService.getBoardWithDetails(this.boardId());
+    this.loading.set(false);
   }
 
   goBack() {

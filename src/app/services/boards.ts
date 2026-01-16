@@ -144,10 +144,8 @@ export class BoardService {
   async updateBoardItem(boardId: string, content: JSONContent): Promise<void> {
     const { data, error } = await this.supabase.supabaseClient
       .from('board_items')
-      .upsert(
-        { board_id: boardId, content},
-        { onConflict: 'board_id' },
-      )
+      .update({ content, updated_at: new Date()})
+      .eq('board_id', boardId)
       .select()
       .single();
 
