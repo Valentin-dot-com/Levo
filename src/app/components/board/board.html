@@ -1,0 +1,47 @@
+@if (currentBoard()) {
+
+<div class="board-detail">
+  <!-- Header with breadcrumb -->
+  <div class="board-header">
+    <button (click)="goBack()" class="back-button">
+      ← Back
+    </button>
+    <h2>{{ currentBoard()?.board?.title }}</h2>
+  </div>
+
+  <div class="sub-boards-section">
+    <h3>Sub-boards</h3>
+
+    <div class="create-sub-board">
+      <label for="new-sub-board">Create a new sub-board:</label>
+      <input name="new-sub-board" [value]="newSubBoardTitle()" (input)="newSubBoardTitle.set($any($event.target).value)"
+        placeholder="New sub-board name" (keyup.enter)="createSubBoard()" />
+      <button (click)="createSubBoard()">Create Sub-board</button>
+    </div>
+
+    <div class="sub-boards-grid">
+      @for (sub of currentBoard()?.subBoards; track sub.id) {
+      <a [routerLink]="['fyll i senare']">
+        <h4>{{ sub.title }}</h4>
+      </a>
+      }
+    </div>
+
+    @if (!currentBoard()?.subBoards || currentBoard()?.subBoards?.length === 0) {
+    <p>No sub-boards yet, you can create one quickly</p>
+    }
+  </div>
+
+  <section class="editor-container">
+    <h3>Notes</h3>
+    <app-editor [savedContent]="currentBoard()?.boardItem?.content ?? null" [boardId]="boardId()"/>
+  </section>
+</div>
+}
+
+@if (loading()) {
+<div>
+  Loading board...
+  <!-- TODO: insert loading component -->
+</div>
+}
