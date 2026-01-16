@@ -1,21 +1,6 @@
-.editor {
-  min-height: 200px;
-  padding: 16px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+@use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
-  line-height: 1.6;
-}
-
-/* Viktigt: Tiptap använder dessa */
-.editor p {
-  margin: 0.5em 0;
-}
-
-.editor ul,
-.editor ol {
-  padding-left: 1.2em;
+app-editor {
+  height: 500px;
 }

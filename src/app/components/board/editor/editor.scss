@@ -1,61 +1,185 @@
+@use '../../../styles/variables.scss' as *;
+
 .editor-wrapper {
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .editor {
-  min-height: 200px;
-  padding: 16px;
-  border-radius: 14px;
-  background: #fff;
+  min-height: 100%;
+  padding: 1rem;
+  border-radius: $border-radius-XL;
+  background: $color-fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+  font-family: $font-primary, sans-serif;
+  font-size: $font-size-S;
   line-height: 1.6;
-}
 
-.editor p {
-  margin: 0.5em 0;
-}
+  p {
+    margin: 0;
+  }
 
-.editor ul,
-.editor ol {
-  padding-left: 1.2em;
-}
+  ul,
+  ol {
+    padding-left: 1.2em;
+  }
 
-.toolbar {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
-}
+  .toolbar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
 
-.toolbar button {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: none;
-  background: #f2f2f2;
-  font-weight: 600;
-  cursor: pointer;
-}
+  .toolbar button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    background: #f2f2f2;
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-.toolbar button.active {
-  background: #111;
-  color: #fff;
-}
+  .toolbar button.active {
+    background: #111;
+    color: #fff;
+  }
 
-/* Task styling */
-.editor ul[data-type='taskList'] {
-  list-style: none;
-  padding-left: 0;
-}
+  /* Task styling */
+  ul[data-type='taskList'] {
+    list-style: none;
+    padding-left: 0;
+  }
 
-.editor li[data-type='taskItem'] {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+  li[data-type='taskItem'] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-.editor li[data-type='taskItem'] > label {
-  margin: 0;
+  li[data-type='taskItem'] > label {
+    margin: 0;
+  }
+
+  .ProseMirror {
+    outline: none;
+    line-height: 1.6;
+    color: $color-text;
+  }
+
+  /* Placeholder */
+  .ProseMirror p.is-editor-empty:first-child::before {
+    content: 'Type something...';
+    color: $color-text-secondary;
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* Paragrafer */
+  .ProseMirror p {
+    margin: 0;
+  }
+
+  /* Rubriker */
+  .ProseMirror h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 1em 0 0.5em;
+  }
+
+  .ProseMirror h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1em 0 0.5em;
+  }
+
+  /* Listor */
+  .ProseMirror ul,
+  .ProseMirror ol {
+    padding-left: 1.25rem;
+    margin: 0.5em 0;
+  }
+
+  .ProseMirror li {
+    margin: 0.25em 0;
+  }
+
+  /* Task list */
+  /* List styles */
+
+  /* Task list container */
+  .ProseMirror ul[data-type='taskList'] {
+    list-style: none;
+    padding: 0;
+  }
+
+  /* Task row */
+  .ProseMirror ul[data-type='taskList'] > li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    margin: 0.4em 0;
+    list-style: none;
+  }
+
+  /* Checkbox */
+  .ProseMirror li[data-type='taskItem'] input[type='checkbox'] {
+    margin-top: 0.3em;
+    width: 16px;
+    height: 16px;
+    accent-color: #007aff; /* iOS blue */
+    cursor: pointer;
+  }
+
+  /* Label (checkbox + clickable area) */
+  .ProseMirror ul[data-type='taskList'] > li > label {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Checkbox */
+  .ProseMirror ul[data-type='taskList'] input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007aff;
+    cursor: pointer;
+  }
+
+  /* Task text */
+  .ProseMirror ul[data-type='taskList'] > li > div {
+    flex: 1;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    button {
+      border-radius: $border-radius-XL;
+      background-color: $color-grey;
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: $font-size-S;
+    }
+  }
+
+
+  .toolbar button.active {
+    background: #007aff;
+    color: white;
+  }
+
+  .ProseMirror ::selection {
+    background: rgba(0, 122, 255, 0.2);
+  }
+
+  .ProseMirror {
+    caret-color: $color-primary;
+  }
 }
 

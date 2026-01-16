@@ -7,6 +7,7 @@ import {
   OnDestroy,
   signal,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../../services/boards';
@@ -21,6 +22,7 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
   imports: [CommonModule],
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
   private boardService = inject(BoardService);
@@ -35,6 +37,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   boardId = input<string | null>(null);
 
   editor = signal<Editor | null>(null);
+  editorState = signal(0);
 
   private contentChange$ = new Subject<JSONContent>();
   private destroy$ = new Subject<void>();
@@ -51,7 +54,11 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
+        this.editorState.update(v => v + 1);
       },
+      onSelectionUpdate: () => {
+        this.editorState.update(v => v + 1);
+      }
     });
 
     this.editor.set(editor);
