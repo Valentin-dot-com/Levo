@@ -1,1 +1,22 @@
-Boards
+<section class="boards-page">
+  <h1>Your boards</h1>
+
+  <ul class="boards-list">
+    @for (board of boards(); track board.id) {
+      @let boardCalendar = getCalendar(board.calendar_id);
+      <li class="board">
+        <a [routerLink]="['/boards', board.id]">
+          <span class="board-calendar">
+            {{ boardCalendar?.name }}
+            @if (boardCalendar?.is_shared) {
+              <span class="is-shared-container">
+                <app-icon-shared />
+              </span>
+            }
+          </span>
+          <h3 class="board-title">{{ board.title }}</h3>
+        </a>
+      </li>
+    }
+  </ul>
+</section>

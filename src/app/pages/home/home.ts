@@ -4,7 +4,7 @@ import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
 import { CommonModule } from '@angular/common';
 import { CalendarViewService } from '../../services/calendarView';
-import { compareAsc, format, isToday, parseISO } from 'date-fns';
+import { compareAsc, isToday, parseISO } from 'date-fns';
 import { RouterLink } from '@angular/router';
 import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';

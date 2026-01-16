@@ -1,0 +1,95 @@
+@use '../../styles/variables.scss' as *;
+@use '../../styles/mixins.scss' as *;
+
+.boards-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 100%;
+  overflow: auto;
+  padding-bottom: 2rem;
+
+  h2 {
+    font-size: $font-size-M;
+  }
+
+  .boards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .board {
+    list-style: none;
+    background-color: $color-grey;
+    border-radius: $border-radius-XL;
+    overflow: hidden;
+
+    a {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: $color-primary;
+      font-weight: 500;
+      transition: background 0.2s ease;
+
+      @include hover-supported {
+        background-color: $color-accent;
+        color: $color-white;
+
+        .board-title {
+          color: $color-white;
+        }
+      }
+    }
+
+    .board-calendar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: $font-size-text;
+      height: 2rem;
+      fill: none;
+    }
+
+    .board-title {
+      font-size: $font-size-S;
+    }
+  }
+}
+
+.is-shared-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $color-accent;
+  padding: 0.25rem 0.5rem;
+  border-radius: $border-radius-S;
+
+  app-icon-shared {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: $color-accent;
+    fill: none;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .boards-page {
+    .boards-list {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .board {
+      flex-basis: calc(50% - 0.5rem);
+    }
+  }
+}

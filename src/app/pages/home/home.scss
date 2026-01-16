@@ -296,10 +296,10 @@
       .boards-list {
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 2rem;
+        gap: 1rem;
 
         .board {
-          flex-basis: calc(50% - 1rem);
+          flex-basis: calc(50% - 0.5rem);
         }
       }
     }

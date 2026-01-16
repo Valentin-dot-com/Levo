@@ -56,7 +56,7 @@
       @for (board of boards(); track board.id) {
       @let boardCalendar = getCalendar(board.calendar_id);
       <li class="board">
-        <a routerLink="/board">
+        <a [routerLink]="['/boards', board.id]">
           <span class="board-calendar">
             {{ boardCalendar?.name }}
             @if (boardCalendar?.is_shared) {
