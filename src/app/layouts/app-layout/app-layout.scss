@@ -160,6 +160,7 @@ main.content {
           &.active {
             background-color: $color-primary;
             color: $color-white;
+            fill: $color-white;
             border: none;
             margin: 2rem 0;
           }
