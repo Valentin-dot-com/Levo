@@ -1,8 +1,19 @@
-import { AfterViewInit, Component, ElementRef, inject, input, OnDestroy, signal, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../../services/boards';
 import { Editor, JSONContent } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -12,18 +23,18 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
   styleUrl: './editor.scss',
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
-  private boardService = inject(BoardService)
+  private boardService = inject(BoardService);
 
   currentBoard = this.boardService.currentBoard;
   newSubBoardTitle = signal('');
 
   @ViewChild('editorHost', { static: true })
-  editorHost!: ElementRef<HTMLDivElement>
+  editorHost!: ElementRef<HTMLDivElement>;
 
   savedContent = input<JSONContent | null>(null);
   boardId = input<string | null>(null);
 
-  editor?: Editor;
+  editor = signal<Editor | null>(null);
 
   private contentChange$ = new Subject<JSONContent>();
   private destroy$ = new Subject<void>();
@@ -34,20 +45,22 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   }
 
   initializeEditor() {
-    this.editor = new Editor({
+    const editor = new Editor({
       element: this.editorHost.nativeElement,
-      extensions: [StarterKit],
+      extensions: [StarterKit, TaskList, TaskItem.configure({ nested: true })],
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
-      }
-    })
+      },
+    });
+
+    this.editor.set(editor);
   }
 
   setupAutoSave() {
     this.contentChange$.pipe(debounceTime(1500), takeUntil(this.destroy$)).subscribe((content) => {
       this.saveContent(content);
-    })
+    });
   }
 
   saveContent(content: JSONContent) {
@@ -61,6 +74,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.editor?.destroy();
+    this.editor()?.destroy();
+    this.editor.set(null);
   }
 }

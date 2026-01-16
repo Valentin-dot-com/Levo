@@ -14,7 +14,6 @@
   line-height: 1.6;
 }
 
-/* Viktigt: Tiptap använder dessa */
 .editor p {
   margin: 0.5em 0;
 }
@@ -23,3 +22,40 @@
 .editor ol {
   padding-left: 1.2em;
 }
+
+.toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #f2f2f2;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toolbar button.active {
+  background: #111;
+  color: #fff;
+}
+
+/* Task styling */
+.editor ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.editor li[data-type='taskItem'] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor li[data-type='taskItem'] > label {
+  margin: 0;
+}
+

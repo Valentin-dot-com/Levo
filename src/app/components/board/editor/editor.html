@@ -1,9 +1,35 @@
 <div class="editor-wrapper">
-  <!-- <div class="toolbar">
-    <button (click)="editor.chain().focus().toggleBold().run()">B</button>
-    <button (click)="editor.chain().focus().toggleItalic().run()">I</button>
-    <button (click)="editor.chain().focus().toggleBulletList().run()">• List</button>
-  </div> -->
+  @if (editor()) {
+    <div class="toolbar">
+    <button
+      (click)="editor()!.chain().focus().toggleBold().run()"
+      [class.active]="editor()!.isActive('bold')"
+    >
+      B
+    </button>
+
+    <button
+      (click)="editor()!.chain().focus().toggleItalic().run()"
+      [class.active]="editor()!.isActive('italic')"
+    >
+      I
+    </button>
+
+    <button
+      (click)="editor()!.chain().focus().toggleBulletList().run()"
+      [class.active]="editor()!.isActive('bulletList')"
+    >
+      • List
+    </button>
+
+    <button
+      (click)="editor()!.chain().focus().toggleTaskList().run()"
+      [class.active]="editor()!.isActive('taskList')"
+    >
+      ☑
+    </button>
+  </div>
+  }
 
   <div #editorHost class="editor"></div>
 </div>

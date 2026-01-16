@@ -163,4 +163,9 @@ export class BoardService {
     this._currentSubBoards.update((boards) => boards.filter((board) => board.id !== id));
     return true;
   }
+
+  clearCurrent() {
+    this._currentBoard.set(null);
+    this._currentSubBoards.set([]);
+  }
 }

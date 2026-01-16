@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BoardService } from '../../services/boards';
@@ -10,7 +10,7 @@ import { EditorComponent } from './editor/editor';
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
-export class BoardComponent implements AfterViewInit {
+export class BoardComponent implements AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private boardService = inject(BoardService)
@@ -50,5 +50,14 @@ export class BoardComponent implements AfterViewInit {
       parent_board_id: this.boardId(),
       order_index: this.currentBoard()?.subBoards.length || 0
     });
+  }
+
+  deleteBoard(boardId: string) {
+    this.boardService.deleteBoard(boardId);
+    this.goBack();
+  }
+
+  ngOnDestroy(): void {
+    this.boardService.clearCurrent();
   }
 }

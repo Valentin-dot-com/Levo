@@ -16,7 +16,7 @@
       <label for="new-sub-board">Create a new sub-board:</label>
       <input name="new-sub-board" [value]="newSubBoardTitle()" (input)="newSubBoardTitle.set($any($event.target).value)"
         placeholder="New sub-board name" (keyup.enter)="createSubBoard()" />
-      <button (click)="createSubBoard()">Create Sub-board</button>
+      <button role="button" (click)="createSubBoard()">Create Sub-board</button>
     </div>
 
     <div class="sub-boards-grid">
@@ -36,6 +36,13 @@
     <h3>Notes</h3>
     <app-editor [savedContent]="currentBoard()?.boardItem?.content ?? null" [boardId]="boardId()"/>
   </section>
+</div>
+
+<div class="delete-board-container">
+  <button role="button" class="delete-btn" (click)="deleteBoard(currentBoard()?.board?.id ?? '')">
+    Delete this board
+  </button>
+  <!-- TODO: Add confirmation here "Are you sure? => Yes / No" -->
 </div>
 }
 
