@@ -17,7 +17,6 @@ export class BoardService {
   private _currentBoard = signal<BoardWithDetails | null>(null);
 
   readonly boards = this._boards.asReadonly();
-  readonly currentSubBoards = this._currentSubBoards.asReadonly();
   readonly currentBoard = this._currentBoard.asReadonly();
 
   async getRootBoards(): Promise<void> {
@@ -123,7 +122,13 @@ export class BoardService {
 
     if (error) throw error;
 
-    this._currentSubBoards.update((boards) => [...boards, data]);
+    this._currentBoard.update((boardWithDetails) => {
+      if (!boardWithDetails) return boardWithDetails;
+      return {
+        ...boardWithDetails,
+        subBoards: [...(boardWithDetails.subBoards ?? []), data],
+      };
+    });
     return data;
   }
 
@@ -144,7 +149,7 @@ export class BoardService {
   async updateBoardItem(boardId: string, content: JSONContent): Promise<void> {
     const { data, error } = await this.supabase.supabaseClient
       .from('board_items')
-      .update({ content, updated_at: new Date()})
+      .update({ content, updated_at: new Date() })
       .eq('board_id', boardId)
       .select()
       .single();

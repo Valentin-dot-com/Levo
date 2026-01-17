@@ -1,6 +1,6 @@
 import { Component, input, output, signal  } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NewEventComponent } from '../forms/new-task/new-event';
+import { NewEventComponent } from '../forms/new-event/new-event';
 import { NewBoardComponent } from '../forms/new-board/new-board';
 import { AddIconComponent } from '../../icons/addIcon';
 

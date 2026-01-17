@@ -1,49 +1,84 @@
 @if (currentBoard()) {
 
-<div class="board-detail">
-  <!-- Header with breadcrumb -->
-  <div class="board-header">
-    <button (click)="goBack()" class="back-button">
-      ← Back
+<section class="board-detail">
+  <h1>{{ currentBoard()?.board?.title }}</h1>
+  <nav class="board-nav">
+    <button (click)="goBack()" class="back-btn">
+      <app-icon-arrow-left />
+      Go back
     </button>
-    <h2>{{ currentBoard()?.board?.title }}</h2>
-  </div>
+    <!-- TODO: Implement breadcrumbs -->
+  </nav>
 
-  <div class="sub-boards-section">
-    <h3>Sub-boards</h3>
+  <section class="sub-boards">
+    <h2>Sub-boards</h2>
 
-    <div class="create-sub-board">
-      <label for="new-sub-board">Create a new sub-board:</label>
-      <input name="new-sub-board" [value]="newSubBoardTitle()" (input)="newSubBoardTitle.set($any($event.target).value)"
-        placeholder="New sub-board name" (keyup.enter)="createSubBoard()" />
-      <button role="button" (click)="createSubBoard()">Create Sub-board</button>
+
+    @if (openCreate()) {
+    <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
+      <div class="create-sub-board">
+        <label for="new-sub-board">Title for your new sub-board</label>
+        <input name="new-sub-board" [value]="newSubBoardTitle()"
+          (input)="newSubBoardTitle.set($any($event.target).value)" placeholder="Title..."
+          (keyup.enter)="createSubBoard()" />
+        <button role="button" class="submit-btn" (click)="createSubBoard()"
+          [disabled]="newSubBoardTitle().length === 0">Create
+          new board
+        </button>
+        <button type="button" class="close" (click)="close()">
+          <span>Cancel</span>
+          <app-icon-add />
+        </button>
+      </div>
     </div>
+    }
 
-    <div class="sub-boards-grid">
+    <ul class="sub-boards-list">
+      <li class="open-create-sub">
+        <button class="open-btn" (click)="openCreateSub()" aria-label="Create new sub-board">
+          Create new
+        </button>
+      </li>
       @for (sub of currentBoard()?.subBoards; track sub.id) {
-      <a [routerLink]="['fyll i senare']">
-        <h4>{{ sub.title }}</h4>
-      </a>
+      <li class="board">
+        <a class="link" [routerLink]="['fyll i senare']">
+          <h3>{{ sub.title }}</h3>
+        </a>
+
+      </li>
       }
-    </div>
+    </ul>
 
     @if (!currentBoard()?.subBoards || currentBoard()?.subBoards?.length === 0) {
     <p>No sub-boards yet, you can create one quickly</p>
     }
-  </div>
+  </section>
 
   <section class="editor-container">
-    <h3>Notes</h3>
-    <app-editor [savedContent]="currentBoard()?.boardItem?.content ?? null" [boardId]="boardId()"/>
+    <h2>Notes</h2>
+    <app-editor [savedContent]="currentBoard()?.boardItem?.content ?? null" [boardId]="boardId()" />
   </section>
-</div>
+  <div class="delete-board-container">
+    <button role="button" class="delete-btn" (click)="deleteBoard(currentBoard()?.board?.id ?? '')">
+      Delete this board
+      <app-icon-delete />
+    </button>
+    <!-- TODO: Add confirmation here "Are you sure? => Yes / No" -->
+  </div>
 
-<div class="delete-board-container">
-  <button role="button" class="delete-btn" (click)="deleteBoard(currentBoard()?.board?.id ?? '')">
-    Delete this board
-  </button>
-  <!-- TODO: Add confirmation here "Are you sure? => Yes / No" -->
-</div>
+  @if (errorMessage()) {
+  <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+    <p>{{ errorMessage() }}</p>
+  </span>
+  }
+
+  @if (successMessage()) {
+  <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+    <p>{{ successMessage() }}</p>
+  </span>
+  }
+</section>
+
 }
 
 @if (loading()) {

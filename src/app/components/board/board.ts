@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BoardService } from '../../services/boards';
 import { EditorComponent } from './editor/editor';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
+import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
+import { AddIconComponent } from '../../icons/addIcon';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent],
+  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, AddIconComponent],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -19,7 +22,9 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   boardId = signal('');
   currentBoard = this.boardService.currentBoard;
   newSubBoardTitle = signal('');
-
+  successMessage = signal('');
+  errorMessage = signal('');
+  openCreate = signal(false);
 
   ngAfterViewInit(): void {
     this.boardId.set(this.route.snapshot.params['boardId']);
@@ -40,16 +45,41 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  openCreateSub() {
+    this.openCreate.set(true);
+  }
+
+  close() {
+    this.openCreate.set(false);
+  }
+
   createSubBoard() {
+    this.loading.set(true);
     const calendarId = this.currentBoard()?.board?.calendar_id;
     if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) return;
 
-    this.boardService.createSubBoard({
-      calendar_id: calendarId,
-      title: this.newSubBoardTitle(),
-      parent_board_id: this.boardId(),
-      order_index: this.currentBoard()?.subBoards.length || 0
-    });
+    try {
+      this.boardService.createSubBoard({
+        calendar_id: calendarId,
+        title: this.newSubBoardTitle(),
+        parent_board_id: this.boardId(),
+        order_index: this.currentBoard()?.subBoards.length || 0
+      });
+
+      this.newSubBoardTitle.set('');
+      this.successMessage.set('Sub-board created successfully');
+      setTimeout(() => this.successMessage.set(''), 3000);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this.errorMessage.set(
+          err.message ?? 'An error occured, could not create sub-board.'
+        )
+      } else {
+        this.errorMessage.set('An error occured, could not create sub-board.')
+      }
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   deleteBoard(boardId: string) {

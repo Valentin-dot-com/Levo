@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BoardService } from '../../services/boards';
 import { CalendarService } from '../../services/calendars';
 import { SharedIconComponent } from '../../icons/sharedIcon';
@@ -12,13 +12,10 @@ import { SharedIconComponent } from '../../icons/sharedIcon';
   styleUrl: './boards.scss',
 })
 export class BoardsComponent {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private boardsService = inject(BoardService);
   private calendarService = inject(CalendarService);
 
   boards = this.boardsService.boards;
-  currentSubBoards = this.boardsService.currentSubBoards;
   loading = signal(false);
 
   getCalendar(calId: string) {
