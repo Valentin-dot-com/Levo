@@ -55,4 +55,8 @@ export class AppLayoutComponent implements OnInit {
       this.initError.set('Failed to load your data. Please refresh the page.');
     }
   }
+
+  clearBoardPath() {
+    this.boardService.resetFullPath();
+  }
 }

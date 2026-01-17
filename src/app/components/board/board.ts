@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BoardService } from '../../services/boards';
@@ -9,14 +9,21 @@ import { AddIconComponent } from '../../icons/addIcon';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, AddIconComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    EditorComponent,
+    DeleteIconComponent,
+    ArrowLeftIconComponent,
+    AddIconComponent,
+  ],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
-export class BoardComponent implements AfterViewInit, OnDestroy {
+export class BoardComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private boardService = inject(BoardService)
+  private boardService = inject(BoardService);
 
   loading = signal(false);
   boardId = signal('');
@@ -25,23 +32,51 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
   successMessage = signal('');
   errorMessage = signal('');
   openCreate = signal(false);
+  path = this.boardService.fullPath;
 
-  ngAfterViewInit(): void {
-    this.boardId.set(this.route.snapshot.params['boardId']);
-    this.loadBoard();
+  // ngAfterViewInit(): void {
+  //   this.boardId.set(this.route.snapshot.params['boardId']);
+  //   this.loadBoard();
+  //   this.updatePathInit();
+  //   console.log(this.path());
+  // }
+
+  ngOnInit(): void {
+    this.route.params.subscribe(async (params) => {
+      this.boardId.set(params['boardId']);
+      await this.loadBoard();
+      this.updatePathInit();
+    });
   }
 
-  loadBoard() {
+  updatePathInit() {
+    if (this.currentBoard()?.board?.parent_board_id) {
+      const board = this.currentBoard()?.board;
+      console.log(board);
+      if (!board) return;
+      this.boardService.pushPath(board);
+    } else {
+      const board = this.currentBoard()?.board;
+      console.log(board);
+      if (!board) return;
+      this.boardService.setRoot(board);
+    }
+  }
+
+  async loadBoard() {
     this.loading.set(true);
-    this.boardService.getBoardWithDetails(this.boardId());
+    await this.boardService.getBoardWithDetails(this.boardId());
     this.loading.set(false);
   }
 
   goBack() {
-    if (this.currentBoard()?.board?.parent_board_id) {
-      this.router.navigate(['../', this.currentBoard()?.board?.parent_board_id]);
+    const parentId = this.currentBoard()?.board?.parent_board_id;
+    if (parentId) {
+      this.boardService.popToPath(parentId);
+      this.router.navigate(['/boards', parentId]);
     } else {
-      this.router.navigate(['../'], { relativeTo: this.route});
+      this.boardService.resetFullPath();
+      this.router.navigate(['../'], { relativeTo: this.route });
     }
   }
 
@@ -53,17 +88,16 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
     this.openCreate.set(false);
   }
 
-  createSubBoard() {
-    this.loading.set(true);
+  async createSubBoard() {
     const calendarId = this.currentBoard()?.board?.calendar_id;
     if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) return;
 
     try {
-      this.boardService.createSubBoard({
+      await this.boardService.createSubBoard({
         calendar_id: calendarId,
         title: this.newSubBoardTitle(),
         parent_board_id: this.boardId(),
-        order_index: this.currentBoard()?.subBoards.length || 0
+        order_index: this.currentBoard()?.subBoards.length || 0,
       });
 
       this.newSubBoardTitle.set('');
@@ -71,14 +105,10 @@ export class BoardComponent implements AfterViewInit, OnDestroy {
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(
-          err.message ?? 'An error occured, could not create sub-board.'
-        )
+        this.errorMessage.set(err.message ?? 'An error occured, could not create sub-board.');
       } else {
-        this.errorMessage.set('An error occured, could not create sub-board.')
+        this.errorMessage.set('An error occured, could not create sub-board.');
       }
-    } finally {
-      this.loading.set(false);
     }
   }
 

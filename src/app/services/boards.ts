@@ -15,9 +15,30 @@ export class BoardService {
   private _boards = signal<Board[]>([]);
   private _currentSubBoards = signal<Board[]>([]);
   private _currentBoard = signal<BoardWithDetails | null>(null);
+  private _fullPath = signal<Board[]>([]);
 
   readonly boards = this._boards.asReadonly();
   readonly currentBoard = this._currentBoard.asReadonly();
+  readonly fullPath = this._fullPath.asReadonly();
+
+  setRoot(board: Board) {
+    this._fullPath.set([board]);
+  }
+
+  pushPath(board: Board) {
+    this._fullPath.update((path) => [...path, board]);
+  }
+
+  popToPath(boardId: string) {
+    this._fullPath.update((path) => {
+      const index = path.findIndex((b) => b.id === boardId);
+      return index >= 0 ? path.slice(0, index + 1) : path;
+    });
+  }
+
+  resetFullPath() {
+    this._fullPath.set([]);
+  }
 
   async getRootBoards(): Promise<void> {
     const calendarIds = this.calendarService.calendarIds();
