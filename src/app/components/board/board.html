@@ -41,7 +41,7 @@
       </li>
       @for (sub of currentBoard()?.subBoards; track sub.id) {
       <li class="board">
-        <a class="link" [routerLink]="['fyll i senare']">
+        <a class="link" [routerLink]="['/boards', sub.id]">
           <h3>{{ sub.title }}</h3>
         </a>
 

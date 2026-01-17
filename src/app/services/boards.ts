@@ -37,22 +37,6 @@ export class BoardService {
     this._boards.set(data ?? []);
   }
 
-  // This one might be redundant if I have the getBoardWithDetails-method...
-  async getSubBoards(parentBoardId: string): Promise<void> {
-    if (!parentBoardId) {
-      throw new Error('No parent-board ID was found. Could not fetch sub-boards');
-    }
-
-    const { data, error } = await this.supabase.supabaseClient
-      .from('boards')
-      .select('*')
-      .eq('parent_board_id', parentBoardId)
-      .order('order_index');
-
-    if (error) throw error;
-    this._currentSubBoards.set(data ?? []);
-  }
-
   async getBoardWithDetails(boardId: string): Promise<void> {
     if (!boardId) {
       throw new Error('No board-ID was given, could not fetch data.');
