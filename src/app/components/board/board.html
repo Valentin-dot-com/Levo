@@ -1,19 +1,7 @@
-@let breadcrumbs = path();
-
 @if (currentBoard() && !loading()) {
 <section class="board-detail">
   <h1>{{ currentBoard()?.board?.title }}</h1>
   <nav class="board-nav">
-    <div class="breadcrumbs">
-      @for (crumb of breadcrumbs; track crumb.id; let last = $last) {
-        @if (!last) {
-          <a class="crumb" [routerLink]="['/boards', crumb.id]">{{ crumb.title }} /</a>
-        }
-        @if (last) {
-          <span class="crumb current">{{ crumb.title }}</span>
-        }
-      }
-    </div>
     <button (click)="goBack()" class="back-btn">
       <app-icon-arrow-left />
       Go back

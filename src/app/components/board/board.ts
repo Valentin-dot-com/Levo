@@ -32,7 +32,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   successMessage = signal('');
   errorMessage = signal('');
   openCreate = signal(false);
-  path = this.boardService.fullPath;
 
   // ngAfterViewInit(): void {
   //   this.boardId.set(this.route.snapshot.params['boardId']);
@@ -45,22 +44,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(async (params) => {
       this.boardId.set(params['boardId']);
       await this.loadBoard();
-      this.updatePathInit();
     });
-  }
-
-  updatePathInit() {
-    if (this.currentBoard()?.board?.parent_board_id) {
-      const board = this.currentBoard()?.board;
-      console.log(board);
-      if (!board) return;
-      this.boardService.pushPath(board);
-    } else {
-      const board = this.currentBoard()?.board;
-      console.log(board);
-      if (!board) return;
-      this.boardService.setRoot(board);
-    }
   }
 
   async loadBoard() {
@@ -72,10 +56,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   goBack() {
     const parentId = this.currentBoard()?.board?.parent_board_id;
     if (parentId) {
-      this.boardService.popToPath(parentId);
       this.router.navigate(['/boards', parentId]);
     } else {
-      this.boardService.resetFullPath();
       this.router.navigate(['../'], { relativeTo: this.route });
     }
   }
