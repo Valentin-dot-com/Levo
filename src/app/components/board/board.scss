@@ -18,9 +18,9 @@
 
   .board-nav {
     display: flex;
-    flex-direction: column;
-    gap: 0;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 
     .back-btn {
       display: flex;
@@ -30,9 +30,11 @@
       border-radius: $border-radius-XL;
       background-color: transparent;
       color: $color-text;
-      transition: color 0.2s ease-in-out;
+      font-size: $font-size-text;
+      font-weight: 500;
       padding: 0.5rem 0;
       cursor: pointer;
+      transition: color 0.2s ease-in-out;
 
       app-icon-arrow-left {
         display: flex;
@@ -42,25 +44,6 @@
 
       @include hover-supported {
         color: $color-accent;
-      }
-    }
-
-    .breadcrumbs {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 0.25rem;
-
-      .crumb {
-        text-decoration: none;
-        font-size: $font-size-text;
-        font-weight: 500;
-        color: $color-text;
-        padding: 0.5rem 0;
-
-        &.current {
-          color: $color-accent;
-        }
       }
     }
   }
@@ -186,9 +169,9 @@
     .board,
     .open-create-sub {
       background-color: transparent;
-      border-radius: $border-radius-XL;
-      min-width: 10rem;
-      height: 4rem;
+      border-radius: $border-radius-M;
+      min-width: 7rem;
+      height: 3rem;
       overflow: hidden;
 
       .link {
@@ -203,7 +186,7 @@
         transition: background 0.2s ease-in-out;
 
         h3 {
-          font-size: $font-size-S;
+          font-size: $font-size-text;
           font-weight: 600;
           color: $color-text;
           line-height: normal;
@@ -221,12 +204,12 @@
     }
 
     .open-create-sub {
-      min-width: 7rem;
-      max-width: 7rem;
+      min-width: 5rem;
+      max-width: 5rem;
       margin-right: 1rem;
 
       .open-btn {
-        background-color: $color-grey;
+        background-color: $color-primary;
         padding: 1rem;
         border: none;
         width: 100%;
@@ -234,9 +217,9 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        font-size: $font-size-S;
+        font-size: $font-size-text;
         font-weight: 600;
-        color: $color-text;
+        color: $color-white;
         line-height: normal;
         transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
         cursor: pointer;
