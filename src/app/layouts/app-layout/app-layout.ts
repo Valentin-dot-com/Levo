@@ -57,6 +57,6 @@ export class AppLayoutComponent implements OnInit {
   }
 
   clearBoardPath() {
-    this.boardService.resetFullPath();
+    this.boardService.clearCurrent();
   }
 }
