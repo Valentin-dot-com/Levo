@@ -13,7 +13,6 @@ export class BoardService {
   private calendarService = inject(CalendarService);
 
   private _boards = signal<Board[]>([]);
-  private _currentSubBoards = signal<Board[]>([]);
   private _currentBoard = signal<BoardWithDetails | null>(null);
   private _fullPath = signal<Board[]>([]);
 
@@ -170,12 +169,23 @@ export class BoardService {
     if (error) throw error;
 
     this._boards.update((boards) => boards.filter((board) => board.id !== id));
-    this._currentSubBoards.update((boards) => boards.filter((board) => board.id !== id));
+    this._currentBoard.update((current) => {
+      if (!current) return current;
+      if (current.board && current.board.id === id) {
+        return null;
+      }
+      if (current.subBoards) {
+        return {
+          ...current,
+          subBoards: current.subBoards.filter((board) => board.id !== id),
+        };
+      }
+      return current;
+    });
     return true;
   }
 
   clearCurrent() {
     this._currentBoard.set(null);
-    this._currentSubBoards.set([]);
   }
 }
