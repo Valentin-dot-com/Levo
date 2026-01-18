@@ -1,27 +1,10 @@
-
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
-@use 'app/styles/variables.scss' as *;
-@use 'app/styles/vendor/reset.scss' as *;
-@use 'app/styles/theme-colors' as theme;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 html {
   height: 100vh;
   width: 100%;
   overflow: hidden;
-
-  @include mat.theme((
-    color: (
-      primary: theme.$primary-palette,
-      tertiary: theme.$tertiary-palette,
-    ),
-    typography: Montserrat,
-    density: 0,
-  ));
 }
 
 body {
@@ -62,47 +45,4 @@ input,
 textarea,
 select {
   font-family: $font-primary;
-}
-
-// Angular Material Datepicker styles:
-.mat-datepicker-content {
-  // Hover state
-  --mat-datepicker-calendar-date-hover-state-background-color: #{$color-accent};
-
-  // Focus state
-  --mat-datepicker-calendar-date-focus-state-background-color: #{rgba($color-primary, 0.24)};
-
-  // Force white text on hover using direct selectors
-  .mat-calendar-body-cell:hover .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    color: #{$color-fff} !important;
-  }
-
-  // White text on focus
-  .mat-calendar-body-cell:focus .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
-    color: #{$color-fff} !important;
-  }
-}
-
-.mat-datepicker-toggle {
-  --mat-datepicker-toggle-icon-color: #{$color-primary};
-}
-
-.mat-mdc-form-field:hover {
-  .mat-mdc-text-field-wrapper {
-    background-color: #{$color-fff} !important;
-  }
-}
-
-.mat-mdc-text-field-wrapper {
-  background-color: #{$color-fff} !important;
-}
-
-.mat-mdc-form-field.mat-mdc-form-field-type-mat-input.mat-form-field-appearance-fill {
-  .mat-mdc-text-field-wrapper {
-    background-color: #{$color-fff} !important;
-  }
-
-  &:hover .mat-mdc-text-field-wrapper {
-    background-color: #{$color-fff} !important;
-  }
 }
