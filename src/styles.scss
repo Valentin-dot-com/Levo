@@ -1,5 +1,6 @@
 @use 'variables' as *;
 @use 'mixins' as *;
+@use 'vendor/reset';
 
 html {
   height: 100vh;
