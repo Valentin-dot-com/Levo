@@ -24,4 +24,5 @@ export interface BoardWithDetails {
   board: Board | null;
   subBoards: Board[];
   boardItem: BoardItem | null;
+  parentBoard: Board | null;
 }

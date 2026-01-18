@@ -14,9 +14,11 @@ export class BoardService {
 
   private _boards = signal<Board[]>([]);
   private _currentBoard = signal<BoardWithDetails | null>(null);
+  private _parentBoard = signal<Board | null>(null);
 
   readonly boards = this._boards.asReadonly();
   readonly currentBoard = this._currentBoard.asReadonly();
+  readonly parentBoard = this._parentBoard.asReadonly();
 
   async getRootBoards(): Promise<void> {
     const calendarIds = this.calendarService.calendarIds();
@@ -36,33 +38,56 @@ export class BoardService {
     this._boards.set(data ?? []);
   }
 
-  async getBoardWithDetails(boardId: string): Promise<void> {
-    if (!boardId) {
-      throw new Error('No board-ID was given, could not fetch data.');
-    }
+  private async fetchBoardById(id: string) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('boards')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data ?? null;
+  }
 
-    const [
-      { data: board, error: boardError },
-      { data: item, error: itemsError },
-      { data: subBoards, error: subBoardsError },
-    ] = await Promise.all([
-      this.supabase.supabaseClient.from('boards').select('*').eq('id', boardId).single(),
-      this.supabase.supabaseClient.from('board_items').select('*').eq('board_id', boardId).single(),
-      this.supabase.supabaseClient
-        .from('boards')
-        .select('*')
-        .eq('parent_board_id', boardId)
-        .order('order_index'),
+  private async fetchBoardItemByBoardId(boardId: string) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('board_items')
+      .select('*')
+      .eq('board_id', boardId)
+      .single();
+    if (error) throw error;
+    return data ?? null;
+  }
+
+  private async fetchSubBoards(parentBoardId: string) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('boards')
+      .select('*')
+      .eq('parent_board_id', parentBoardId)
+      .order('order_index');
+    if (error) throw error;
+    return data ?? [];
+  }
+
+  async getBoardWithDetails(boardId: string): Promise<void> {
+    if (!boardId) throw new Error('No board-ID was given, could not fetch data.');
+
+    const [board, boardItem, subBoards] = await Promise.all([
+      this.fetchBoardById(boardId),
+      this.fetchBoardItemByBoardId(boardId),
+      this.fetchSubBoards(boardId),
     ]);
 
-    if (boardError) throw boardError;
-    if (itemsError) throw itemsError;
-    if (subBoardsError) throw subBoardsError;
+    let parentBoard = null;
+    const parentId = board?.parent_board_id ?? null;
+    if (parentId) {
+      parentBoard = await this.fetchBoardById(parentId);
+    }
 
     const boardWithDetails: BoardWithDetails = {
-      board: board ?? null,
-      subBoards: subBoards ?? [],
-      boardItem: item ?? null,
+      board,
+      subBoards,
+      boardItem,
+      parentBoard,
     };
 
     this._currentBoard.set(boardWithDetails);
