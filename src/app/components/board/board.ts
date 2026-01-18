@@ -33,13 +33,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   errorMessage = signal('');
   openCreate = signal(false);
 
-  // ngAfterViewInit(): void {
-  //   this.boardId.set(this.route.snapshot.params['boardId']);
-  //   this.loadBoard();
-  //   this.updatePathInit();
-  //   console.log(this.path());
-  // }
-
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
       this.boardId.set(params['boardId']);

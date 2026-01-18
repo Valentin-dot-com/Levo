@@ -4,7 +4,11 @@
   <nav class="board-nav">
     <button (click)="goBack()" class="back-btn">
       <app-icon-arrow-left />
-      Go back
+      @if (currentBoard()?.parentBoard) {
+        Go back to {{ currentBoard()?.parentBoard?.title }}
+      } @else {
+        Go back to all boards
+      }
     </button>
   </nav>
 
