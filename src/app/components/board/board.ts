@@ -5,7 +5,6 @@ import { BoardService } from '../../services/boards';
 import { EditorComponent } from './editor/editor';
 import { DeleteIconComponent } from '../../icons/deleteIcon';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
-import { AddIconComponent } from '../../icons/addIcon';
 
 @Component({
   selector: 'app-board',
@@ -15,7 +14,6 @@ import { AddIconComponent } from '../../icons/addIcon';
     EditorComponent,
     DeleteIconComponent,
     ArrowLeftIconComponent,
-    AddIconComponent,
   ],
   templateUrl: './board.html',
   styleUrl: './board.scss',
@@ -32,6 +30,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   successMessage = signal('');
   errorMessage = signal('');
   openCreate = signal(false);
+  openDelete = signal(false);
 
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
@@ -61,6 +60,11 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   close() {
     this.openCreate.set(false);
+    this.openDelete.set(false);
+  }
+
+  openDeleteDialog() {
+    this.openDelete.set(true);
   }
 
   async createSubBoard() {
@@ -78,6 +82,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.newSubBoardTitle.set('');
       this.successMessage.set('Sub-board created successfully');
       setTimeout(() => this.successMessage.set(''), 3000);
+      this.openCreate.set(false);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.errorMessage.set(err.message ?? 'An error occured, could not create sub-board.');
@@ -89,6 +94,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   deleteBoard(boardId: string) {
     this.boardService.deleteBoard(boardId);
+    this.openDelete.set(false);
     this.goBack();
   }
 

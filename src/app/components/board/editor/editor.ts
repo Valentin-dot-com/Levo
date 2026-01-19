@@ -16,10 +16,12 @@ import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { ListIconComponent } from '../../../icons/listIcon';
+import { TaskIconComponent } from '../../../icons/taskIcon';
 
 @Component({
   selector: 'app-editor',
-  imports: [CommonModule],
+  imports: [CommonModule, ListIconComponent, TaskIconComponent],
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
   encapsulation: ViewEncapsulation.None,
@@ -54,11 +56,11 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
-        this.editorState.update(v => v + 1);
+        this.editorState.update((v) => v + 1);
       },
       onSelectionUpdate: () => {
-        this.editorState.update(v => v + 1);
-      }
+        this.editorState.update((v) => v + 1);
+      },
     });
 
     this.editor.set(editor);

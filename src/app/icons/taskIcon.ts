@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-icon-delete',
+  selector: 'app-icon-task',
   template: `
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,14 +14,12 @@ import { Component } from '@angular/core';
       height="24"
       width="24"
     >
-      <path d="m3 6 2 0 16 0" stroke-width="2"></path>
+      <path d="m9 11 3 3L22 4" stroke-width="2"></path>
       <path
-        d="M19 6v14a2 2 0 0 1 -2 2H7a2 2 0 0 1 -2 -2V6m3 0V4a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2"
+        d="M21 12v7a2 2 0 0 1 -2 2H5a2 2 0 0 1 -2 -2V5a2 2 0 0 1 2 -2h11"
         stroke-width="2"
       ></path>
-      <path d="m10 11 0 6" stroke-width="2"></path>
-      <path d="m14 11 0 6" stroke-width="2"></path>
     </svg>
   `,
 })
-export class DeleteIconComponent {}
+export class TaskIconComponent {}
