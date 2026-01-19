@@ -1,11 +1,11 @@
-@use '../../../styles/variables.scss' as *;
-@use '../../../styles/mixins.scss' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 :host {
   height: 100%;
 }
 
-.create-task-form {
+.create-event-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,7 +35,7 @@
       font-weight: 600;
     }
 
-    .new-task-input {
+    .new-event-input {
       border: 2px solid transparent;
       border-radius: $border-radius-S;
       padding: 0.5rem 0.75rem;
@@ -101,8 +101,8 @@
 
   .success-msg,
   .error-msg {
-    position: absolute;
-    bottom: 5rem;
+    position: fixed;
+    bottom: 7rem;
     left: 0;
     width: 100%;
     display: flex;

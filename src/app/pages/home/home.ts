@@ -4,7 +4,7 @@ import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
 import { CommonModule } from '@angular/common';
 import { CalendarViewService } from '../../services/calendarView';
-import { compareAsc, format, isToday, parseISO } from 'date-fns';
+import { compareAsc, isToday, parseISO } from 'date-fns';
 import { RouterLink } from '@angular/router';
 import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';
@@ -30,13 +30,13 @@ export class HomeComponent {
     return week?.days.find((day) => isToday(day.date)) || null;
   });
 
-  tasks = computed(() => {
-    const tasksForToday =
-      this.calendarView.tasks().filter((task) => task.date && isToday(task.date)) || [];
+  events = computed(() => {
+    const eventsForToday =
+      this.calendarView.events().filter((event) => event.date && isToday(event.date)) || [];
 
-    if (tasksForToday.length === 0) return tasksForToday;
+    if (eventsForToday.length === 0) return eventsForToday;
 
-    return [...tasksForToday].sort((a, b) => {
+    return [...eventsForToday].sort((a, b) => {
       if (!a.scheduled_at && !b.scheduled_at) return 0;
       if (!a.scheduled_at) return 1;
       if (!b.scheduled_at) return -1;
@@ -54,7 +54,10 @@ export class HomeComponent {
   }
 
   formatTime(time: string) {
-    return format(parseISO(time), 'HH:mm');
+    if (!time) return '';
+    const [hours, minutes] = time.split(':');
+    if (hours === undefined || minutes === undefined) return '';
+    return `${hours}:${minutes}`;
   }
 
   signOut() {

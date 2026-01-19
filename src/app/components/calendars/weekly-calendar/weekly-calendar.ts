@@ -88,9 +88,9 @@ export class WeeklyCalendarComponent implements OnDestroy {
     this.todayObserver.observe(el.nativeElement);
   }
 
-  tasksForDate(date: Date) {
+  eventsForDate(date: Date) {
     const iso = format(date, 'yyyy-MM-dd');
-    return this.calendarView.tasks().filter((t) => t.date === iso) ?? [];
+    return this.calendarView.events().filter((t) => t.date === iso) ?? [];
   }
 
   onScroll() {

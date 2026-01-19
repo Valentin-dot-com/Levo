@@ -1,4 +1,5 @@
-@use '../../styles/variables.scss' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 // LOADING ANIMATION from https://css-loaders.com
 .loader {

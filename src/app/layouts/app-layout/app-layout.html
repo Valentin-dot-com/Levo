@@ -2,13 +2,13 @@
   <nav class="main-nav">
     <menu class="nav-links">
       <li>
-        <a routerLink="/home" routerLinkActive="active" (click)="closeCreateOnNavClick()">
+        <a routerLink="/home" routerLinkActive="active" (click)="closeCreateOnNavClick(); clearBoardPath()">
           <app-icon-home />
           <span>Home</span>
         </a>
       </li>
       <li>
-        <a routerLink="/calendar" routerLinkActive="active" (click)="closeCreateOnNavClick()">
+        <a routerLink="/calendar" routerLinkActive="active" (click)="closeCreateOnNavClick(); clearBoardPath()">
           <app-icon-calendar />
           <span>Calendar</span>
         </a>
@@ -19,13 +19,13 @@
         </button>
       </li>
       <li>
-        <a routerLink="/boards" routerLinkActive="active" (click)="closeCreateOnNavClick()">
+        <a routerLink="/boards" routerLinkActive="active" (click)="closeCreateOnNavClick(); clearBoardPath()">
           <app-icon-board />
           <span>Boards</span>
         </a>
       </li>
       <li>
-        <a routerLink="/profile" routerLinkActive="active" (click)="closeCreateOnNavClick()">
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeCreateOnNavClick(); clearBoardPath()">
           <app-icon-profile />
           <span>Profile</span>
         </a>

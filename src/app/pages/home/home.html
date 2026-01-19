@@ -16,41 +16,35 @@
         </span>
       }
     </div>
-    <article class="todays-tasks">
-      <h3>Today's tasks</h3>
-      <ul class="tasks">
-        @if (tasks().length) {
-          @for (task of tasks(); track task.id) {
-            @let taskCalendar = getCalendar(task.calendar_id);
-            <li class="task" [class.completed]="task.status === 'completed'">
+    <article class="todays-events">
+      <h3>Today's events</h3>
+      <ul class="events">
+        @if (events().length) {
+          @for (event of events(); track event.id) {
+            @let eventCalendar = getCalendar(event.calendar_id);
+            <li class="event">
               <h4>
-                {{ task.title }}
+                {{ event.title }}
               </h4>
-              @if (taskCalendar?.is_shared) {
+              @if (eventCalendar?.is_shared) {
                 <span class="is-shared-container">
                   <app-icon-shared />
                 </span>
               }
-              @if (task.scheduled_at) {
-                <span class="scheduled-at">{{ formatTime(task.scheduled_at) }}</span>
+              @if (event.scheduled_at) {
+                <span class="scheduled-at">{{ formatTime(event.scheduled_at) }}</span>
               }
-              <div class="status-toggle">
-                <label class="checkbox styled">
-                  <input type="checkbox"/>
-                  <div class="checkbox__checkmark"></div>
-                </label>
-              </div>
             </li>
           }
         } @else {
-          <li class="no-tasks">
-            <h4>You have no tasks planned for today</h4>
+          <li class="no-events">
+            <h4>You have no events planned for today</h4>
           </li>
         }
-        <li class="add-task-today">
+        <li class="add-event-today">
           <button>
             <app-icon-add />
-            <span class="add-text">Add new task for today</span>
+            <span class="add-text">Add new event for today</span>
           </button>
         </li>
       </ul>
@@ -62,7 +56,7 @@
       @for (board of boards(); track board.id) {
       @let boardCalendar = getCalendar(board.calendar_id);
       <li class="board">
-        <a routerLink="/board">
+        <a [routerLink]="['/boards', board.id]">
           <span class="board-calendar">
             {{ boardCalendar?.name }}
             @if (boardCalendar?.is_shared) {

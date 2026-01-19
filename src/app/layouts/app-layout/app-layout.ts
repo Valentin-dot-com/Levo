@@ -49,10 +49,14 @@ export class AppLayoutComponent implements OnInit {
     try {
       await this.calendarService.initCalendarData();
       await this.calendarView.initialize();
-      await this.boardService.fetchUserBoards();
+      await this.boardService.getRootBoards();
     } catch (error) {
       console.error('Failed to initialize app data:', error);
       this.initError.set('Failed to load your data. Please refresh the page.');
     }
+  }
+
+  clearBoardPath() {
+    this.boardService.clearCurrent();
   }
 }
