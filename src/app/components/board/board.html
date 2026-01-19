@@ -1,20 +1,18 @@
 @if (currentBoard() && !loading()) {
+@let subBoards = currentBoard()?.subBoards ?? [];
+<nav class="board-nav">
+  <button (click)="goBack()" class="back-btn"
+    [aria-label]="`Go back to ${currentBoard()?.parentBoard?.title ?? 'all boards'}`">
+    <app-icon-arrow-left />
+    {{ currentBoard()?.parentBoard?.title ?? 'All boards'}}
+  </button>
+</nav>
+
 <section class="board-detail">
   <h1>{{ currentBoard()?.board?.title }}</h1>
-  <nav class="board-nav">
-    <button (click)="goBack()" class="back-btn">
-      <app-icon-arrow-left />
-      @if (currentBoard()?.parentBoard) {
-        Go back to {{ currentBoard()?.parentBoard?.title }}
-      } @else {
-        Go back to all boards
-      }
-    </button>
-  </nav>
 
   <section class="sub-boards">
-    <h2>Sub-boards</h2>
-
+    <h2>Boards</h2>
 
     @if (openCreate()) {
     <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
@@ -41,13 +39,19 @@
           Create new
         </button>
       </li>
-      @for (sub of currentBoard()?.subBoards; track sub.id) {
-      <li class="board">
-        <a class="link" [routerLink]="['/boards', sub.id]">
-          <h3>{{ sub.title }}</h3>
-        </a>
+      @if (subBoards.length >= 1 ) {
+        @for (sub of subBoards; track sub.id) {
+        <li class="board">
+          <a class="link" [routerLink]="['/boards', sub.id]">
+            <h3>{{ sub.title }}</h3>
+          </a>
 
-      </li>
+        </li>
+        }
+      } @else {
+        <li class="empty-msg">
+          <p>Create boards inside this board to organize related content.</p>
+        </li>
       }
     </ul>
   </section>

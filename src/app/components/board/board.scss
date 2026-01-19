@@ -1,11 +1,45 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+.board-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: $border-radius-XL;
+    background-color: transparent;
+    color: $color-text;
+    font-size: $font-size-text;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+
+    app-icon-arrow-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @include hover-supported {
+      color: $color-accent;
+    }
+  }
+}
+
 .board-detail {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   position: relative;
+  min-height: 100%;
+  overflow-y: auto;
 
   h1 {
     margin: 0;
@@ -14,38 +48,6 @@
 
   h2 {
     font-size: $font-size-M;
-  }
-
-  .board-nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    .back-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      border-radius: $border-radius-XL;
-      background-color: transparent;
-      color: $color-text;
-      font-size: $font-size-text;
-      font-weight: 500;
-      padding: 0.5rem 0;
-      cursor: pointer;
-      transition: color 0.2s ease-in-out;
-
-      app-icon-arrow-left {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      @include hover-supported {
-        color: $color-accent;
-      }
-    }
   }
 
   .sub-boards {
@@ -83,7 +85,8 @@
       position: fixed;
       width: calc(100% - 2rem);
       z-index: 15;
-      box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.3),
+      box-shadow:
+        0 -10px 14px rgba($color-primary, $alpha: 0.3),
         0 10px 14px rgba($color-primary, $alpha: 0.3);
 
       label {
@@ -120,7 +123,9 @@
         background-color: $color-success;
         padding: 0.5rem;
         margin-top: 1rem;
-        transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        transition:
+          background 0.2s ease-in-out,
+          opacity 0.2s ease-in-out;
         cursor: pointer;
 
         @include hover-supported {
@@ -203,6 +208,14 @@
       }
     }
 
+    .empty-msg {
+      font-size: $font-size-text;
+      font-weight: 500;
+      color: $color-text;
+      display: flex;
+      align-items: center;
+    }
+
     .open-create-sub {
       min-width: 5rem;
       max-width: 5rem;
@@ -221,7 +234,9 @@
         font-weight: 600;
         color: $color-white;
         line-height: normal;
-        transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
+        transition:
+          color 0.2s ease-in-out,
+          background 0.2s ease-in-out;
         cursor: pointer;
 
         @include hover-supported {
@@ -229,6 +244,20 @@
           color: $color-white;
         }
       }
+    }
+  }
+
+  .editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid red;
+    min-height: 50vh;
+
+    app-editor {
+      flex: 1;
+      border: 1px solid aqua;
     }
   }
 
@@ -257,10 +286,6 @@
       background-color: $color-error;
     }
   }
-}
-
-app-editor {
-  height: 500px;
 }
 
 .enter-animation {

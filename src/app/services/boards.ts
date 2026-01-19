@@ -178,13 +178,10 @@ export class BoardService {
       if (current.board && current.board.id === id) {
         return null;
       }
-      if (current.subBoards) {
-        return {
-          ...current,
-          subBoards: current.subBoards.filter((board) => board.id !== id),
-        };
-      }
-      return current;
+      return {
+        ...current,
+        subBoards: current.subBoards.filter((board) => board.id !== id),
+      };
     });
     return true;
   }
