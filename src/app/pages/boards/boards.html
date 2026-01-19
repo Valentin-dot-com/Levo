@@ -18,5 +18,20 @@
         </a>
       </li>
     }
+    <li class="create-new">
+      <button type="button" class="open-create" (click)="openCreateNew()">
+        Create new board
+      </button>
+    </li>
   </ul>
+
+  @if(openCreate()) {
+    <aside class="overlay" animate.enter="slide-in-animation" animate.leave="slide-out-animation">
+      <div class="create-new-container">
+        <h2>Create new board</h2>
+        <app-new-board />
+        <button type="button" class="close" (click)="close()">Cancel</button>
+      </div>
+    </aside>
+  }
 </section>

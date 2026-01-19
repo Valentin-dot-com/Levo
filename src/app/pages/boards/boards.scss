@@ -61,6 +61,27 @@
       font-size: $font-size-S;
     }
   }
+
+  .create-new {
+    display: flex;
+    align-items: center;
+
+    .open-create {
+      border: none;
+      border-radius: $border-radius-XL;
+      padding: 1rem;
+      width: 100%;
+      background-color: $color-primary;
+      color: $color-white;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      @include hover-supported {
+        background-color: $color-accent;
+      }
+    }
+  }
 }
 
 .is-shared-container {
@@ -81,16 +102,96 @@
   }
 }
 
+.overlay {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+
+  .create-new-container {
+    width: calc(100% - 2rem);
+    height: 55vh;
+    background-color: $color-white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    border-radius: $border-radius-XL;
+    overflow-y: auto;
+    box-shadow:
+      0 -10px 14px rgba($color-primary, $alpha: 0.3),
+      0 10px 14px rgba($color-primary, $alpha: 0.3);
+
+    h2 {
+      text-align: center;
+    }
+
+    .close {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: $border-radius-XL;
+      font-size: $font-size-text;
+      color: $color-text;
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: $color-grey;
+      cursor: pointer;
+      transition:
+        background 0.2s ease-in-out,
+        color 0.2s ease-in-out;
+
+      @include hover-supported {
+        background-color: $color-accent;
+        color: $color-white;
+      }
+    }
+  }
+}
+
+.slide-in-animation {
+  @include slide-in-animation();
+}
+
+.slide-out-animation {
+  @include slide-out-animation();
+}
+
 @media screen and (min-width: 1300px) {
   .boards-page {
     .boards-list {
       flex-direction: row;
       flex-wrap: wrap;
       gap: 1rem;
+      // align-items: stretch;
     }
 
     .board {
       flex-basis: calc(50% - 0.5rem);
+    }
+
+    .create-new {
+      flex-basis: calc(50% - 0.5rem);
+
+      .open-create {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+
+  .overlay {
+    .create-new-container {
+      width: 30%;
+      max-width: 32rem;
     }
   }
 }
