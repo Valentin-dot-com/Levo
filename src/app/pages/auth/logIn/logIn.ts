@@ -8,13 +8,12 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 import { SupabaseService } from '../../../services/supabase';
 import { LoaderComponent } from '../../../components/loader/loader';
 
 @Component({
   selector: 'app-log-in',
-  imports: [FormsModule, CommonModule, MatButtonModule, ReactiveFormsModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './logIn.html',
   styleUrl: './logIn.scss',
 })
