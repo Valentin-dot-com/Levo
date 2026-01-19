@@ -8,13 +8,12 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 import { LoaderComponent } from '../../../components/loader/loader';
 import { AuthService } from '../../../services/authenticate';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [FormsModule, CommonModule, MatButtonModule, ReactiveFormsModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './signUp.html',
   styleUrl: './signUp.scss',
 })
