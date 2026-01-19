@@ -1,31 +1,30 @@
 <div class="editor-wrapper">
-  <div #editorHost class="editor"></div>
   @if (editor()) {
   <div class="toolbar">
     <button (click)="editor()!.chain().focus().toggleHeading({ level: 2 }).run()"
-      [class.active]="editor()!.isActive('heading', { level: 2 })">
+      [class.active]="isEditing() && editor()!.isActive('heading', { level: 2 })">
       H
     </button>
     <button class="bold.btn" (click)="editor()!.chain().focus().toggleBold().run()"
-      [class.active]="editorState() && editor()!.isActive('bold')">
+      [class.active]="isEditing() && editorState() && editor()!.isActive('bold')">
       B
     </button>
 
     <button class="italic-btn" (click)="editor()!.chain().focus().toggleItalic().run()"
-      [class.active]="editorState() && editor()!.isActive('italic')">
+      [class.active]="isEditing() && editorState() && editor()!.isActive('italic')">
       I
     </button>
 
     <button class="list-btn" (click)="editor()!.chain().focus().toggleBulletList().run()"
-      [class.active]="editorState() && editor()!.isActive('bulletList')">
+      [class.active]="isEditing() && editorState() && editor()!.isActive('bulletList')">
       <app-icon-list />
     </button>
 
     <button class="task-btn" (click)="editor()!.chain().focus().toggleTaskList().run()"
-      [class.active]="editorState() && editor()!.isActive('taskList')">
+      [class.active]="isEditing() && editorState() && editor()!.isActive('taskList')">
       <app-icon-task />
     </button>
   </div>
   }
-
+  <div #editorHost class="editor" [class.active]="isEditing()"></div>
 </div>

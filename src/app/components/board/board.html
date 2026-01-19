@@ -1,14 +1,15 @@
 @if (currentBoard() && !loading()) {
 @let subBoards = currentBoard()?.subBoards ?? [];
-<nav class="board-nav">
-  <button (click)="goBack()" class="back-btn"
-    [aria-label]="`Go back to ${currentBoard()?.parentBoard?.title ?? 'all boards'}`">
-    <app-icon-arrow-left />
-    {{ currentBoard()?.parentBoard?.title ?? 'All boards'}}
-  </button>
-</nav>
 
 <section class="board-detail">
+  <nav class="board-nav">
+    <button (click)="goBack()" class="back-btn"
+      [aria-label]="`Go back to ${currentBoard()?.parentBoard?.title ?? 'all boards'}`">
+      <app-icon-arrow-left />
+      {{ currentBoard()?.parentBoard?.title ?? 'All boards'}}
+    </button>
+  </nav>
+  
   <h1>{{ currentBoard()?.board?.title }}</h1>
 
   <section class="sub-boards">

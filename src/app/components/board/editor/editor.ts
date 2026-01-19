@@ -39,6 +39,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   boardId = input<string | null>(null);
 
   editor = signal<Editor | null>(null);
+  isEditing = signal(false);
   editorState = signal(0);
 
   private contentChange$ = new Subject<JSONContent>();
@@ -57,10 +58,18 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
         this.editorState.update((v) => v + 1);
+        editor.commands.scrollIntoView();
       },
       onSelectionUpdate: () => {
         this.editorState.update((v) => v + 1);
+        editor.commands.scrollIntoView();
       },
+      onFocus: () => {
+        this.isEditing.set(true);
+      },
+      onBlur: () => {
+        this.isEditing.set(false);
+      }
     });
 
     this.editor.set(editor);

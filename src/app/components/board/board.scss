@@ -44,8 +44,10 @@ app-icon-delete {
   flex-direction: column;
   gap: 1rem;
   position: relative;
-  min-height: 0;
-  flex: 1 1 0%;
+  height: 100%;
+  max-height: 100%;
+  padding-bottom: 2rem;
+  overflow-y: auto;
 
   h1 {
     margin: 0;
@@ -248,7 +250,14 @@ app-icon-delete {
     background-color: $color-error;
     color: $color-white;
     line-height: normal;
+    position: relative;
     cursor: pointer;
+    z-index: 1;
+    transition: background 0.2s ease-in-out;
+
+    @include hover-supported {
+      background-color: $color-accent;
+    }
   }
 
   .overlay {
@@ -312,15 +321,12 @@ app-icon-delete {
   }
 
   .editor-container {
-    flex: 1 1 0%;
-    min-height: 50vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 0.5rem;
 
     app-editor {
-      flex: 1 1 0%;
       min-height: 0;
       display: flex;
       flex-direction: column;

@@ -2,7 +2,6 @@
 @use 'mixins' as *;
 
 .editor-wrapper {
-  flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -11,14 +10,12 @@
 
 .toolbar {
   position: sticky;
-  bottom: 0;
+  top: 1rem;
+  width: 100%;
   z-index: 1;
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
   gap: 0.5rem;
-  border-bottom: 1px solid $color-text-secondary;
 
   button {
     min-height: 3rem;
@@ -72,14 +69,21 @@
 }
 
 .editor {
-  flex: 1;
-  padding: 1rem 1rem 6rem;
+  padding: 1rem;
   border-radius: $border-radius-XL;
   background: $color-fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
   font-family: $font-primary, sans-serif;
   line-height: 1.6;
+  transition: outline 0.2s ;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition: outline 0.2s ease-in-out;
+
+  &.active {
+    outline-color: $color-accent;
+  }
 
   p {
     margin: 0;
