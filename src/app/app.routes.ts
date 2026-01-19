@@ -8,7 +8,6 @@ import { CalendarComponent } from './pages/calendar/calendar';
 import { BoardsComponent } from './pages/boards/boards';
 import { ProfileComponent } from './pages/profile/profile';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout';
-import { BoardComponent } from './components/board/board';
 
 export const routes: Routes = [
   // Auth routes (standalone layout)
@@ -24,8 +23,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'calendar', component: CalendarComponent },
-      { path: 'boards', component: BoardsComponent, },
-      { path: 'boards/:boardId', component: BoardComponent },
+      { path: 'boards', component: BoardsComponent },
+      {
+        path: 'boards/:boardId',
+        loadComponent: () => import('./components/board/board').then((m) => m.BoardComponent),
+      },
       { path: 'profile', component: ProfileComponent },
     ],
   },
