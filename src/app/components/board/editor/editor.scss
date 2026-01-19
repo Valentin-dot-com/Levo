@@ -89,6 +89,14 @@
 
   p {
     margin: 0;
+
+    a {
+      cursor: pointer;
+
+      @include hover-supported {
+        color: $color-accent;
+      }
+    }
   }
 
   h2 {

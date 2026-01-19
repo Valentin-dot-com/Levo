@@ -12,9 +12,17 @@ import {
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../../services/boards';
 import { Editor, JSONContent } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import Bold from '@tiptap/extension-bold';
+import Italic from '@tiptap/extension-italic';
+import BulletList from '@tiptap/extension-bullet-list';
+import ListItem from '@tiptap/extension-list-item';
+import Heading from '@tiptap/extension-heading';
+import Link from '@tiptap/extension-link';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { ListIconComponent } from '../../../icons/listIcon';
 import { TaskIconComponent } from '../../../icons/taskIcon';
@@ -53,7 +61,21 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   initializeEditor() {
     const editor = new Editor({
       element: this.editorHost.nativeElement,
-      extensions: [StarterKit, TaskList, TaskItem.configure({ nested: true })],
+      extensions: [
+        Document,
+        Paragraph,
+        Text,
+        Bold,
+        Italic,
+        BulletList,
+        ListItem,
+        Heading,
+        TaskList,
+        Link.configure({
+          autolink: true, // This enables auto-linking when you type URLs
+        }),
+        TaskItem.configure({ nested: true }),
+      ],
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
@@ -69,7 +91,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       },
       onBlur: () => {
         this.isEditing.set(false);
-      }
+      },
     });
 
     this.editor.set(editor);
