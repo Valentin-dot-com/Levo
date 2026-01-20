@@ -1,55 +1,73 @@
 @if(day() && loading() === false ) {
-  <section class="day-details">
-    <h1 class="day">
-      <span class="day-date">{{ dayDetails()?.number }} {{ dayDetails()?.month }}</span>
-      <span class="weekday">{{ dayDetails()?.weekday }} W.{{ dayDetails()?.weeknumber }}, {{ dayDetails()?.year }}</span>
-    </h1>
+<section class="day-details">
+  <h1 class="day">
+    <span class="day-date">{{ dayDetails()?.number }} {{ dayDetails()?.month }}</span>
+    <span class="weekday">{{ dayDetails()?.weekday }} W.{{ dayDetails()?.weeknumber }}, {{ dayDetails()?.year }}</span>
+  </h1>
 
-    <article class="events">
-      <h2>Events</h2>
+  <section class="events">
+    <h2>Events</h2>
+    @if (events().length) {
       <ul class="events-list">
-        @if (events().length) {
-          @for (event of events(); track event.id) {
-            @let eventCalendar = getCalendar(event.calendar_id);
-            <li class="event">
+        @for (event of events(); track event.id) {
+          @let eventCalendar = getCalendar(event.calendar_id);
+          <li class="event">
+            <article>
               <h3>
                 {{ event.title }}
               </h3>
               @if (event.scheduled_at) {
-                <span class="scheduled-at">{{ formatTime(event.scheduled_at) }}</span>
+                <time class="scheduled-at">{{ formatTime(event.scheduled_at) }}</time>
               }
               @if (event.description) {
-                <span class="description">{{ event.description }}</span>
+                <p class="description">{{ event.description }}</p>
               }
               @if (event.location) {
-                <span class="location">
+                <address class="location">
                   <p>{{ event.location }}</p>
-                </span>
+                </address>
               }
-              <span class="is-shared-container">
-                {{ eventCalendar?.name }}
+              <footer class="event-metadata">
+                <span class="is-shared-container">
+                  {{ eventCalendar?.name }}
+                </span>
                 @if (eventCalendar?.is_shared) {
-                  <app-icon-shared />
+                  <app-icon-shared aria-label="Shared calendar" />
                 }
-              </span>
-            </li>
-          }
-        } @else {
-          <li class="no-events">
-            <h3>You have no events planned for today</h3>
+              </footer>
+            </article>
           </li>
         }
       </ul>
-    </article>
-    <section class="create-new">
-      <h2>Create new event for this day</h2>
-      <form class="create-form">
-        <label class="input" for="title">
-          <span>Enter a title:</span>
-          <input type="text" id="title" placeholder="Title">
-        </label>
-        <button type="submit">Create event</button>
-      </form>
-    </section>
+    } @else {
+      <p class="no-events">You have no events planned for today</p>
+    }
   </section>
+  <section class="create-new">
+    <h2>Create new event for this day</h2>
+    <form class="create-form" (submit)="createEvent(); $event.preventDefault()">
+      <label class="input" for="title">
+        <span>Enter a title:</span>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [value]="newEventTitle()"
+          (input)="newEventTitle.set($any($event.target).value)"
+          (keyup.enter)="createEvent()"
+          placeholder="Title"
+          required
+          autocomplete="off"
+        >
+      </label>
+      <button
+        type="submit"
+        [disabled]="newEventTitle().length === 0"
+        [attr.aria-disabled]="newEventTitle().length === 0"
+      >
+        Create event
+      </button>
+    </form>
+  </section>
+</section>
 }

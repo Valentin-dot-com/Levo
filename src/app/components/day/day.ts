@@ -103,7 +103,7 @@ export class DayComponent implements OnInit {
 
   async createEvent() {
     const calendarId = this.calendarIds()[0];
-    if (calendarId) {
+    if (!calendarId) {
       this.errorMessage.set('Something went wrong, please try again.');
       return;
     }
