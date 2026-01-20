@@ -121,9 +121,12 @@
       }
     }
 
+    .list-item {
+      list-style: none;
+    }
+
     .event,
     .add-event-today {
-      list-style: none;
       background-color: $color-grey;
       border-radius: $border-radius-S;
       padding: 0 1rem;
