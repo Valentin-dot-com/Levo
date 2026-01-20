@@ -33,7 +33,7 @@ export class CalendarComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.calendarView.initialize();
+    // await this.calendarView.initialize();
 
     const now = new Date();
 
