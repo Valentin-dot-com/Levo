@@ -1,0 +1,158 @@
+@use 'variables' as *;
+
+.day-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+
+  .day {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+    margin: 0;
+
+    .day-date {
+      font-size: $font-size-L;
+      flex-basis: 100%;
+    }
+
+    .weekday {
+      font-size: $font-size-S;
+      font-weight: 500;
+    }
+  }
+
+  .events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    h2 {
+      font-size: $font-size-M;
+    }
+  }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .event {
+    list-style: none;
+    padding: 1rem;
+    border-radius: $border-radius-L;
+    background-color: $color-fff;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    row-gap: 0.25rem;
+
+    h3 {
+      font-size: $font-size-S;
+    }
+
+    .is-shared-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      line-height: normal;
+      gap: 0.5rem;
+      font-size: $font-size-text;
+      color: $color-primary;
+
+      app-icon-shared {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: $color-accent;
+        fill: none;
+      }
+    }
+
+    .scheduled-at,
+    .description,
+    .location {
+      font-size: $font-size-text;
+      font-weight: 500;
+      color: $color-primary;
+    }
+
+    .description {
+      flex-basis: 100%;
+      color: $color-text;
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: $color-text;
+    }
+  }
+
+  .no-events {
+    list-style: none;
+
+    h3 {
+      font-weight: 500;
+      font-size: $font-size-S;
+    }
+  }
+
+  .create-new {
+    list-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      font-size: $font-size-M;
+    }
+
+    .create-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      span {
+        color: $color-text;
+        font-size: $font-size-text;
+        font-weight: 500;
+      }
+
+      input {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: $border-radius-S;
+        background-color: $color-grey;
+      }
+    }
+
+    button {
+      border: none;
+      border-radius: $border-radius-XL;
+      background-color: $color-success;
+      color: $color-white;
+      font-weight: 600;
+      padding: 0.5rem;
+    }
+  }
+}

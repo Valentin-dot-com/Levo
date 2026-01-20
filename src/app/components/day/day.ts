@@ -3,7 +3,7 @@ import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CalendarViewService } from '../../services/calendarView';
-import { format } from 'date-fns';
+import { format, getISOWeek } from 'date-fns';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { CalendarService } from '../../services/calendars';
 
@@ -12,6 +12,7 @@ interface DayDetails {
   weekday: string;
   month: string;
   year: string;
+  weeknumber: string;
 }
 
 @Component({
@@ -26,13 +27,17 @@ export class DayComponent implements OnInit {
   private calendarService = inject(CalendarService);
   private destroyRef = inject(DestroyRef);
 
-  readonly day = this.calendarView.selectedDay;
-  readonly events = this.calendarView.eventsForSelectedDay;
+  calendarIds = this.calendarService.calendarIds;
+  day = this.calendarView.selectedDay;
+  events = this.calendarView.eventsForSelectedDay;
 
-  readonly loading = signal(true);
-  private readonly dayId = signal<string>('');
+  errorMessage = signal('');
+  successMessage = signal('');
+  loading = signal(true);
+  newEventTitle = signal('');
+  private dayId = signal<string>('');
 
-  readonly dayDetails = computed<DayDetails | null>(() => {
+  dayDetails = computed<DayDetails | null>(() => {
     const selectedDay = this.day();
     if (!selectedDay) return null;
 
@@ -41,6 +46,7 @@ export class DayComponent implements OnInit {
       weekday: format(selectedDay, 'EEEE'),
       month: format(selectedDay, 'MMMM'),
       year: selectedDay.getFullYear().toString(),
+      weeknumber: getISOWeek(selectedDay).toString(),
     };
   });
 
@@ -93,5 +99,36 @@ export class DayComponent implements OnInit {
   getCalendar(calId: string) {
     const calendar = this.calendarService.calendars().find((cal) => cal.id === calId);
     return calendar || null;
+  }
+
+  async createEvent() {
+    const calendarId = this.calendarIds()[0];
+    if (calendarId) {
+      this.errorMessage.set('Something went wrong, please try again.');
+      return;
+    }
+
+    const date = this.day() ? format(this.day()!, 'yyyy-MM-dd') : null;
+
+    try {
+      await this.calendarService.createEvent({
+        calendar_id: calendarId,
+        title: this.newEventTitle(),
+        description: null,
+        location: null,
+        date: date,
+        scheduled_at: null,
+      });
+
+      this.newEventTitle.set('');
+      this.successMessage.set('New event created successfully');
+      setTimeout(() => this.successMessage.set(''), 3000);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this.errorMessage.set(err.message ?? 'An error occured, could not create event.');
+      } else {
+        this.errorMessage.set('An error occured, could not create event.');
+      }
+    }
   }
 }

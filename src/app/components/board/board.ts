@@ -8,13 +8,7 @@ import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 
 @Component({
   selector: 'app-board',
-  imports: [
-    CommonModule,
-    RouterLink,
-    EditorComponent,
-    DeleteIconComponent,
-    ArrowLeftIconComponent,
-  ],
+  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -69,7 +63,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async createSubBoard() {
     const calendarId = this.currentBoard()?.board?.calendar_id;
-    if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) return;
+    if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) {
+      this.errorMessage.set('Something went wrong, please try again.');
+      return;
+    }
 
     try {
       await this.boardService.createSubBoard({
