@@ -1,7 +1,7 @@
-<section class="home-page">
+ <section class="home-page">
   <h1 class="greeting">Hi, {{currentUser?.first_name}}</h1>
   <section class="today-container">
-    <h2 class="weekday-label">
+    <h2 class="weekday-label" role="button" tabindex="0" (click)="goToDay(today()!.date)" (keyup.enter)="goToDay(today()!.date)">
       <span class="weekday">
         {{ today()?.weekdayLabel }}
       </span>
@@ -11,8 +11,7 @@
       @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
         <span class="day" [class.today]="day.isToday">
           <p>{{ weekdays[i] }}</p>
-          <!-- TODO: Add routerlink to that days' view -->
-          <a>{{ day.dayNumber }}</a>
+          <a [routerLink]="['/day', formatDate(day.date)]" (click)="selectDay(day.date)">{{ day.dayNumber }}</a>
         </span>
       }
     </div>
@@ -22,18 +21,20 @@
         @if (events().length) {
           @for (event of events(); track event.id) {
             @let eventCalendar = getCalendar(event.calendar_id);
-            <li class="event">
-              <h4>
-                {{ event.title }}
-              </h4>
-              @if (eventCalendar?.is_shared) {
-                <span class="is-shared-container">
-                  <app-icon-shared />
-                </span>
-              }
-              @if (event.scheduled_at) {
-                <span class="scheduled-at">{{ formatTime(event.scheduled_at) }}</span>
-              }
+            <li class="list-item">
+              <article class="event">
+                <h4>
+                  {{ event.title }}
+                </h4>
+                @if (eventCalendar?.is_shared) {
+                  <span class="is-shared-container">
+                    <app-icon-shared aria-label="Shared calendar"/>
+                  </span>
+                }
+                @if (event.scheduled_at) {
+                  <time class="scheduled-at">{{ formatTime(event.scheduled_at) }}</time>
+                }
+              </article>
             </li>
           }
         } @else {

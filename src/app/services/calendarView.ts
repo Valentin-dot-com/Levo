@@ -21,13 +21,31 @@ import { CalendarDay, CalendarMonth, CalendarWeek } from '../models/calendar.mod
 export class CalendarViewService {
   private calendarService = inject(CalendarService);
 
+  private _initialized = signal<boolean>(false);
   private _currentYear = signal<number>(new Date().getFullYear());
   private _currentMonth = signal<number>(new Date().getMonth());
+  private _selectedDay = signal<Date | null>(null);
 
+  readonly initialized = this._initialized.asReadonly();
+  readonly selectedDay = this._selectedDay.asReadonly();
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
+
   readonly events = computed(() => {
     return this.calendarService.getCachedEventsForMonth(this.currentYear(), this.currentMonth());
+  });
+
+  readonly eventsForSelectedDay = computed(() => {
+    const day = this._selectedDay();
+    if (!day) return [];
+
+    const year = day.getFullYear();
+    const month = day.getMonth();
+    const isoDay = format(day, 'yyyy-MM-dd');
+
+    const monthEvents = this.calendarService.getCachedEventsForMonth(year, month);
+
+    return monthEvents.filter((e) => e.date === isoDay);
   });
 
   readonly thisWeek = computed(() => {
@@ -55,12 +73,20 @@ export class CalendarViewService {
     } as CalendarWeek;
   });
 
-  readonly weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  readonly weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 
   readonly monthName = computed(() => {
     const date = new Date(this.currentYear(), this.currentMonth());
     return format(date, 'MMMM');
   });
+
+  setSelectedDay(date: Date) {
+    this._selectedDay.set(date);
+  }
+
+  clearSelectedDay() {
+    this._selectedDay.set(null);
+  }
 
   generateDaysForMonth(date: Date): CalendarDay[] {
     const monthStart = startOfMonth(date);
@@ -166,9 +192,19 @@ export class CalendarViewService {
   }
 
   async initialize(): Promise<void> {
-    // TODO: Change this to only retrieve calendarIds inside the user filter!
-    await this.calendarService.fetchUserCalendarIds();
-    await this.goToMonth(this.currentYear(), this.currentMonth());
+    if (this._initialized()) {
+      console.warn('CalendarViewService already initialized');
+      return;
+    }
+
+    try {
+      await this.goToMonth(this.currentYear(), this.currentMonth());
+
+      this._initialized.set(true);
+    } catch (error) {
+      console.error('Failed to initialize calendar view:', error);
+      throw error;
+    }
   }
 
   async goToToday(): Promise<void> {

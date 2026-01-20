@@ -22,13 +22,12 @@ export class CalendarService {
   readonly calendarIds = this._calendarIds.asReadonly();
   readonly todoEvents = this._todoEvents.asReadonly();
 
-  // readonly Events = computed<Event[]>(() => {
-  //   const key = this.getMonthKey(this.calendarView.currentYear(), this.calendarView.currentMonth());
-  //   return this._eventCache().get(key) ?? [];
-  // });
-
   private getMonthKey(year: number, month: number): string {
     return `${year}-${month}`;
+  }
+
+  private getMonthKeyFromDate(date: Date): string {
+    return this.getMonthKey(date.getFullYear(), date.getMonth());
   }
 
   getMonthRange(year: number, month: number) {
@@ -82,6 +81,18 @@ export class CalendarService {
       newCache.set(key, events);
       return newCache;
     });
+  }
+
+  private addEventToCache(event: Event) {
+    if (!event.date) return;
+
+    const eventDate = new Date(event.date);
+    const key = this.getMonthKeyFromDate(eventDate);
+
+    const currentCache = this._eventCache().get(key);
+    if (currentCache) {
+      this.updateCache(key, [...currentCache, event]);
+    }
   }
 
   async fetchUserCalendars(): Promise<void> {
@@ -148,10 +159,10 @@ export class CalendarService {
     if (!calendarIds) return;
 
     const { data, error } = await this.supabase.supabaseClient
-    .from('events')
-    .select('*')
-    .in('calendar_id', calendarIds)
-    .is('date', null);
+      .from('events')
+      .select('*')
+      .in('calendar_id', calendarIds)
+      .is('date', null);
 
     if (error) throw error;
 
@@ -160,33 +171,31 @@ export class CalendarService {
 
   async createEvent(event: CreateEvent) {
     const { data, error } = await this.supabase.supabaseClient
-    .from('events')
-    .insert({
-      calendar_id: event.calendar_id,
-      title: event.title,
-      description: event.description ?? null,
-      location: event.location ?? null,
-      date: event.date ?? null,
-      scheduled_at: event.scheduled_at ?? null,
-    })
-    .select()
-    .single();
+      .from('events')
+      .insert({
+        calendar_id: event.calendar_id,
+        title: event.title,
+        description: event.description ?? null,
+        location: event.location ?? null,
+        date: event.date ?? null,
+        scheduled_at: event.scheduled_at ?? null,
+      })
+      .select()
+      .single();
 
     if (error) throw error;
 
     if (data.date) {
-      // Add to eventCache
+      this.addEventToCache(data);
     } else {
-      this._todoEvents.update(events => [...events, data]);
+      this._todoEvents.update((events) => [...events, data]);
     }
 
     return data;
   }
 
   async initCalendarData(): Promise<void> {
-    // const now = new Date();
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
-    // await this.calendarView.goToMonth(now.getFullYear(), now.getMonth());
   }
 }

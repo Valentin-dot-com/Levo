@@ -12,6 +12,7 @@
   .greeting {
     font-size: $font-size-M;
     margin: 0;
+    margin-bottom: 0.5rem;
   }
 
   .today-container {
@@ -26,6 +27,12 @@
     flex-direction: column;
     gap: 0.25rem;
     line-height: normal;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+
+    @include hover-supported {
+      color: $color-accent;
+    }
 
     .weekday {
       font-size: $font-size-L;
@@ -62,12 +69,20 @@
         justify-content: center;
         font-size: $font-size-S;
         font-weight: 500;
+        color: $color-text;
         background-color: $color-grey;
         border-radius: 50%;
         aspect-ratio: 1 / 1;
         width: 100%;
         max-height: 5rem;
         max-width: 5rem;
+        text-decoration: none;
+        transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+
+        @include hover-supported {
+          background-color: $color-primary;
+          color: $color-white;
+        }
       }
 
       &.today {
@@ -107,9 +122,12 @@
       }
     }
 
+    .list-item {
+      list-style: none;
+    }
+
     .event,
     .add-event-today {
-      list-style: none;
       background-color: $color-grey;
       border-radius: $border-radius-S;
       padding: 0 1rem;

@@ -41,12 +41,12 @@ export class NewBoardComponent {
       await this.boardService.createBoard(newBoard);
 
       this.newBoardForm.reset();
-      this.successMessage.set('Task created successfully!');
+      this.successMessage.set('Board created successfully!');
       setTimeout(() => this.successMessage.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.errorMessage.set(
-          err.message ?? 'An error occured while trying to create task. Please try again.'
+          err.message ?? 'An error occured while trying to create board. Please try again.'
         );
       }
     } finally {

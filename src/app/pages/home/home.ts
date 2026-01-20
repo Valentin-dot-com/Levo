@@ -4,8 +4,8 @@ import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
 import { CommonModule } from '@angular/common';
 import { CalendarViewService } from '../../services/calendarView';
-import { compareAsc, isToday, parseISO } from 'date-fns';
-import { RouterLink } from '@angular/router';
+import { compareAsc, format, isToday, parseISO } from 'date-fns';
+import { Router, RouterLink } from '@angular/router';
 import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 
@@ -20,6 +20,7 @@ export class HomeComponent {
   private calendarService = inject(CalendarService);
   private calendarView = inject(CalendarViewService);
   private boardService = inject(BoardService);
+  private router = inject(Router);
 
   currentUser = this.auth.profile();
   weekdays = this.calendarView.weekDays;
@@ -58,6 +59,20 @@ export class HomeComponent {
     const [hours, minutes] = time.split(':');
     if (hours === undefined || minutes === undefined) return '';
     return `${hours}:${minutes}`;
+  }
+
+  formatDate(date: Date) {
+    return format(date, 'yyyy-MM-dd');
+  }
+
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
+  goToDay(date: Date) {
+    this.calendarView.setSelectedDay(date)
+    const selected = format(date, 'yyyy-MM-dd');
+    this.router.navigate(['/day', selected]);
   }
 
   signOut() {
