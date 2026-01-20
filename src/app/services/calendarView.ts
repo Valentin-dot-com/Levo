@@ -23,12 +23,27 @@ export class CalendarViewService {
 
   private _currentYear = signal<number>(new Date().getFullYear());
   private _currentMonth = signal<number>(new Date().getMonth());
+  private _selectedDay = signal<Date | null>(null);
 
+  readonly selectedDay = this._selectedDay.asReadonly();
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
   readonly events = computed(() => {
     return this.calendarService.getCachedEventsForMonth(this.currentYear(), this.currentMonth());
   });
+
+  readonly eventsForSelectedDay = computed(() => {
+    const day = this._selectedDay();
+    if  (!day) return [];
+
+    const year = day.getFullYear();
+    const month = day.getMonth();
+    const isoDay = format(day, 'yyyy-MM-dd');
+
+    const monthEvents = this.calendarService.getCachedEventsForMonth(year, month);
+
+    return monthEvents.filter(e => e.date === isoDay);
+  })
 
   readonly thisWeek = computed(() => {
     const today = new Date();
@@ -61,6 +76,14 @@ export class CalendarViewService {
     const date = new Date(this.currentYear(), this.currentMonth());
     return format(date, 'MMMM');
   });
+
+  setSelectedDay(date: Date) {
+    this._selectedDay.set(date);
+  }
+
+  clearSelectedDay() {
+    this._selectedDay.set(null);
+  }
 
   generateDaysForMonth(date: Date): CalendarDay[] {
     const monthStart = startOfMonth(date);

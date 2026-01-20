@@ -1,7 +1,7 @@
-<section class="home-page">
+ <section class="home-page">
   <h1 class="greeting">Hi, {{currentUser?.first_name}}</h1>
   <section class="today-container">
-    <h2 class="weekday-label">
+    <h2 class="weekday-label" role="button" tabindex="0" (click)="goToDay(today()!.date)" (keyup.enter)="goToDay(today()!.date)">
       <span class="weekday">
         {{ today()?.weekdayLabel }}
       </span>
@@ -11,8 +11,7 @@
       @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
         <span class="day" [class.today]="day.isToday">
           <p>{{ weekdays[i] }}</p>
-          <!-- TODO: Add routerlink to that days' view -->
-          <a>{{ day.dayNumber }}</a>
+          <a [routerLink]="['/day', formatDate(day.date)]">{{ day.dayNumber }}</a>
         </span>
       }
     </div>

@@ -8,6 +8,7 @@ import { CalendarComponent } from './pages/calendar/calendar';
 import { BoardsComponent } from './pages/boards/boards';
 import { ProfileComponent } from './pages/profile/profile';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout';
+import { DayComponent } from './components/day/day';
 
 export const routes: Routes = [
   // Auth routes (standalone layout)
@@ -23,6 +24,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'calendar', component: CalendarComponent },
+      { path: 'day/:dayId', component: DayComponent },
       { path: 'boards', component: BoardsComponent },
       {
         path: 'boards/:boardId',
