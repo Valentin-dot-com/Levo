@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -6,6 +6,7 @@ import { CalendarViewService } from '../../services/calendarView';
 import { format, getISOWeek } from 'date-fns';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { CalendarService } from '../../services/calendars';
+import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 
 interface DayDetails {
   number: string;
@@ -17,12 +18,13 @@ interface DayDetails {
 
 @Component({
   selector: 'app-day',
-  imports: [CommonModule, SharedIconComponent],
+  imports: [CommonModule, SharedIconComponent, ArrowLeftIconComponent],
   templateUrl: './day.html',
   styleUrl: './day.scss',
 })
 export class DayComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private calendarView = inject(CalendarViewService);
   private calendarService = inject(CalendarService);
   private destroyRef = inject(DestroyRef);
@@ -130,5 +132,9 @@ export class DayComponent implements OnInit {
         this.errorMessage.set('An error occured, could not create event.');
       }
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

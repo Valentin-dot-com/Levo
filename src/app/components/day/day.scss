@@ -1,11 +1,43 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .day-details {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0;
   position: relative;
 
+  .board-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: $border-radius-XL;
+      background-color: transparent;
+      color: $color-text;
+      font-size: $font-size-text;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      transition: color 0.2s ease-in-out;
+
+      app-icon-arrow-left {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @include hover-supported {
+        color: $color-accent;
+      }
+    }
+  }
   .day {
     display: flex;
     justify-content: flex-start;
@@ -29,6 +61,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-top: 1rem;
 
     h2 {
       font-size: $font-size-M;
@@ -119,6 +152,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    margin-top: 1rem;
 
     h2 {
       font-size: $font-size-M;
