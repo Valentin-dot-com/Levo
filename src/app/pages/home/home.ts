@@ -65,6 +65,10 @@ export class HomeComponent {
     return format(date, 'yyyy-MM-dd');
   }
 
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
   goToDay(date: Date) {
     this.calendarView.setSelectedDay(date)
     const selected = format(date, 'yyyy-MM-dd');
