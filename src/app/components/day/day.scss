@@ -43,8 +43,11 @@
     margin: 0;
   }
 
-  .event {
+  .list-item {
     list-style: none;
+  }
+
+  .event {
     padding: 1rem;
     border-radius: $border-radius-L;
     background-color: $color-fff;
