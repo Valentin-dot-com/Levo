@@ -7,9 +7,9 @@
     (click)="open()"
   >
     <span class="value" [class.placeholder]="!displayValue()">
-      <span>{{ hour() }}</span>
+      <span>{{ pad(hour()) }}</span>
       <span>:</span>
-      <span>{{ minute() }}</span>
+      <span>{{ pad(minute()) }}</span>
     </span>
   </button>
   <button type="button" class="clear-btn" (click)="clear()" aria-label="Clear time">

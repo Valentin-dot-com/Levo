@@ -78,7 +78,11 @@
         max-height: 5rem;
         max-width: 5rem;
         text-decoration: none;
-        transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+
+        transition:
+          background 0.2s ease-in-out,
+          color 0.2s ease-in-out;
 
         @include hover-supported {
           background-color: $color-primary;
@@ -137,8 +141,10 @@
       gap: 1rem;
       position: relative;
       align-items: center;
-      transition: background 0.2s ease, color 0.2s ease;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
       &.completed {
         background-color: $color-success;
@@ -222,7 +228,7 @@
     .boards-list {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
       padding: 0;
       margin: 0;
     }
@@ -232,6 +238,8 @@
       background-color: $color-grey;
       border-radius: $border-radius-XL;
       overflow: hidden;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+
 
       a {
         padding: 1rem;
@@ -241,6 +249,7 @@
         color: $color-primary;
         font-weight: 500;
         transition: background 0.2s ease;
+
 
         @include hover-supported {
           background-color: $color-accent;
@@ -254,7 +263,8 @@
 
       .board-calendar {
         display: flex;
-        align-items: center;justify-content: space-between;
+        align-items: center;
+        justify-content: space-between;
         gap: 0.5rem;
         font-size: $font-size-text;
         height: 2rem;
@@ -286,7 +296,7 @@
   }
 }
 
-.enter-animation  {
+.enter-animation {
   @include slide-in-animation();
 }
 

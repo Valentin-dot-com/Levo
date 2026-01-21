@@ -75,8 +75,11 @@
         height: 3.25rem;
         aspect-ratio: 1 / 1;
         color: $color-white;
-        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        transition:
+          background-color 0.2s ease-in-out,
+          transform 0.2s ease-in-out;
         cursor: pointer;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
 
         &.open {
           transform: rotate(45deg);
@@ -92,7 +95,6 @@
         @include hover-supported {
           background-color: $color-primary;
         }
-
       }
     }
   }
