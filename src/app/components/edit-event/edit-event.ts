@@ -1,13 +1,10 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   inject,
   input,
   output,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { Event } from '../../models/event.model';
 import { EventFormComponent } from '../forms/new-event/event-form';
@@ -20,20 +17,13 @@ import { AddIconComponent } from '../../icons/addIcon';
   templateUrl: './edit-event.html',
   styleUrl: './edit-event.scss',
 })
-export class EditEventComponent implements AfterViewInit {
+export class EditEventComponent {
   private calendarService = inject(CalendarService);
-
-  @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>;
 
   errorMessage = signal('');
   event = input<Event | null>(null);
   closed = output<void>();
 
-  ngAfterViewInit(): void {
-    if (this.event() && this.dialog) {
-      this.dialog.nativeElement.showModal();
-    }
-  }
 
   close() {
     this.closed.emit();

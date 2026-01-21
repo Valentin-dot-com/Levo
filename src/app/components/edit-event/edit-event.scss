@@ -20,7 +20,7 @@
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 7rem;
-  width: calc(100% - 2rem);
+  width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   position: relative;
@@ -79,12 +79,4 @@
       color: $color-white;
     }
   }
-}
-
-.slide-in-animation {
-  @include slide-in-animation();
-}
-
-.slide-out-animation {
-  @include slide-out-animation();
 }

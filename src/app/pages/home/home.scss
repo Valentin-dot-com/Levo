@@ -159,6 +159,19 @@
       }
     }
 
+    .event {
+      cursor: pointer;
+
+      @include hover-supported {
+        background-color: $color-accent;
+        color: $color-white;
+
+        h4 {
+          color: $color-white;
+        }
+      }
+    }
+
     .add-event-today {
       padding: 0;
       overflow: hidden;
@@ -272,11 +285,11 @@
 }
 
 .enter-animation  {
-  @include fade-in-animation();
+  @include slide-in-animation();
 }
 
 .leave-animation {
-  @include fade-out-animation();
+  @include slide-out-animation();
 }
 
 @media screen and (min-width: 1300px) {
