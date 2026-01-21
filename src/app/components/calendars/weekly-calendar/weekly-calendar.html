@@ -17,7 +17,7 @@
 
         <div class="week-days">
           @for (day of week.days; track day.date) {
-            <article class="day-card">
+            <a [routerLink]="['/day', formatDate(day.date)]" class="day-card" [class.today]="day.isToday" >
               @if (day.isToday) {
                 <h4 #todayAnchor class="day today" data-today>
                   <span>{{ day.weekdayLabel }}</span>
@@ -30,10 +30,22 @@
                 </h4>
               }
               @let events = eventsForDate(day.date);
-              @for (event of events; track event.id) {
-                <p>{{ event.title }}</p>
+              @if (events.length > 0) {
+                <ul class="events-list">
+                  @for (event of events; track event.id) {
+                    <li class="event">
+                      <article class="event-card">
+                        <h5>{{ event.title }}</h5>
+
+                        @if (event.scheduled_at) {
+                          <time class="scheduled-at">{{ formatTime(event.scheduled_at) }}</time>
+                        }
+                      </article>
+                    </li>
+                  }
+                </ul>
               }
-            </article>
+            </a>
           }
         </div>
       </article>
