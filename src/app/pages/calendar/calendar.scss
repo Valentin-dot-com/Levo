@@ -10,6 +10,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  padding: 1rem 1rem 0;
 
   h1 {
     line-height: normal;
@@ -41,8 +42,8 @@ nav {
   justify-content: center;
   z-index: 2;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
 
   .view-toggle {
     display: inline-flex;
