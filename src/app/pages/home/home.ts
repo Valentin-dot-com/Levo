@@ -69,10 +69,6 @@ export class HomeComponent {
     return format(date, 'yyyy-MM-dd');
   }
 
-  selectDay(date: Date) {
-    this.calendarView.setSelectedDay(date);
-  }
-
   openEditEvent(event: Event) {
     console.log('EVent clicked')
     this.selectedEvent.set(event);
