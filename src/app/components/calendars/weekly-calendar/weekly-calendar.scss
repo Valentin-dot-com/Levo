@@ -23,15 +23,13 @@
 .weekly-calendar {
   min-height: 0;
   max-height: 100%;
-  // height: 95%;
   position: relative;
   display: flex;
   flex-direction: column;
 
   .go-to-today-btn {
     position: absolute;
-    // bottom: -5rem;
-    // left: 1rem;
+
     left: 50%;
     bottom: 0;
     transform: translateX(-50%) translateY(1rem);
@@ -46,6 +44,7 @@
     color: $color-white;
     opacity: 0;
     cursor: pointer;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     &.visible {
       transform: translateX(-50%) translateY(-3rem);

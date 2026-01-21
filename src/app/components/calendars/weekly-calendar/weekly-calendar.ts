@@ -153,6 +153,10 @@ export class WeeklyCalendarComponent implements OnDestroy {
     return this.calendarView.weekDays;
   }
 
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
   formatDate(date: Date) {
     return format(date, 'yyyy-MM-dd');
   }
@@ -163,7 +167,7 @@ export class WeeklyCalendarComponent implements OnDestroy {
     if (hours === undefined || minutes === undefined) return '';
     return `${hours}:${minutes}`;
   }
-  
+
   ngOnDestroy() {
     this.todayObserver?.disconnect();
   }

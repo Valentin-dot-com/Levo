@@ -17,7 +17,7 @@
 
         <div class="week-days">
           @for (day of week.days; track day.date) {
-            <a [routerLink]="['/day', formatDate(day.date)]" class="day-card" [class.today]="day.isToday" >
+            <a [routerLink]="['/day', formatDate(day.date)]" (click)="selectDay(day.date)" class="day-card" [class.today]="day.isToday" >
               @if (day.isToday) {
                 <h4 #todayAnchor class="day today" data-today>
                   <span>{{ day.weekdayLabel }}</span>

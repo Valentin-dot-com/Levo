@@ -214,6 +214,10 @@ export class MonthlyCalendarComponent implements OnDestroy {
     });
   }
 
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
   formatDate(date: Date) {
     return format(date, 'yyyy-MM-dd');
   }
