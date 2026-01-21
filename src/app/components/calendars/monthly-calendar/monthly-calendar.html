@@ -34,7 +34,7 @@
               <h3>w. {{ week.weekNumber }}</h3>
               <div class="week-days calendar-grid">
                 @for (day of week.days; track $index) {
-                  <article class="calendar-day" [class.today]="day.isToday" [class]="'weekday-' + day.weekdayIndex">
+                  <a [routerLink]="['/day', formatDate(day.date)]" class="calendar-day" [class.today]="day.isToday" [class]="'weekday-' + day.weekdayIndex">
                     @if (day.isToday) {
                       <h4 class="calendar-day-number today" #todayAnchor data-today>{{ day.dayNumber }}</h4>
                     }
@@ -50,7 +50,7 @@
                         }
                       </div>
                     }
-                  </article>
+                  </a>
                 }
               </div>
             </section>
