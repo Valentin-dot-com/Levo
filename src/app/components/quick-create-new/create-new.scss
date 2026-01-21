@@ -18,7 +18,7 @@
   height: 98%;
   max-height:  98%;
   z-index: 15;
-  box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22);
+  box-shadow: 0 -10px 14px rgba(0, 0, 0, 0.22);
 
   .close {
     position: absolute;
@@ -84,7 +84,7 @@
 }
 
 .slide-out-animation {
-  @include slide-in-animation();
+  @include slide-out-animation();
 }
 
 @media screen and (min-width: 1300px) {

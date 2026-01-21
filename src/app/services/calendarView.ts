@@ -80,8 +80,12 @@ export class CalendarViewService {
     return format(date, 'MMMM');
   });
 
-  setSelectedDay(date: Date) {
-    this._selectedDay.set(date);
+  setSelectedDay(date: Date | null) {
+    if (date) {
+      this._selectedDay.set(date)
+    } else {
+      this._selectedDay.set(null);
+    }
   }
 
   clearSelectedDay() {

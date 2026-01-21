@@ -10,6 +10,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  padding: 1rem 1rem 0;
 
   h1 {
     line-height: normal;
@@ -26,7 +27,8 @@
   gap: 5rem;
 }
 
-app-weekly-calendar, app-monthly-calendar {
+app-weekly-calendar,
+app-monthly-calendar {
   flex: 1;
 }
 
@@ -41,14 +43,15 @@ nav {
   justify-content: center;
   z-index: 2;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
 
   .view-toggle {
     display: inline-flex;
     background: $color-grey;
     border-radius: 999px;
     padding: 4px;
+    // box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     button {
       border: none;
@@ -59,7 +62,9 @@ nav {
       color: $color-text;
       font-weight: 600;
       font-size: $font-size-text;
-      transition: background 0.2s, color 0.2s;
+      transition:
+        background 0.2s,
+        color 0.2s;
 
       &.active {
         background: $color-fff;

@@ -17,10 +17,11 @@ import { CalendarViewService } from '../../../services/calendarView';
 import { LoaderComponent } from '../../loader/loader';
 import { ArrowLeftIconComponent } from '../../../icons/arrowLeftIcon';
 import { ArrowRightIconComponent } from '../../../icons/arrowRightIcon';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-monthly-calendar',
-  imports: [CommonModule, LoaderComponent, ArrowLeftIconComponent, ArrowRightIconComponent],
+  imports: [CommonModule, LoaderComponent, ArrowLeftIconComponent, ArrowRightIconComponent, RouterLink],
   templateUrl: './monthly-calendar.html',
   styleUrl: './monthly-calendar.scss',
 })
@@ -211,6 +212,14 @@ export class MonthlyCalendarComponent implements OnDestroy {
       top: weekTop + this.remToPx(4),
       behavior: 'smooth',
     });
+  }
+
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
+  formatDate(date: Date) {
+    return format(date, 'yyyy-MM-dd');
   }
 
   ngOnDestroy() {

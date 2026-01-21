@@ -114,7 +114,8 @@ export class TimePickerComponent implements ControlValueAccessor {
     this.onChange?.(`${this.pad(this.hour()!)}:${this.pad(this.minute()!)}`);
   }
 
-  pad(v: number) {
+  pad(v: number | null) {
+    if (v === null) return '';
     return String(v).padStart(2, '0');
   }
 

@@ -3,10 +3,12 @@ import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CalendarViewService } from '../../services/calendarView';
-import { format, getISOWeek } from 'date-fns';
+import { format, getISOWeek, parse } from 'date-fns';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { CalendarService } from '../../services/calendars';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
+import { Event } from '../../models/event.model';
+import { EditEventComponent } from '../edit-event/edit-event';
 
 interface DayDetails {
   number: string;
@@ -18,7 +20,7 @@ interface DayDetails {
 
 @Component({
   selector: 'app-day',
-  imports: [CommonModule, SharedIconComponent, ArrowLeftIconComponent],
+  imports: [CommonModule, SharedIconComponent, ArrowLeftIconComponent, EditEventComponent],
   templateUrl: './day.html',
   styleUrl: './day.scss',
 })
@@ -37,7 +39,7 @@ export class DayComponent implements OnInit {
   successMessage = signal('');
   loading = signal(true);
   newEventTitle = signal('');
-  private dayId = signal<string>('');
+  selectedEvent = signal<Event | null>(null);
 
   dayDetails = computed<DayDetails | null>(() => {
     const selectedDay = this.day();
@@ -54,30 +56,24 @@ export class DayComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const newDayId = params['dayId'];
-      if (newDayId !== this.dayId()) {
-        this.dayId.set(newDayId);
-        this.loadDay();
-      }
+      const dayId = params['dayId'];
+
+      if (!dayId) return;
+
+      this.loadDay(dayId);
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.calendarView.setSelectedDay(null);
     });
   }
 
-  private loadDay(): void {
+  private loadDay(dayId: string): void {
     this.loading.set(true);
 
     try {
-      if (this.day()) {
-        this.loading.set(false);
-        return;
-      }
+      const parsed = this.parseDate(dayId);
 
-      const id = this.dayId();
-      if (!id) {
-        this.loading.set(false);
-        return;
-      }
-
-      const parsed = this.parseDate(id);
       if (parsed) {
         this.calendarView.setSelectedDay(parsed);
       }
@@ -87,8 +83,7 @@ export class DayComponent implements OnInit {
   }
 
   private parseDate(dateString: string): Date | null {
-    const parsed = new Date(dateString);
-    return isNaN(parsed.getTime()) ? null : parsed;
+    return parse(dateString, 'yyyy-MM-dd', new Date());
   }
 
   formatTime(time: string) {
@@ -132,6 +127,15 @@ export class DayComponent implements OnInit {
         this.errorMessage.set('An error occured, could not create event.');
       }
     }
+  }
+
+  openEditEvent(event: Event) {
+    console.log('EVent clicked');
+    this.selectedEvent.set(event);
+  }
+
+  closeEdit() {
+    this.selectedEvent.set(null);
   }
 
   goBack() {

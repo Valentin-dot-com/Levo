@@ -16,10 +16,11 @@ import { CalendarViewService } from '../../../services/calendarView';
 import { CommonModule } from '@angular/common';
 import { CalendarMonth } from '../../../models/calendar.model';
 import { LoaderComponent } from '../../loader/loader';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-weekly-calendar',
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, RouterLink],
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
@@ -150,6 +151,21 @@ export class WeeklyCalendarComponent implements OnDestroy {
 
   get weekDayNames() {
     return this.calendarView.weekDays;
+  }
+
+  selectDay(date: Date) {
+    this.calendarView.setSelectedDay(date);
+  }
+
+  formatDate(date: Date) {
+    return format(date, 'yyyy-MM-dd');
+  }
+
+  formatTime(time: string) {
+    if (!time) return '';
+    const [hours, minutes] = time.split(':');
+    if (hours === undefined || minutes === undefined) return '';
+    return `${hours}:${minutes}`;
   }
 
   ngOnDestroy() {

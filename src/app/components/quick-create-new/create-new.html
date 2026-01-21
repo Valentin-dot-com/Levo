@@ -16,7 +16,7 @@
 
   @switch (currentChoice()) {
     @case ('event') {
-      <app-new-event />
+      <app-event-form [mode]="'create'" />
     }
     @case ('board') {
       <app-new-board />

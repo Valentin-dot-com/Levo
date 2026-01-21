@@ -1,14 +1,14 @@
-import { Component, input, output, signal  } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NewEventComponent } from '../forms/new-event/new-event';
 import { NewBoardComponent } from '../forms/new-board/new-board';
 import { AddIconComponent } from '../../icons/addIcon';
+import { EventFormComponent } from '../forms/new-event/event-form';
 
 type Choice = 'event' | 'board';
 
 @Component({
   selector: 'app-create-new',
-  imports: [CommonModule, NewEventComponent, NewBoardComponent, AddIconComponent],
+  imports: [CommonModule, EventFormComponent, NewBoardComponent, AddIconComponent],
   templateUrl: './create-new.html',
   styleUrl: './create-new.scss',
 })
