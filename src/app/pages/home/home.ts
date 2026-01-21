@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { CalendarService } from '../../services/calendars';
 import { BoardService } from '../../services/boards';
@@ -8,10 +8,12 @@ import { compareAsc, format, isToday, parseISO } from 'date-fns';
 import { Router, RouterLink } from '@angular/router';
 import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';
+import { EditEventComponent } from '../../components/edit-event/edit-event';
+import { Event } from '../../models/event.model';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, AddIconComponent, SharedIconComponent],
+  imports: [CommonModule, RouterLink, AddIconComponent, SharedIconComponent, EditEventComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -25,6 +27,8 @@ export class HomeComponent {
   currentUser = this.auth.profile();
   weekdays = this.calendarView.weekDays;
   thisWeek = this.calendarView.thisWeek;
+
+  selectedEvent = signal<Event | null>(null);
 
   today = computed(() => {
     const week = this.thisWeek();
@@ -67,6 +71,15 @@ export class HomeComponent {
 
   selectDay(date: Date) {
     this.calendarView.setSelectedDay(date);
+  }
+
+  openEditEvent(event: Event) {
+    console.log('EVent clicked')
+    this.selectedEvent.set(event);
+  }
+
+  closeEdit() {
+    this.selectedEvent.set(null);
   }
 
   goToDay(date: Date) {

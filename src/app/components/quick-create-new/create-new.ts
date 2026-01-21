@@ -13,12 +13,6 @@ type Choice = 'event' | 'board';
   styleUrl: './create-new.scss',
 })
 export class CreateNewComponent {
-  // private calendarService = inject(CalendarService);
-
-  // loading = signal(false);
-  // errorMessage = signal('');
-  // successMessage = signal('');
-
   closed = output<void>();
 
   close() {
@@ -33,25 +27,4 @@ export class CreateNewComponent {
   setCurrentChoice(choice: Choice) {
     this.currentChoice.set(choice);
   }
-
-  // async createEvent(event: CreateEvent) {
-  //   this.loading.set(true);
-  //   this.errorMessage.set('');
-  //   this.successMessage.set('');
-
-  //   try {
-  //     await this.calendarService.createEvent(event);
-  //     this.successMessage.set('Event created successfully!');
-  //   } catch (err: unknown) {
-  //     if (err instanceof Error) {
-  //       this.errorMessage.set(
-  //         err.message ?? 'An error occured while trying to create event. Please try again.',
-  //       );
-  //     } else {
-  //       this.errorMessage.set('An error occured while trying to create event. Please try again.');
-  //     }
-  //   } finally {
-  //     this.loading.set(false);
-  //   }
-  // }
 }

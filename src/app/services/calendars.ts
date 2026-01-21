@@ -95,6 +95,46 @@ export class CalendarService {
     }
   }
 
+  private removeEventFromCache(eventId: UUID, eventDate?: string | null) {
+    if (eventDate) {
+      const date = new Date(eventDate);
+      const key = this.getMonthKeyFromDate(date);
+
+      const currentCache = this._eventCache().get(key);
+      if (currentCache) {
+        this.updateCache(
+          key,
+          currentCache.filter((e) => e.id !== eventId),
+        );
+      }
+    }
+  }
+
+  private updateEventInCache(updatedEvent: Event, oldDate?: string | null) {
+    // Remove from old location if date changed
+    if (oldDate && oldDate !== updatedEvent.date) {
+      this.removeEventFromCache(updatedEvent.id, oldDate);
+    }
+
+    // Update or add to new location
+    if (updatedEvent.date) {
+      const eventDate = new Date(updatedEvent.date);
+      const key = this.getMonthKeyFromDate(eventDate);
+
+      const currentCache = this._eventCache().get(key);
+      if (currentCache) {
+        const existingIndex = currentCache.findIndex((e) => e.id === updatedEvent.id);
+        if (existingIndex !== -1) {
+          const updatedCache = [...currentCache];
+          updatedCache[existingIndex] = updatedEvent;
+          this.updateCache(key, updatedCache);
+        } else {
+          this.updateCache(key, [...currentCache, updatedEvent]);
+        }
+      }
+    }
+  }
+
   async fetchUserCalendars(): Promise<void> {
     const calendarIds = this._calendarIds();
 
@@ -194,7 +234,7 @@ export class CalendarService {
     return data;
   }
 
-  async updateEvent(id: UUID, event: CreateEvent) {
+  async updateEvent(id: UUID, event: CreateEvent, oldEvent: Event) {
     const { data, error } = await this.supabase.supabaseClient
       .from('events')
       .update({
@@ -212,12 +252,39 @@ export class CalendarService {
     if (error) throw error;
 
     if (data.date) {
-      this.addEventToCache(data);
+      this.updateEventInCache(data, oldEvent.date);
+      this._todoEvents.update((events) => events.filter((e) => e.id !== id));
     } else {
-      this._todoEvents.update((events) => [...events, data]);
+      if (oldEvent.date) {
+        this.removeEventFromCache(id, oldEvent.date);
+      }
+
+      this._todoEvents.update((events) => {
+        const existingIndex = events.findIndex((e) => e.id === id);
+
+        if (existingIndex !== -1) {
+          const updated = [...events];
+          updated[existingIndex] = data;
+          return updated;
+        }
+
+        return [...events, data];
+      })
     }
 
     return data;
+  }
+
+  async deleteEvent(oldEvent: Event) {
+    const { error } = await this.supabase.supabaseClient.from('events').delete().eq('id', oldEvent.id);
+
+    if (error) throw error;
+
+    if (oldEvent.date) {
+      this.removeEventFromCache(oldEvent.id, oldEvent.date);
+    } else {
+      this._todoEvents.update((events) => events.filter((e) => e.id !== oldEvent.id));
+    }
   }
 
   async initCalendarData(): Promise<void> {

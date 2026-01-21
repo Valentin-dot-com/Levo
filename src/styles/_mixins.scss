@@ -34,7 +34,7 @@
   }
 }
 
-@mixin fade-in-animation($duration: 0.5s, $easing: ease-in-out) {
+@mixin fade-in-animation($duration: 0.2s, $easing: ease-in-out) {
   animation: fade-in $duration $easing;
   @keyframes fade-in {
     from {
@@ -46,7 +46,7 @@
   }
 }
 
-@mixin fade-out-animation($duration: 0.5s, $easing: ease-in-out) {
+@mixin fade-out-animation($duration: 0.2s, $easing: ease-in-out) {
   animation: fade-out $duration $easing;
   @keyframes fade-out {
     from {

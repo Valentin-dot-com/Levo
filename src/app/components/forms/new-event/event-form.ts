@@ -96,7 +96,12 @@ export class EventFormComponent implements OnInit {
         scheduled_at: formData.scheduled_at ? `${formData.scheduled_at}:00` : null,
       };
 
-      await this.calendarService.updateEvent(id, updatedEvent);
+      const oldEvent = this.initialData();
+
+      if (!oldEvent)
+        throw new Error('Could not find the event you want to update, please try again.');
+
+      await this.calendarService.updateEvent(id, updatedEvent, oldEvent);
 
       this.successMessage.set('Event updated successfully');
       setTimeout(() => this.successMessage.set(''), 3000);
