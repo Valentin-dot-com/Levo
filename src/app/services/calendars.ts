@@ -194,6 +194,32 @@ export class CalendarService {
     return data;
   }
 
+  async updateEvent(id: UUID, event: CreateEvent) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('events')
+      .update({
+        calendar_id: event.calendar_id,
+        title: event.title,
+        description: event.description ?? null,
+        location: event.location ?? null,
+        date: event.date ?? null,
+        scheduled_at: event.scheduled_at ?? null,
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    if (data.date) {
+      this.addEventToCache(data);
+    } else {
+      this._todoEvents.update((events) => [...events, data]);
+    }
+
+    return data;
+  }
+
   async initCalendarData(): Promise<void> {
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();

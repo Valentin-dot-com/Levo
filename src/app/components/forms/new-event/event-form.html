@@ -1,4 +1,4 @@
-<form class="create-event-form" [formGroup]="newEventForm" (submit)="onCreate()">
+<form class="create-event-form" [formGroup]="eventForm" (submit)="onSubmit()">
   <span class="inputs">
     <div class="input-container">
       <label for="calendar_id">Calendar*</label>
@@ -7,13 +7,13 @@
         formControlName="calendar_id"
         required
         class="new-event-input dropdown"
-        [class.error]="newEventForm.get('calendar_id')?.invalid && newEventForm.get('calendar_id')?.touched"
+        [class.error]="eventForm.get('calendar_id')?.invalid && eventForm.get('calendar_id')?.touched"
       >
       @for (cal of calendars(); track cal.id) {
         <option [value]="cal.id">{{ cal.name }}</option>
       }
       </select>
-      @if (newEventForm.get('calendar_id')?.invalid && newEventForm.get('calendar_id')?.touched) {
+      @if (eventForm.get('calendar_id')?.invalid && eventForm.get('calendar_id')?.touched) {
         <span class="feedback-invalid">Calendar is required</span>
       }
     </div>
@@ -26,9 +26,9 @@
         formControlName="title"
         required
         class="new-event-input"
-        [class.error]="newEventForm.get('title')?.invalid && newEventForm.get('title')?.touched"
+        [class.error]="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
       />
-      @if (newEventForm.get('title')?.invalid && newEventForm.get('title')?.touched) {
+      @if (eventForm.get('title')?.invalid && eventForm.get('title')?.touched) {
         <span class="feedback-invalid">Title is required</span>
       }
     </div>
@@ -64,8 +64,8 @@
     </div>
   </span>
 
-  <button class="submit-btn" type="submit" [disabled]="newEventForm.invalid || loading()">
-    Create event
+  <button class="submit-btn" type="submit" [disabled]="eventForm.invalid || loading()">
+    {{ mode() === 'create' ? 'Create event' : 'Save changes' }}
   </button>
 
   @if (errorMessage()) {
