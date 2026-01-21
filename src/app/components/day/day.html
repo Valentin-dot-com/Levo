@@ -19,7 +19,7 @@
         @for (event of events(); track event.id) {
           @let eventCalendar = getCalendar(event.calendar_id);
           <li class="list-item">
-            <article class="event">
+            <article class="event" tabindex="0" (click)="openEditEvent(event)" (keyup.enter)="openEditEvent(event)">
               <h3>
                 {{ event.title }}
               </h3>
@@ -76,5 +76,9 @@
       </button>
     </form>
   </section>
+
+  @if (selectedEvent()) {
+    <app-edit-event [event]="selectedEvent()" (closed)="closeEdit()" animate.enter="enter-animation" animate.leave="leave-animation"/>
+  }
 </section>
 }
