@@ -11,7 +11,7 @@
       @for (day of thisWeek().days; let i = $index; track day.dayNumber) {
         <span class="day" [class.today]="day.isToday">
           <p>{{ weekdays[i] }}</p>
-          <a [routerLink]="['/calendar']" [queryParams]="{ day: formatDate(day.date)}">{{ day.dayNumber }}</a>
+          <a [routerLink]="['/day', formatDate(day.date)]">{{ day.dayNumber }}</a>
         </span>
       }
     </div>

@@ -79,11 +79,9 @@ export class HomeComponent {
   }
 
   goToDay(date: Date) {
-    this.calendarView.setSelectedDay(date);
+    // this.calendarView.setSelectedDay(date);
     const selected = format(date, 'yyyy-MM-dd');
-    this.router.navigate(['/calendar'], {
-      queryParams: { day: selected },
-    });
+    this.router.navigate(['/day', selected]);
   }
 
   signOut() {
