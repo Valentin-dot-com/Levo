@@ -214,7 +214,8 @@
     }
 
     &.today {
-      border-color: $color-primary;
+      background-color: $color-accent;
+      color: $color-white;
 
       h4 {
         color: $color-white;
@@ -223,12 +224,12 @@
 
     &.selected {
       border-color: $color-primary;
-      background-color: $color-primary;
-      color: $color-fff;
+      // background-color: $color-primary;
+      // color: $color-fff;
     }
 
     @include hover-supported {
-      background-color: $color-accent;
+      background-color: $color-primary;
       border-color: transparent;
       color: $color-white;
       cursor: pointer;

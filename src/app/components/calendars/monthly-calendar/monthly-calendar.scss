@@ -186,6 +186,7 @@
 
     &.today {
       background-color: $color-accent;
+      border-color: $color-accent;
 
       h4 {
         color: $color-white;
@@ -233,6 +234,10 @@
 
 @media screen and (min-width: 1300px) {
   .calendar-monthly .calendar-day.selected {
-    border-color: $color-accent;
+    border-color: $color-text-secondary;
+
+    &.today {
+      border-color: $color-accent;
+    }
   }
 }
