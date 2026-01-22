@@ -172,7 +172,8 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          throw new Error('No calendar memberships for current user. Could not fetch events');
+          console.debug('[CalendarService] No calendarIds yet, skipping fetch')
+          return;
         }
 
         const { data, error } = await this.supabase.supabaseClient
@@ -269,14 +270,17 @@ export class CalendarService {
         }
 
         return [...events, data];
-      })
+      });
     }
 
     return data;
   }
 
   async deleteEvent(oldEvent: Event) {
-    const { error } = await this.supabase.supabaseClient.from('events').delete().eq('id', oldEvent.id);
+    const { error } = await this.supabase.supabaseClient
+      .from('events')
+      .delete()
+      .eq('id', oldEvent.id);
 
     if (error) throw error;
 

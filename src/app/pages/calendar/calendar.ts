@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { CalendarViewService } from '../../services/calendarView';
 // import { MonthlyCalendarComponent } from '../../components/calendars/monthly-calendar/monthly-calendar';
 import { addMonths, parse } from 'date-fns';
@@ -61,13 +61,25 @@ export class CalendarComponent implements OnInit {
 
     const months: CalendarMonth[] = [];
 
-    for (let i = -4; i <= 4; i++) {
-      const date = addMonths(now, i);
-      await this.calendarService.fetchEventsForMonth(date.getFullYear(), date.getMonth());
-      months.push(this.calendarView.generateMonth(date));
-    }
-
     this.monthsToRender.set(months);
+  }
+
+  constructor() {
+    effect(() => {
+      const calendarIds = this.calendarService.calendarIds();
+      if (!calendarIds.length) return;
+
+      const now = new Date();
+      const months: CalendarMonth[] = [];
+
+      for (let i = -4; i <= 4; i++) {
+        const date = addMonths(now, i);
+        this.calendarService.fetchEventsForMonth(date.getFullYear(), date.getMonth());
+        months.push(this.calendarView.generateMonth(date));
+      }
+
+      this.monthsToRender.set(months);
+    });
   }
 
   markDay(date: Date) {
