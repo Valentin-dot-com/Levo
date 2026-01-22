@@ -1,10 +1,15 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+:host {
+  height: 100%;
+}
+
 .day-details {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  min-height: 100%;
   gap: 0;
   position: relative;
 

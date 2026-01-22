@@ -1,14 +1,13 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { CalendarViewService } from '../../services/calendarView';
-import { format, getISOWeek, parse } from 'date-fns';
+import { format, getISOWeek } from 'date-fns';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { CalendarService } from '../../services/calendars';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { Event } from '../../models/event.model';
 import { EditEventComponent } from '../edit-event/edit-event';
+import { Router } from '@angular/router';
 
 interface DayDetails {
   number: string;
@@ -24,12 +23,10 @@ interface DayDetails {
   templateUrl: './day.html',
   styleUrl: './day.scss',
 })
-export class DayComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private location = inject(Location);
+export class DayComponent implements OnDestroy {
   private calendarView = inject(CalendarViewService);
   private calendarService = inject(CalendarService);
-  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   calendarIds = this.calendarService.calendarIds;
   day = this.calendarView.selectedDay;
@@ -37,7 +34,6 @@ export class DayComponent implements OnInit {
 
   errorMessage = signal('');
   successMessage = signal('');
-  loading = signal(true);
   newEventTitle = signal('');
   selectedEvent = signal<Event | null>(null);
 
@@ -53,38 +49,6 @@ export class DayComponent implements OnInit {
       weeknumber: getISOWeek(selectedDay).toString(),
     };
   });
-
-  ngOnInit(): void {
-    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const dayId = params['dayId'];
-
-      if (!dayId) return;
-
-      this.loadDay(dayId);
-    });
-
-    this.destroyRef.onDestroy(() => {
-      this.calendarView.setSelectedDay(null);
-    });
-  }
-
-  private loadDay(dayId: string): void {
-    this.loading.set(true);
-
-    try {
-      const parsed = this.parseDate(dayId);
-
-      if (parsed) {
-        this.calendarView.setSelectedDay(parsed);
-      }
-    } finally {
-      this.loading.set(false);
-    }
-  }
-
-  private parseDate(dateString: string): Date | null {
-    return parse(dateString, 'yyyy-MM-dd', new Date());
-  }
 
   formatTime(time: string) {
     if (!time) return '';
@@ -143,7 +107,15 @@ export class DayComponent implements OnInit {
     this.selectedEvent.set(null);
   }
 
-  goBack() {
-    this.location.back();
+  close() {
+    this.calendarView.setSelectedDay(null);
+  }
+
+  ngOnDestroy(): void {
+    this.router.navigate([], {
+      queryParams: { day: null },
+      queryParamsHandling: 'merge',
+    });
+    this.selectedEvent.set(null);
   }
 }
