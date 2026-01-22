@@ -10,10 +10,11 @@ import { WeeklyCalendarComponent } from '../../components/calendars/weekly-calen
 import { CalendarService } from '../../services/calendars';
 import { MonthlyCalendarComponent } from '../../components/calendars/monthly-calendar/monthly-calendar';
 import { ScreenSizeService } from '../../services/ScreenSize';
+import { DesktopDaySummaryComponent } from '../../components/desktop-day-summary/desktop-day-summary';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, WeeklyCalendarComponent, MonthlyCalendarComponent],
+  imports: [CommonModule, WeeklyCalendarComponent, MonthlyCalendarComponent, DesktopDaySummaryComponent],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })

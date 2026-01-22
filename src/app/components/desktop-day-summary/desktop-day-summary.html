@@ -1,0 +1,77 @@
+@if(day()) {
+<section class="day-details">
+  <h1 class="day">
+    <span class="day-date">{{ dayDetails()?.number }} {{ dayDetails()?.month }}</span>
+    <span class="weekday">{{ dayDetails()?.weekday }} W.{{ dayDetails()?.weeknumber }}, {{ dayDetails()?.year }}</span>
+  </h1>
+
+  <section class="events">
+    <h2>Events</h2>
+    @if (events().length) {
+      <ul class="events-list">
+        @for (event of events(); track event.id) {
+          @let eventCalendar = getCalendar(event.calendar_id);
+          <li class="list-item">
+            <article class="event" tabindex="0" (click)="openEditEvent(event)" (keyup.enter)="openEditEvent(event)">
+              <h3>
+                {{ event.title }}
+              </h3>
+              @if (event.scheduled_at) {
+                <time class="scheduled-at">{{ formatTime(event.scheduled_at) }}</time>
+              }
+              @if (event.description) {
+                <p class="description">{{ event.description }}</p>
+              }
+              @if (event.location) {
+                <address class="location">
+                  <p>{{ event.location }}</p>
+                </address>
+              }
+              <footer class="event-metadata">
+                <span class="is-shared-container">
+                  {{ eventCalendar?.name }}
+                </span>
+                @if (eventCalendar?.is_shared) {
+                  <app-icon-shared aria-label="Shared calendar" />
+                }
+              </footer>
+            </article>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="no-events">You have no events planned for today</p>
+    }
+  </section>
+  <section class="create-new">
+    <h2>Create new event for this day</h2>
+    <form class="create-form" (submit)="createEvent(); $event.preventDefault()">
+      <label class="input" for="title">
+        <span>Enter a title:</span>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [value]="newEventTitle()"
+          (input)="newEventTitle.set($any($event.target).value)"
+          (keyup.enter)="createEvent()"
+          placeholder="Title"
+          required
+          autocomplete="off"
+        >
+      </label>
+      <button
+        type="submit"
+        [disabled]="newEventTitle().length === 0"
+        [attr.aria-disabled]="newEventTitle().length === 0"
+      >
+        Create event
+      </button>
+    </form>
+  </section>
+
+  @if (selectedEvent()) {
+    <app-edit-event [event]="selectedEvent()" (closed)="closeEdit()" animate.enter="enter-animation" animate.leave="leave-animation"/>
+  }
+</section>
+}
