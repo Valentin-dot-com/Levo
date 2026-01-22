@@ -105,6 +105,11 @@ export class DayComponent implements OnInit {
       return;
     }
 
+    if (this.newEventTitle().length === 0) {
+      this.errorMessage.set('You need to enter atleast 1 carachter.');
+      return;
+    }
+
     const date = this.day() ? format(this.day()!, 'yyyy-MM-dd') : null;
 
     try {

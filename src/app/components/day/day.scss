@@ -201,10 +201,16 @@
       padding: 0.5rem;
       box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
 
       @include hover-supported {
         background-color: $color-accent;
+      }
+
+      &:disabled {
+        cursor: auto;
+        background-color: $color-success;
+        opacity: 0.7;
       }
     }
   }
@@ -215,5 +221,29 @@
 
   .leave-animation {
     @include slide-out-animation();
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .day-details {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .board-nav {
+      flex-basis: 100%;
+    }
+
+    .day {
+      flex-basis: 100%;
+    }
+
+    .events {
+      flex-basis: calc(50% - 0.5rem);
+    }
+
+    .create-new {
+      flex-basis: calc(50% - 0.5rem);
+    }
   }
 }
