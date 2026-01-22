@@ -130,7 +130,11 @@ main.content {
 
 @media screen and (min-width: 1300px) {
   main.content {
-    padding: 2rem 20rem;
+    padding: 2rem 0;
+    width: 100%;
+    padding-inline: clamp(5rem, 10vw, 20rem);
+    max-width: 120rem;
+    margin-inline: auto;
   }
 
   .main-nav {
