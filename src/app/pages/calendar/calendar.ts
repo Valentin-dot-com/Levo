@@ -19,7 +19,7 @@ import { DayComponent } from '../../components/day/day';
     WeeklyCalendarComponent,
     MonthlyCalendarComponent,
     DesktopDaySummaryComponent,
-    DayComponent
+    DayComponent,
   ],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
@@ -48,14 +48,16 @@ export class CalendarComponent implements OnInit {
     this.route.queryParamMap.subscribe((params) => {
       const day = params.get('day');
       if (!day) {
-        this.calendarView.setSelectedDay(null);
+        if (this.isDesktop()) {
+          this.markDay(now);
+        } else {
+          this.calendarView.setSelectedDay(null);
+        }
       } else {
         const parsed = parse(day, 'yyyy-MM-dd', new Date());
         this.calendarView.setSelectedDay(parsed);
       }
-
     });
-
 
     const months: CalendarMonth[] = [];
 
@@ -66,11 +68,6 @@ export class CalendarComponent implements OnInit {
     }
 
     this.monthsToRender.set(months);
-
-    // Mark today as the first day TODO: Check if better somewhere else, maybe not needed every onInit...
-    if (this.isDesktop()) {
-      this.markDay(now);
-    }
   }
 
   markDay(date: Date) {
