@@ -1,15 +1,8 @@
 @if(day()) {
 <section class="day-details">
-  <nav class="board-nav">
-    <button (click)="close()" class="back-btn" aria-label="Go back to previous page">
-      <app-icon-arrow-left />
-      Go back
-    </button>
-  </nav>
-
   <h1 class="day">
-    <span class="weekday">{{ dayDetails()?.weekday }} W.{{ dayDetails()?.weeknumber }}, {{ dayDetails()?.year }}</span>
     <span class="day-date">{{ dayDetails()?.number }} {{ dayDetails()?.month }}</span>
+    <span class="weekday">{{ dayDetails()?.weekday }} W.{{ dayDetails()?.weeknumber }}, {{ dayDetails()?.year }}</span>
   </h1>
 
   <section class="events">

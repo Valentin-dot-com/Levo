@@ -34,7 +34,15 @@
               <h3>w. {{ week.weekNumber }}</h3>
               <div class="week-days calendar-grid">
                 @for (day of week.days; track $index) {
-                  <a [routerLink]="['/day', formatDate(day.date)]" class="calendar-day" [class.today]="day.isToday" [class]="'weekday-' + day.weekdayIndex">
+                  <a
+                    [routerLink]="[]"
+                    [queryParams]="{ day: formatDate(day.date) }"
+                    queryParamsHandling="merge"
+                    (click)="selectDay(day.date)" class="calendar-day"
+                    [class.today]="day.isToday"
+                    [class.selected]="calendarView.selectedDay()?.toDateString() === day.date.toDateString()"
+                    [class]="'weekday-' + day.weekdayIndex"
+                  >
                     @if (day.isToday) {
                       <h4 class="calendar-day-number today" #todayAnchor data-today>{{ day.dayNumber }}</h4>
                     }

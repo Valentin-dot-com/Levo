@@ -34,7 +34,6 @@ app-monthly-calendar {
 
 .desktop-aside {
   flex: 1;
-  background-color: $color-grey;
   border-radius: $border-radius-XL;
 }
 
@@ -77,6 +76,19 @@ nav {
       }
     }
   }
+}
+
+.day-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: $color-white;
 }
 
 @media screen and (min-width: 1300px) {

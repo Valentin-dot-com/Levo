@@ -1,13 +1,11 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CalendarViewService } from '../../services/calendarView';
-import { format, getISOWeek, isValid, parse } from 'date-fns';
+import { format, getISOWeek } from 'date-fns';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { CalendarService } from '../../services/calendars';
-import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { Event } from '../../models/event.model';
 import { EditEventComponent } from '../edit-event/edit-event';
-import { ActivatedRoute } from '@angular/router';
 
 interface DayDetails {
   number: string;
@@ -18,16 +16,14 @@ interface DayDetails {
 }
 
 @Component({
-  selector: 'app-day',
-  imports: [CommonModule, SharedIconComponent, ArrowLeftIconComponent, EditEventComponent],
-  templateUrl: './day.html',
-  styleUrl: './day.scss',
+  selector: 'app-desktop-day-summary',
+  imports: [CommonModule, SharedIconComponent, EditEventComponent],
+  templateUrl: './desktop-day-summary.html',
+  styleUrl: './desktop-day-summary.scss',
 })
-export class DayComponent implements OnDestroy, OnInit {
+export class DesktopDaySummaryComponent{
   private calendarView = inject(CalendarViewService);
   private calendarService = inject(CalendarService);
-  private route = inject(ActivatedRoute);
-  private location = inject(Location);
 
   calendarIds = this.calendarService.calendarIds;
   day = this.calendarView.selectedDay;
@@ -37,10 +33,6 @@ export class DayComponent implements OnDestroy, OnInit {
   successMessage = signal('');
   newEventTitle = signal('');
   selectedEvent = signal<Event | null>(null);
-
-  isRouted = computed(() => {
-    return this.route.snapshot.paramMap.has('dayId');
-  })
 
   dayDetails = computed<DayDetails | null>(() => {
     const selectedDay = this.day();
@@ -55,18 +47,6 @@ export class DayComponent implements OnDestroy, OnInit {
     };
   });
 
-  ngOnInit(): void {
-    if (!this.isRouted()) return;
-
-    const dayId = this.route.snapshot.paramMap.get('dayId');
-    if (!dayId) return;
-
-    const parsed = parse(dayId, 'yyyy-MM-dd', new Date());
-
-    if (!isValid(parsed)) return;
-
-    this.calendarView.setSelectedDay(parsed);
-  }
 
   formatTime(time: string) {
     if (!time) return '';
@@ -125,15 +105,4 @@ export class DayComponent implements OnDestroy, OnInit {
     this.selectedEvent.set(null);
   }
 
-  close() {
-    if (this.isRouted()) {
-      this.location.back();
-    } else {
-      this.calendarView.setSelectedDay(null);
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.selectedEvent.set(null);
-  }
 }

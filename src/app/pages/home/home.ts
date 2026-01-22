@@ -70,7 +70,7 @@ export class HomeComponent {
   }
 
   openEditEvent(event: Event) {
-    console.log('EVent clicked')
+    console.log('EVent clicked');
     this.selectedEvent.set(event);
   }
 
@@ -79,7 +79,7 @@ export class HomeComponent {
   }
 
   goToDay(date: Date) {
-    this.calendarView.setSelectedDay(date)
+    // this.calendarView.setSelectedDay(date);
     const selected = format(date, 'yyyy-MM-dd');
     this.router.navigate(['/day', selected]);
   }

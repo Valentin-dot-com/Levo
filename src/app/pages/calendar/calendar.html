@@ -10,17 +10,23 @@
 
   <div class="content-container">
       @if (viewMode() === 'weekly') {
-        <app-weekly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+        <app-weekly-calendar [monthsToRender]="monthsToRender()" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
       }
       @else {
-        <app-monthly-calendar [monthsToRender]="monthsToRender" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
+        <app-monthly-calendar [monthsToRender]="monthsToRender()" (nearTop)="prependMonth()" (nearBottom)="appendMonth()" />
       }
 
       @if (isDesktop() === true) {
         <!-- Aside: Upcoming tasks -->
         <aside class="desktop-aside">
-          <p>Upcoming tasks</p>
+          <app-desktop-day-summary />
         </aside>
       }
   </div>
+
+  @if (selectedDay() && !isDesktop()) {
+    <div class="day-overlay">
+      <app-day />
+    </div>
+  }
 </section>

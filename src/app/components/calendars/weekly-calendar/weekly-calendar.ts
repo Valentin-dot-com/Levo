@@ -1,15 +1,12 @@
 import {
   Component,
-  Input,
-  Signal,
   inject,
   signal,
-  Output,
-  EventEmitter,
-  computed,
   ViewChild,
   ElementRef,
   OnDestroy,
+  input,
+  output,
 } from '@angular/core';
 import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
@@ -25,12 +22,12 @@ import { RouterLink } from "@angular/router";
   styleUrls: ['./weekly-calendar.scss'],
 })
 export class WeeklyCalendarComponent implements OnDestroy {
-  private calendarView = inject(CalendarViewService);
+  calendarView = inject(CalendarViewService);
 
-  @Input({ required: true }) monthsToRender!: Signal<CalendarMonth[]>;
+  monthsToRender = input.required<CalendarMonth[]>();
 
-  @Output() nearTop = new EventEmitter<void>();
-  @Output() nearBottom = new EventEmitter<void>();
+  nearTop = output<void>();
+  nearBottom = output<void>();
 
   private readonly THRESHOLD = 300;
   private isEmittingTop = false;
@@ -42,7 +39,6 @@ export class WeeklyCalendarComponent implements OnDestroy {
   readonly loading = signal(true);
   readonly isBtnScrolling = signal(false);
   readonly isTodayVisible = signal(true);
-  readonly months = computed(() => this.monthsToRender());
 
   private hasInitialScroll = false;
 

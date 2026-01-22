@@ -106,10 +106,6 @@
         position: relative;
         transition: border 0.2s ease-in-out;
 
-        &.today {
-          border-color: $color-accent;
-        }
-
         &::after {
           content: '';
           position: absolute;
@@ -119,6 +115,10 @@
           opacity: 0;
           transition: opacity 0.2s ease-in-out;
           z-index: -1;
+        }
+
+        &.today {
+          border-color: $color-accent;
         }
 
         @include hover-supported {
@@ -178,6 +178,21 @@
       .scheduled-at {
         font-size: $font-size-text;
         color: $color-text;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .month .week .week-days .day-card {
+    padding-right: 1rem;
+
+    &.selected {
+      border-color: transparent;
+      &::after {
+        opacity: 1;
+        background-color: transparent;
+        border: 2px solid $color-text-secondary;
       }
     }
   }

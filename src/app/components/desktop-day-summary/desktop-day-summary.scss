@@ -1,49 +1,13 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-:host {
-  height: 100%;
-}
-
 .day-details {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  min-height: 100%;
   gap: 0;
   position: relative;
 
-  .board-nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    .back-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      border-radius: $border-radius-XL;
-      background-color: transparent;
-      color: $color-text;
-      font-size: $font-size-text;
-      font-weight: 500;
-      padding: 0.5rem 0;
-      cursor: pointer;
-      transition: color 0.2s ease-in-out;
-
-      app-icon-arrow-left {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      @include hover-supported {
-        color: $color-accent;
-      }
-    }
-  }
   .day {
     display: flex;
     justify-content: flex-start;
@@ -226,35 +190,5 @@
 
   .leave-animation {
     @include slide-out-animation();
-  }
-}
-
-@media screen and (min-width: 1300px) {
-  .day-details {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    .board-nav {
-      flex-basis: 100%;
-    }
-
-    .day {
-      flex-basis: 100%;
-    }
-
-    .events {
-      flex-basis: calc(50% - 0.5rem);
-    }
-
-    .create-new {
-      flex-basis: calc(50% - 0.5rem);
-    }
-  }
-}
-
-@media screen and (min-width: 1300px) {
-  .day-details {
-    min-height: 0;
   }
 }
