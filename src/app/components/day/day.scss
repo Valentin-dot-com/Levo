@@ -252,3 +252,9 @@
     }
   }
 }
+
+@media screen and (min-width: 1300px) {
+  .day-details {
+    min-height: 0;
+  }
+}
