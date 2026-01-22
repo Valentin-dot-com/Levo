@@ -4,8 +4,7 @@
 :host {
   position: fixed;
   inset: 0;
-  z-index: 15;
-  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 5;
   backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
