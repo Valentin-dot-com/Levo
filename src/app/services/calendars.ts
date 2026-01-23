@@ -299,6 +299,15 @@ export class CalendarService {
     }
   }
 
+  async deleteCalendar(calId: UUID) {
+    const { error } = await this.supabase.supabaseClient.from('calendars').delete().eq('id', calId);
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => cals.filter((c) => c.id !== calId));
+    this._calendarIds.update((ids) => ids.filter((i) => i !== calId));
+  }
+
   async initCalendarData(): Promise<void> {
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
@@ -306,7 +315,7 @@ export class CalendarService {
 
   private reset() {
     this._calendarIds.set([]);
-    this._calendars.set([])
+    this._calendars.set([]);
     this._eventCache.set(new Map());
     this._todoEvents.set([]);
     this._pendingRequests.clear();
