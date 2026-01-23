@@ -24,7 +24,7 @@ export class HomeComponent {
   private boardService = inject(BoardService);
   private router = inject(Router);
 
-  currentUser = this.auth.profile();
+  currentUser = this.auth.profile;
   weekdays = this.calendarView.weekDays;
   thisWeek = this.calendarView.thisWeek;
 
