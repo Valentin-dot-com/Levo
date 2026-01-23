@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { CalendarService } from './calendars';
 import {
   startOfMonth,
@@ -14,12 +14,14 @@ import {
   getDay,
 } from 'date-fns';
 import { CalendarDay, CalendarMonth, CalendarWeek } from '../models/calendar.model';
+import { AuthService } from './authenticate';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarViewService {
   private calendarService = inject(CalendarService);
+  private auth = inject(AuthService);
 
   private _initialized = signal<boolean>(false);
   private _currentYear = signal<number>(new Date().getFullYear());
@@ -30,6 +32,14 @@ export class CalendarViewService {
   readonly selectedDay = this._selectedDay.asReadonly();
   readonly currentYear = this._currentYear.asReadonly();
   readonly currentMonth = this._currentMonth.asReadonly();
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.userSignal()) {
+        this.reset()
+      }
+    })
+  }
 
   readonly events = computed(() => {
     return this.calendarService.getCachedEventsForMonth(this.currentYear(), this.currentMonth());
@@ -214,5 +224,12 @@ export class CalendarViewService {
   async goToToday(): Promise<void> {
     const today = new Date();
     await this.goToMonth(today.getFullYear(), today.getMonth());
+  }
+
+  reset() {
+    this._initialized.set(false);
+    this._currentYear.set(new Date().getFullYear());
+    this._currentMonth.set(new Date().getMonth());
+    this._selectedDay.set(null);
   }
 }

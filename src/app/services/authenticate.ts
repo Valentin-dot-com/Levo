@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
@@ -15,30 +15,36 @@ export class AuthService {
 
   private _currentUser$ = new BehaviorSubject<User | null>(null);
   private _session$ = new BehaviorSubject<Session | null>(null);
-  private _isLoading$ = new BehaviorSubject<boolean>(true);
   private _profile$ = signal<Profile | null>(null);
+  private _userSignal = signal<User | null>(null);
+
+  private _isLoading$ = new BehaviorSubject<boolean>(true);
 
   user$ = this._currentUser$.asObservable();
   session$ = this._session$.asObservable();
   isLoading$ = this._isLoading$.asObservable();
-  profile = this._profile$.asReadonly()
+  profile = this._profile$.asReadonly();
+  userSignal = this._userSignal.asReadonly();
 
   constructor() {
     this.initAuthListener();
+
+    effect(() => {
+      const user = this._userSignal();
+
+      if (!user) {
+        this._profile$.set(null);
+        return;
+      }
+
+      this.getProfile(user.id);
+    });
   }
 
   private async initAuthListener() {
     const { data } = await this.supabase.supabaseClient.auth.getSession();
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    this._session$.next(data.session);
-    this._currentUser$.next(data.session?.user ?? null);
-
-    if (data.session?.user) {
-      await this.getProfile();
-    }
-
+    this.setUser(data.session?.user ?? null, data.session);
     this._isLoading$.next(false);
 
     this.supabase.supabaseClient.auth.onAuthStateChange(async (event, session) => {
@@ -46,15 +52,15 @@ export class AuthService {
         this.resetAuthState();
         return;
       }
-      this._session$.next(session);
-      this._currentUser$.next(session?.user ?? null);
 
-      if (session?.user) {
-        await this.getProfile();
-      } else {
-        this._profile$.set(null);
-      }
+      this.setUser(session?.user ?? null, session);
     });
+  }
+
+  private setUser(user: User | null, session: Session | null) {
+    this._currentUser$.next(user);
+    this._session$.next(session);
+    this._userSignal.set(user);
   }
 
   get currentUser(): User | null {
@@ -65,21 +71,18 @@ export class AuthService {
     return this._currentUser$.getValue() !== null;
   }
 
-  async getProfile() {
-    const user = this.currentUser;
-
-    if (!user) return;
-
-
+  async getProfile(userId: UUID) {
     const { data, error } = await this.supabase.supabaseClient
-    .from('profiles')
-    .select('*')
-    .eq('user_id', user.id)
-    .single();
+      .from('profiles')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
 
     if (error) throw error;
 
-    this._profile$.set(data ?? null);
+    if (this._userSignal()?.id === userId) {
+      this._profile$.set(data ?? null);
+    }
   }
 
   getUserId(): UUID {
@@ -111,8 +114,8 @@ export class AuthService {
         data: {
           first_name: firstName,
           last_name: lastName,
-        }
-      }
+        },
+      },
     });
   }
 
@@ -134,8 +137,7 @@ export class AuthService {
   }
 
   private resetAuthState() {
-    this._currentUser$.next(null);
-    this._session$.next(null);
+    this.setUser(null, null);
     this._profile$.set(null);
   }
 

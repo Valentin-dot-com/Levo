@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Calendar } from '../models/calendar.model';
 import { CreateEvent, Event } from '../models/event.model';
@@ -21,6 +21,14 @@ export class CalendarService {
   readonly calendars = this._calendars.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
   readonly todoEvents = this._todoEvents.asReadonly();
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.userSignal()) {
+        this.reset();
+      }
+    });
+  }
 
   private getMonthKey(year: number, month: number): string {
     return `${year}-${month}`;
@@ -172,7 +180,7 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          console.debug('[CalendarService] No calendarIds yet, skipping fetch')
+          console.debug('[CalendarService] No calendarIds yet, skipping fetch');
           return;
         }
 
@@ -294,5 +302,13 @@ export class CalendarService {
   async initCalendarData(): Promise<void> {
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
+  }
+
+  private reset() {
+    this._calendarIds.set([]);
+    this._calendars.set([])
+    this._eventCache.set(new Map());
+    this._todoEvents.set([]);
+    this._pendingRequests.clear();
   }
 }

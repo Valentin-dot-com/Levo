@@ -1,15 +1,17 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
 import { Board, BoardWithDetails, CreateBoard, CreateSubBoard } from '../models/board.model';
 import { UUID } from '../models/primitives.model';
 import { CalendarService } from './calendars';
 import { JSONContent } from '@tiptap/core';
+import { AuthService } from './authenticate';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardService {
   private supabase = inject(SupabaseService);
+  private auth = inject(AuthService);
   private calendarService = inject(CalendarService);
 
   private _boards = signal<Board[]>([]);
@@ -19,6 +21,14 @@ export class BoardService {
   readonly boards = this._boards.asReadonly();
   readonly currentBoard = this._currentBoard.asReadonly();
   readonly parentBoard = this._parentBoard.asReadonly();
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.userSignal()) {
+        this.reset()
+      }
+    })
+  }
 
   async getRootBoards(): Promise<void> {
     const calendarIds = this.calendarService.calendarIds();
@@ -188,5 +198,11 @@ export class BoardService {
 
   clearCurrent() {
     this._currentBoard.set(null);
+  }
+
+  reset() {
+    this._boards.set([]);
+    this._currentBoard.set(null);
+    this._parentBoard.set(null);
   }
 }
