@@ -41,7 +41,11 @@ export class AuthService {
 
     this._isLoading$.next(false);
 
-    this.supabase.supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+    this.supabase.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        this.resetAuthState();
+        return;
+      }
       this._session$.next(session);
       this._currentUser$.next(session?.user ?? null);
 
@@ -127,6 +131,12 @@ export class AuthService {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+  }
+
+  private resetAuthState() {
+    this._currentUser$.next(null);
+    this._session$.next(null);
+    this._profile$.set(null);
   }
 
   // Might include at a later time
