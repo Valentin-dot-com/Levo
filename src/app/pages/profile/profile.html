@@ -1,8 +1,12 @@
-<section>
+<section class="profile">
   <h1>{{ currentUser()?.first_name }} {{ currentUser()?.last_name }}</h1>
 
   <article>
     <h2>Account settings</h2>
+
+    <button type="button" class="manage-cals-btn" (click)="openEditCals()">
+      Manage you calendars
+    </button>
 
     <button type="button" class="sign-out" (click)="signOut()">
       Sign out
@@ -14,8 +18,6 @@
         {{ isDeleting() ? 'Deleting account...' : 'Delete my account' }}
       </button>
     </span>
-
-
   </article>
 
   @if (errorMessage()) {

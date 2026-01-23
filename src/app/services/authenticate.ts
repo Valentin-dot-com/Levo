@@ -136,6 +136,17 @@ export class AuthService {
     });
   }
 
+  async deleteAccount() {
+    const userId = this.currentUser?.id;
+    if (!userId) {
+      throw new Error('Cannot retrieve user ID: User is not authenticated');
+    }
+
+    const { error } = await this.supabase.supabaseClient.rpc('delete_user');
+
+    if (error) throw error;
+  }
+
   private resetAuthState() {
     this.setUser(null, null);
     this._profile$.set(null);

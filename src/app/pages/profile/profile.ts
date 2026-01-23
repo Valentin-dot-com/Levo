@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
-import { SupabaseService } from '../../services/supabase';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,13 +11,18 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent {
   private auth = inject(AuthService);
-  private supabase = inject(SupabaseService);
   private router = inject(Router);
 
   isDeleting = signal(false);
   errorMessage = signal('');
+  isEditingCalendars = signal(false);
+  isEditingName = signal(false);
 
   currentUser = this.auth.profile;
+
+  openEditCals() {
+    this.isEditingCalendars.set(true);
+  }
 
   signOut() {
     this.auth.signOut();
@@ -33,8 +37,9 @@ export class ProfileComponent {
     this.errorMessage.set('');
 
     try {
-      await this.supabase.deleteAccount();
+      await this.auth.deleteAccount();
 
+      this.signOut();
       this.router.navigate(['/']);
     } catch (err: unknown) {
       this.errorMessage.set(err instanceof Error ? err.message : 'Failed to delete account. Please try again');
