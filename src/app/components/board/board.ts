@@ -35,8 +35,14 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async loadBoard() {
     this.loading.set(true);
-    await this.boardService.getBoardWithDetails(this.boardId());
-    this.loading.set(false);
+    try {
+      await this.boardService.getBoardWithDetails(this.boardId());
+    } catch (err: unknown) {
+      console.error('Failed to load board. ', err)
+      this.errorMessage.set(err instanceof Error ? err.message : 'Failed to load board');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   goBack() {

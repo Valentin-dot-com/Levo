@@ -68,7 +68,6 @@ app-icon-delete {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 1;
       background-color: $color-white;
       display: flex;
       flex-direction: column;
@@ -76,7 +75,6 @@ app-icon-delete {
       padding: 2rem 1rem;
       border-radius: $border-radius-XL;
       overflow-y: auto;
-      flex: 1;
       position: fixed;
       width: calc(100% - 2rem);
       z-index: 15;
@@ -274,7 +272,7 @@ app-icon-delete {
     z-index: 5;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(4px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(4px) saturate(120%);
   }
 
   .delete-overlay {
@@ -386,11 +384,11 @@ app-icon-delete {
 
     h1 {
       grid-column: 1 / span 2;
-      font-size: $font-size-XL;
+      font-size: $font-size-L;
     }
 
     h2 {
-      font-size: $font-size-L;
+      font-size: $font-size-M;
     }
 
     .board-nav {
