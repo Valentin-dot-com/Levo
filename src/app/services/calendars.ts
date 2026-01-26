@@ -1,6 +1,6 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Calendar } from '../models/calendar.model';
+import { Calendar, CreateCalendar } from '../models/calendar.model';
 import { CreateEvent, Event } from '../models/event.model';
 import { UUID } from '../models/primitives.model';
 import { AuthService } from './authenticate';
@@ -21,6 +21,14 @@ export class CalendarService {
   readonly calendars = this._calendars.asReadonly();
   readonly calendarIds = this._calendarIds.asReadonly();
   readonly todoEvents = this._todoEvents.asReadonly();
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.userSignal()) {
+        this.reset();
+      }
+    });
+  }
 
   private getMonthKey(year: number, month: number): string {
     return `${year}-${month}`;
@@ -172,7 +180,7 @@ export class CalendarService {
         const calendarIds = this._calendarIds();
 
         if (calendarIds.length === 0) {
-          console.debug('[CalendarService] No calendarIds yet, skipping fetch')
+          console.debug('[CalendarService] No calendarIds yet, skipping fetch');
           return;
         }
 
@@ -235,6 +243,23 @@ export class CalendarService {
     return data;
   }
 
+  async createCalendar(newCal: CreateCalendar) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('calendars')
+      .insert({
+        owner_id: newCal.owner_id,
+        name: newCal.name,
+        is_shared: newCal.is_shared,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => [...cals, data]);
+    this._calendarIds.update((ids) => [ids, data.id]);
+  }
+
   async updateEvent(id: UUID, event: CreateEvent, oldEvent: Event) {
     const { data, error } = await this.supabase.supabaseClient
       .from('events')
@@ -291,8 +316,37 @@ export class CalendarService {
     }
   }
 
+  async deleteCalendar(calId: UUID) {
+    const { error } = await this.supabase.supabaseClient.from('calendars').delete().eq('id', calId);
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => cals.filter((c) => c.id !== calId));
+    this._calendarIds.update((ids) => ids.filter((i) => i !== calId));
+  }
+
+  async leaveCalendar(calId: UUID, userId: UUID) {
+    const { error } = await this.supabase.supabaseClient
+      .from('calendar_memberships')
+      .delete()
+      .match({ calendar_id: calId, user_id: userId });
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => cals.filter((c) => c.id !== calId));
+    this._calendarIds.update((ids) => ids.filter((i) => i !== calId));
+  }
+
   async initCalendarData(): Promise<void> {
     await this.fetchUserCalendarIds();
     await this.fetchUserCalendars();
+  }
+
+  private reset() {
+    this._calendarIds.set([]);
+    this._calendars.set([]);
+    this._eventCache.set(new Map());
+    this._todoEvents.set([]);
+    this._pendingRequests.clear();
   }
 }

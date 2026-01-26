@@ -1,5 +1,5 @@
  <section class="home-page">
-  <h1 class="greeting">Hi, {{currentUser?.first_name}}</h1>
+  <h1 class="greeting">Hi, {{currentUser()?.first_name}}</h1>
   <section class="today-container">
     <h2 class="weekday-label" role="button" tabindex="0" (click)="goToDay(today()!.date)" (keyup.enter)="goToDay(today()!.date)">
       <span class="weekday">

@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="24"
       width="24"
+      aria-label="delete icon"
     >
       <path d="m3 6 2 0 16 0" stroke-width="2"></path>
       <path

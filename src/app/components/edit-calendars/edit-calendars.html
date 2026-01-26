@@ -1,0 +1,77 @@
+<article class="edit-calendars">
+  <nav class="board-nav">
+    <button (click)="close()" class="back-btn" aria-label="Go back to previous page">
+      <app-icon-arrow-left />
+      Go back
+    </button>
+  </nav>
+
+  <h2>Your calendars</h2>
+
+  <ul class="calendars-list">
+    @for (cal of calendars(); track cal.id) {
+    @let shared = cal.is_shared;
+    @let owner = isOwner(cal);
+
+    <li class="calendar">
+      <h3>{{ cal.name }}</h3>
+
+      <span class="meta-data">
+        @if (owner) {
+        <p>Owner</p>
+        }
+
+        @if (shared) {
+        <p>Shared calendar</p>
+        }
+      </span>
+      <div class="btns">
+        @if (shared) {
+        <button class="leave-cal" aria-label="Leave this calendar" (click)="leaveCalendar(cal.id)">
+          Leave
+        </button>
+        }
+        @if (owner) {
+        <button class="delete-cal" aria-label="Delete this calendar" (click)="deleteCalendar(cal.id)">
+          Delete
+          <app-icon-delete />
+        </button>
+        }
+      </div>
+    </li>
+    }
+  </ul>
+
+  <section class="create-new">
+    <h2>Create new calendar</h2>
+    <form class="create-form" (submit)="createCalendar(); $event.preventDefault()">
+      <label class="input" for="name">
+        <span>Enter a name for your new calendar</span>
+        <input type="text" id="name" name="name" [value]="newCalendarTitle()"
+          (input)="newCalendarTitle.set($any($event.target).value)" (keyup.enter)="createCalendar()" placeholder="Name"
+          required autocomplete="off">
+      </label>
+
+      <fieldset class="is-shared-input">
+        <legend>Is this calendar shared?</legend>
+
+        <label class="radio" for="isShared-false">
+          <span>Personal</span>
+          <input type="radio" id="isShared-false" name="isShared" value="false" (change)="isNewCalShared.set(false)"
+            [checked]="!isNewCalShared()" />
+        </label>
+
+        <label class="radio" for="isShared-true">
+          <span>Shared</span>
+          <input type="radio" id="isShared-true" name="isShared" value="true" (change)="isNewCalShared.set(true)"
+            [checked]="isNewCalShared()" />
+        </label>
+      </fieldset>
+
+      <button class="submit-btn" type="submit" [disabled]="newCalendarTitle().length === 0"
+        [attr.aria-disabled]="newCalendarTitle().length === 0">
+        Create calendar
+      </button>
+    </form>
+  </section>
+</article>

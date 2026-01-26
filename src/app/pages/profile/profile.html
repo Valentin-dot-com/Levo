@@ -1,1 +1,36 @@
-Profile
+<section class="profile">
+  <h1>{{ currentUser()?.first_name }} {{ currentUser()?.last_name }}</h1>
+
+  <article class="settings">
+    <h2>Manage Levo</h2>
+
+    <!-- <button type="button" class="change-name" >Change display name</button> -->
+
+    <button type="button" class="manage-cals-btn" (click)="openEditCals()">
+      Manage calendars
+    </button>
+
+    <button type="button" class="sign-out" (click)="signOut()">
+      Sign out
+    </button>
+
+    <span class="delete-account">
+      <p>Delete your account</p>
+      <button type="button" class="delete-btn" (click)="deleteAccount()" [disabled]="isDeleting()">
+        {{ isDeleting() ? 'Deleting account...' : 'Delete account' }}
+      </button>
+    </span>
+  </article>
+
+  @if (isEditingCalendars()) {
+    <aside class="overlay">
+      <app-edit-calendars (closed)="closeEdit()" />
+    </aside>
+  }
+
+  @if (errorMessage()) {
+    <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+      <p>{{ errorMessage() }}</p>
+    </span>
+  }
+</section>
