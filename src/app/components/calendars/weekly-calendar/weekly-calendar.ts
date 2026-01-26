@@ -49,14 +49,14 @@ export class WeeklyCalendarComponent implements OnDestroy {
   set todayAnchor(el: ElementRef<HTMLElement> | undefined) {
     if (!el || this.hasInitialScroll) return;
 
-    const weekEl = el.nativeElement.closest('.week');
+    const dayEl = el.nativeElement.closest('.day-card');
 
-    if (!weekEl) return;
+    if (!dayEl) return;
 
     const container = this.container.nativeElement;
 
     const weekTop =
-      weekEl.getBoundingClientRect().top -
+      dayEl.getBoundingClientRect().top -
       container.getBoundingClientRect().top +
       container.scrollTop;
 
@@ -121,14 +121,14 @@ export class WeeklyCalendarComponent implements OnDestroy {
 
       if (!el) return;
 
-      const weekEl = el.closest('.week');
+      const dayEl = el.closest('.day-card');
 
-      if (!weekEl) return;
+      if (!dayEl) return;
 
       const container = this.container.nativeElement;
 
       const weekTop =
-        weekEl.getBoundingClientRect().top -
+        dayEl.getBoundingClientRect().top -
         container.getBoundingClientRect().top +
         container.scrollTop;
 

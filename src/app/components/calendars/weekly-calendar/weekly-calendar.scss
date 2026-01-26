@@ -36,7 +36,7 @@
     transition:
       transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
       opacity 360ms ease;
-    z-index: 1;
+    z-index: 3;
     background-color: $color-accent;
     border: none;
     border-radius: $border-radius-XL;
