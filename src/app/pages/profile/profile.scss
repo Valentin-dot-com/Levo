@@ -71,3 +71,11 @@
     -webkit-backdrop-filter: blur(4px) saturate(120%);
   }
 }
+
+.enter-animation {
+  @include slide-in-animation();
+}
+
+.leave-animation {
+  @include slide-out-animation();
+}

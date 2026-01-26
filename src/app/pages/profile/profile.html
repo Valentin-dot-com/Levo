@@ -23,7 +23,7 @@
   </article>
 
   @if (isEditingCalendars()) {
-    <aside class="overlay">
+    <aside class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
       <app-edit-calendars (closed)="closeEdit()" />
     </aside>
   }
