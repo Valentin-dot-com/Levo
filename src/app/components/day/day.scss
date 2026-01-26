@@ -110,18 +110,13 @@
       font-size: $font-size-text;
     }
 
-    .is-shared-container {
+    .event-metadata {
       position: absolute;
       top: 1rem;
       right: 1rem;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      line-height: normal;
       gap: 0.5rem;
-      font-size: $font-size-text;
-      color: $color-primary;
-
       app-icon-shared {
         display: flex;
         align-items: center;
@@ -130,6 +125,14 @@
         color: $color-accent;
         fill: none;
       }
+    }
+    
+    .calendar-name {
+      line-height: normal;
+      gap: 0.5rem;
+      font-size: $font-size-text;
+      color: $color-primary;
+
     }
 
     .scheduled-at,

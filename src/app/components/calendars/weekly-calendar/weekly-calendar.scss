@@ -168,6 +168,14 @@
       justify-content: flex-start;
       gap: 0.5rem;
 
+      app-icon-shared {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: none;
+        color: $color-accent;
+      }
+
       h5 {
         font-size: $font-size-text;
         font-weight: 600;

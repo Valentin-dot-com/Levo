@@ -14,15 +14,18 @@ import { CommonModule } from '@angular/common';
 import { CalendarMonth } from '../../../models/calendar.model';
 import { LoaderComponent } from '../../loader/loader';
 import { RouterLink } from "@angular/router";
+import { CalendarService } from '../../../services/calendars';
+import { SharedIconComponent } from '../../../icons/sharedIcon';
 
 @Component({
   selector: 'app-weekly-calendar',
-  imports: [CommonModule, LoaderComponent, RouterLink],
+  imports: [CommonModule, LoaderComponent, RouterLink, SharedIconComponent],
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
 export class WeeklyCalendarComponent implements OnDestroy {
   calendarView = inject(CalendarViewService);
+  calendarService = inject(CalendarService);
 
   monthsToRender = input.required<CalendarMonth[]>();
 
@@ -143,6 +146,11 @@ export class WeeklyCalendarComponent implements OnDestroy {
 
   private remToPx(rem: number): number {
     return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+  }
+
+  getCalendar(calId: string) {
+    const calendar = this.calendarService.calendars().find((cal) => cal.id === calId);
+    return calendar || null;
   }
 
   get weekDayNames() {
