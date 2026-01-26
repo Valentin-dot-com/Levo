@@ -1,7 +1,7 @@
 @if (currentBoard() && !loading()) {
 @let subBoards = currentBoard()?.subBoards ?? [];
 
-<section class="board-detail">
+<section class="board-detail" animate.enter="fade-in-animation" animate.leave="fade-out-animation">
   <nav class="board-nav">
     <button (click)="goBack()" class="back-btn"
       [aria-label]="`Go back to ${currentBoard()?.parentBoard?.title ?? 'all boards'}`">
@@ -9,7 +9,7 @@
       {{ currentBoard()?.parentBoard?.title ?? 'All boards'}}
     </button>
   </nav>
-  
+
   <h1>{{ currentBoard()?.board?.title }}</h1>
 
   <section class="sub-boards">
@@ -99,8 +99,7 @@
 }
 
 @if (loading()) {
-<div>
-  Loading board...
-  <!-- TODO: insert loading component -->
+<div class="loader" animate.enter="fade-in-animation" animate.leave="fade-out-animation">
+  <app-loader />
 </div>
 }

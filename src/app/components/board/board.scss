@@ -365,12 +365,28 @@ app-icon-delete {
   }
 }
 
+.loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .enter-animation {
   @include slide-in-animation();
 }
 
 .leave-animation {
   @include slide-out-animation();
+}
+
+.fade-in-animation {
+  @include fade-in-animation();
+}
+
+.fade-out-animation {
+  @include fade-out-animation();
 }
 
 @media screen and (min-width: 1300px) {
