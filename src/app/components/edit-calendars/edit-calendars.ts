@@ -4,6 +4,7 @@ import { CalendarService } from '../../services/calendars';
 import { Calendar, CreateCalendar } from '../../models/calendar.model';
 import { AuthService } from '../../services/authenticate';
 import { UUID } from '../../models/primitives.model';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 @Component({
   selector: 'app-edit-calendars',
@@ -14,14 +15,13 @@ import { UUID } from '../../models/primitives.model';
 export class EditCalendarsComponent {
   private calendarService = inject(CalendarService);
   private auth = inject(AuthService);
+  private feedbackMsg = inject(FeedbackMessageService);
 
   currentUser = this.auth.profile;
   calendars = this.calendarService.calendars;
 
   newCalendarTitle = signal('');
   isNewCalShared = signal(false);
-  successMessage = signal('');
-  errorMessage = signal('');
 
   isOwner(calendar: Calendar): boolean {
     const ownerId = calendar.owner_id;
@@ -50,13 +50,13 @@ export class EditCalendarsComponent {
 
       this.newCalendarTitle.set('');
       this.isNewCalShared.set(false);
-      this.successMessage.set('New calendar created successfully');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackMsg.success.set('New calendar created successfully');
+      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, could not create calendar.');
+        this.feedbackMsg.error.set(err.message ?? 'An error occured, could not create calendar.');
       } else {
-        this.errorMessage.set('An error occured, could not create calendar.');
+        this.feedbackMsg.error.set('An error occured, could not create calendar.');
       }
     }
   }
@@ -69,13 +69,13 @@ export class EditCalendarsComponent {
     try {
       await this.calendarService.leaveCalendar(calId, userId);
 
-      this.successMessage.set('You have successfully left the calendar');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackMsg.success.set('You have successfully left the calendar');
+      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, could not leave calendar.');
+        this.feedbackMsg.error.set(err.message ?? 'An error occured, could not leave calendar.');
       } else {
-        this.errorMessage.set('An error occured, could not leave calendar.');
+        this.feedbackMsg.error.set('An error occured, could not leave calendar.');
       }
     }
   }
@@ -86,13 +86,13 @@ export class EditCalendarsComponent {
     try {
       await this.calendarService.deleteCalendar(calId);
 
-      this.successMessage.set('Calendar deleted successfully');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackMsg.success.set('Calendar deleted successfully');
+      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, could not delete calendar.');
+        this.feedbackMsg.error.set(err.message ?? 'An error occured, could not delete calendar.');
       } else {
-        this.errorMessage.set('An error occured, could not delete calendar.');
+        this.feedbackMsg.error.set('An error occured, could not delete calendar.');
       }
     }
   }
