@@ -3,11 +3,10 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
 import { EditCalendarsComponent } from '../../components/edit-calendars/edit-calendars';
-import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, EditCalendarsComponent, ArrowLeftIconComponent],
+  imports: [CommonModule, EditCalendarsComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

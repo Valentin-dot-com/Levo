@@ -6,10 +6,11 @@ import { AuthService } from '../../services/authenticate';
 import { UUID } from '../../models/primitives.model';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
 import { ArrowLeftIconComponent } from "../../icons/arrowLeftIcon";
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-edit-calendars',
-  imports: [CommonModule, ArrowLeftIconComponent],
+  imports: [CommonModule, ArrowLeftIconComponent, DeleteIconComponent],
   templateUrl: './edit-calendars.html',
   styleUrl: './edit-calendars.scss',
 })

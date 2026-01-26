@@ -1,6 +1,4 @@
 <article class="edit-calendars">
-  <h2>Your calendars</h2>
-
   <nav class="board-nav">
     <button (click)="close()" class="back-btn" aria-label="Go back to previous page">
       <app-icon-arrow-left />
@@ -8,21 +6,39 @@
     </button>
   </nav>
 
+  <h2>Your calendars</h2>
+
   <ul class="calendars-list">
     @for (cal of calendars(); track cal.id) {
-      <li class="calendar">
-        <h3>{{ cal.name }}</h3>
-        @if (cal.is_shared) {
-          <button class="leave-cal" aria-label="Leave this calendar" (click)="leaveCalendar(cal.id)">
-            Leave
-          </button>
+    @let shared = cal.is_shared;
+    @let owner = isOwner(cal);
+
+    <li class="calendar">
+      <h3>{{ cal.name }}</h3>
+
+      <span class="meta-data">
+        @if (owner) {
+        <p>Owner</p>
         }
-        @if (isOwner(cal)) {
-          <button class="delete-cal" aria-label="Delete this calendar" (click)="deleteCalendar(cal.id)">
-            Delete
-          </button>
+
+        @if (shared) {
+        <p>Shared calendar</p>
         }
-      </li>
+      </span>
+      <div class="btns">
+        @if (shared) {
+        <button class="leave-cal" aria-label="Leave this calendar" (click)="leaveCalendar(cal.id)">
+          Leave
+        </button>
+        }
+        @if (owner) {
+        <button class="delete-cal" aria-label="Delete this calendar" (click)="deleteCalendar(cal.id)">
+          Delete
+          <app-icon-delete />
+        </button>
+        }
+      </div>
+    </li>
     }
   </ul>
 
@@ -30,40 +46,31 @@
     <h2>Create new calendar</h2>
     <form class="create-form" (submit)="createCalendar(); $event.preventDefault()">
       <label class="input" for="name">
-        <span>Enter a name</span>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          [value]="newCalendarTitle()"
-          (input)="newCalendarTitle.set($any($event.target).value)"
-          (keyup.enter)="createCalendar()"
-          placeholder="Name"
-          required
-          autocomplete="off"
-        >
+        <span>Enter a name for your new calendar</span>
+        <input type="text" id="name" name="name" [value]="newCalendarTitle()"
+          (input)="newCalendarTitle.set($any($event.target).value)" (keyup.enter)="createCalendar()" placeholder="Name"
+          required autocomplete="off">
       </label>
 
-      <fieldset>
+      <fieldset class="is-shared-input">
         <legend>Is this calendar shared?</legend>
-
-        <label class="radio" for="isShared-true">
-          <span>Shared</span>
-          <input type="radio" id="isShared-true" name="isShared" value="true" (change)="isNewCalShared.set(true)" [checked]="isNewCalShared()" />
-        </label>
 
         <label class="radio" for="isShared-false">
           <span>Personal</span>
-          <input type="radio" id="isShared-false" name="isShared" value="false" (change)="isNewCalShared.set(false)" [checked]="!isNewCalShared()" />
+          <input type="radio" id="isShared-false" name="isShared" value="false" (change)="isNewCalShared.set(false)"
+            [checked]="!isNewCalShared()" />
+        </label>
+
+        <label class="radio" for="isShared-true">
+          <span>Shared</span>
+          <input type="radio" id="isShared-true" name="isShared" value="true" (change)="isNewCalShared.set(true)"
+            [checked]="isNewCalShared()" />
         </label>
       </fieldset>
 
-      <button
-        type="submit"
-        [disabled]="newCalendarTitle().length === 0"
-        [attr.aria-disabled]="newCalendarTitle().length === 0"
-      >
-        Create event
+      <button class="submit-btn" type="submit" [disabled]="newCalendarTitle().length === 0"
+        [attr.aria-disabled]="newCalendarTitle().length === 0">
+        Create calendar
       </button>
     </form>
   </section>
