@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase';
-import { Calendar } from '../models/calendar.model';
+import { Calendar, CreateCalendar } from '../models/calendar.model';
 import { CreateEvent, Event } from '../models/event.model';
 import { UUID } from '../models/primitives.model';
 import { AuthService } from './authenticate';
@@ -243,6 +243,22 @@ export class CalendarService {
     return data;
   }
 
+  async createCalendar(newCal: CreateCalendar) {
+    const { data, error } = await this.supabase.supabaseClient
+      .from('calendars')
+      .insert({
+        name: newCal.name,
+        is_shared: newCal.is_shared,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => [...cals, data]);
+    this._calendarIds.update((ids) => [ids, data.id]);
+  }
+
   async updateEvent(id: UUID, event: CreateEvent, oldEvent: Event) {
     const { data, error } = await this.supabase.supabaseClient
       .from('events')
@@ -301,6 +317,18 @@ export class CalendarService {
 
   async deleteCalendar(calId: UUID) {
     const { error } = await this.supabase.supabaseClient.from('calendars').delete().eq('id', calId);
+
+    if (error) throw error;
+
+    this._calendars.update((cals) => cals.filter((c) => c.id !== calId));
+    this._calendarIds.update((ids) => ids.filter((i) => i !== calId));
+  }
+
+  async leaveCalendar(calId: UUID, userId: UUID) {
+    const { error } = await this.supabase.supabaseClient
+      .from('calendar_memberships')
+      .delete()
+      .match({ calendar_id: calId, user_id: userId });
 
     if (error) throw error;
 

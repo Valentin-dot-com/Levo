@@ -37,3 +37,8 @@ export interface CalendarMonth {
   days: CalendarDay[];
   weeks: CalendarWeek[];
 }
+
+export interface CreateCalendar {
+  name: string;
+  is_shared: boolean;
+}
