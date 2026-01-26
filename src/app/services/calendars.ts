@@ -247,6 +247,7 @@ export class CalendarService {
     const { data, error } = await this.supabase.supabaseClient
       .from('calendars')
       .insert({
+        owner_id: newCal.owner_id,
         name: newCal.name,
         is_shared: newCal.is_shared,
       })

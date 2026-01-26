@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
+import { EditCalendarsComponent } from '../../components/edit-calendars/edit-calendars';
+import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [CommonModule, EditCalendarsComponent, ArrowLeftIconComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
@@ -22,6 +24,11 @@ export class ProfileComponent {
 
   openEditCals() {
     this.isEditingCalendars.set(true);
+  }
+
+  closeEdit() {
+    this.isEditingCalendars.set(false);
+    this.isEditingName.set(false);
   }
 
   signOut() {

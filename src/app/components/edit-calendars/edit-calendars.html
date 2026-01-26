@@ -1,5 +1,12 @@
-<aside class="edit-calendars">
+<article class="edit-calendars">
   <h2>Your calendars</h2>
+
+  <nav class="board-nav">
+    <button (click)="close()" class="back-btn" aria-label="Go back to previous page">
+      <app-icon-arrow-left />
+      Go back
+    </button>
+  </nav>
 
   <ul class="calendars-list">
     @for (cal of calendars(); track cal.id) {
@@ -22,16 +29,16 @@
   <section class="create-new">
     <h2>Create new calendar</h2>
     <form class="create-form" (submit)="createCalendar(); $event.preventDefault()">
-      <label class="input" for="title">
-        <span>Enter a title:</span>
+      <label class="input" for="name">
+        <span>Enter a name</span>
         <input
           type="text"
-          id="title"
-          name="title"
+          id="name"
+          name="name"
           [value]="newCalendarTitle()"
           (input)="newCalendarTitle.set($any($event.target).value)"
           (keyup.enter)="createCalendar()"
-          placeholder="Title"
+          placeholder="Name"
           required
           autocomplete="off"
         >
@@ -60,4 +67,4 @@
       </button>
     </form>
   </section>
-</aside>
+</article>

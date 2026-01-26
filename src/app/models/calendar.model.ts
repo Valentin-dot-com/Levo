@@ -41,4 +41,5 @@ export interface CalendarMonth {
 export interface CreateCalendar {
   name: string;
   is_shared: boolean;
+  owner_id: UUID;
 }

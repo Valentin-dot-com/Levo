@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { CalendarService } from '../../services/calendars';
 import { Calendar, CreateCalendar } from '../../models/calendar.model';
 import { AuthService } from '../../services/authenticate';
 import { UUID } from '../../models/primitives.model';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
+import { ArrowLeftIconComponent } from "../../icons/arrowLeftIcon";
 
 @Component({
   selector: 'app-edit-calendars',
-  imports: [CommonModule],
+  imports: [CommonModule, ArrowLeftIconComponent],
   templateUrl: './edit-calendars.html',
   styleUrl: './edit-calendars.scss',
 })
@@ -22,6 +23,12 @@ export class EditCalendarsComponent {
 
   newCalendarTitle = signal('');
   isNewCalShared = signal(false);
+
+  closed = output<void>();
+
+  close() {
+    this.closed.emit();
+  }
 
   isOwner(calendar: Calendar): boolean {
     const ownerId = calendar.owner_id;
@@ -38,9 +45,12 @@ export class EditCalendarsComponent {
 
   async createCalendar() {
     const title = this.newCalendarTitle().trim();
-    if (!title) return;
+    const userId = this.currentUser()?.user_id;
+
+    if (!title || !userId) return;
 
     const payload: CreateCalendar = {
+      owner_id: userId,
       name: title,
       is_shared: this.isNewCalShared(),
     };
