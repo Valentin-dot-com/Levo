@@ -251,6 +251,8 @@ app-icon-delete {
     border-radius: $border-radius-XL;
     background-color: $color-error;
     color: $color-white;
+    font-size: $font-size-text;
+    font-weight: 500;
     line-height: normal;
     position: relative;
     cursor: pointer;
@@ -467,8 +469,8 @@ app-icon-delete {
 
     .open-delete {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 1.25rem;
+      right: 1rem;
       margin: 0;
     }
 
