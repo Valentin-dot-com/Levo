@@ -126,13 +126,12 @@
         fill: none;
       }
     }
-    
+
     .calendar-name {
       line-height: normal;
       gap: 0.5rem;
       font-size: $font-size-text;
       color: $color-primary;
-
     }
 
     .scheduled-at,
@@ -211,7 +210,9 @@
       padding: 0.5rem;
       box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
       cursor: pointer;
-      transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+      transition:
+        background 0.2s ease-in-out,
+        opacity 0.2s ease-in-out;
 
       @include hover-supported {
         background-color: $color-accent;
