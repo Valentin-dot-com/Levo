@@ -207,7 +207,13 @@
       &::after {
         opacity: 1;
         background-color: transparent;
-        border: 2px solid $color-text-secondary;
+        border: 2px solid $color-primary;
+      }
+    }
+
+    &.today {
+      &::after {
+        border-color: $color-accent;
       }
     }
   }

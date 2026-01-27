@@ -234,7 +234,7 @@
 
 @media screen and (min-width: 1300px) {
   .calendar-monthly .calendar-day.selected {
-    border-color: $color-text-secondary;
+    border-color: $color-primary;
 
     &.today {
       border-color: $color-accent;
