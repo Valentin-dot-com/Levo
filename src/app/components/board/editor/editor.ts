@@ -114,73 +114,81 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     const editorElement = this.editorHost.nativeElement;
 
     const handleCheckboxClick = (target: HTMLElement, event: Event) => {
-    // Check if it's the hidden checkbox, the visible span, or the label
-    let checkbox: HTMLInputElement | null = null;
+      let checkbox: HTMLInputElement | null = null;
 
-    if (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') {
-      checkbox = target as HTMLInputElement;
-    } else if (target.tagName === 'SPAN') {
-      // Clicked on the visible custom checkbox span
-      // The checkbox is the previous sibling of the span
-      const parent = target.parentElement;
-      if (parent?.tagName === 'LABEL') {
-        checkbox = parent.querySelector('input[type="checkbox"]');
+      if (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') {
+        checkbox = target as HTMLInputElement;
+      } else if (target.tagName === 'SPAN') {
+        const parent = target.parentElement;
+        if (parent?.tagName === 'LABEL') {
+          checkbox = parent.querySelector('input[type="checkbox"]');
+        }
+      } else if (target.tagName === 'LABEL') {
+        checkbox = target.querySelector('input[type="checkbox"]');
       }
-    } else if (target.tagName === 'LABEL') {
-      // Clicked on the label itself
-      checkbox = target.querySelector('input[type="checkbox"]');
-    }
 
-    if (checkbox) {
-      event.preventDefault();
-      event.stopPropagation();
+      if (checkbox) {
+        event.preventDefault();
+        event.stopPropagation();
 
-      const pos = this.editor()?.view.posAtDOM(checkbox, 0);
+        const pos = this.editor()?.view.posAtDOM(checkbox, 0);
 
-      if (pos !== undefined && pos !== null && this.editor()) {
-        const { state } = this.editor()!;
-        const $pos = state.doc.resolve(pos);
+        if (pos !== undefined && pos !== null && this.editor()) {
+          const { state } = this.editor()!;
+          const $pos = state.doc.resolve(pos);
 
-        // Find the task item node
-        for (let d = $pos.depth; d > 0; d--) {
-          const node = $pos.node(d);
-          if (node.type.name === 'taskItem') {
-            const taskItemPos = $pos.before(d);
+          for (let d = $pos.depth; d > 0; d--) {
+            const node = $pos.node(d);
+            if (node.type.name === 'taskItem') {
+              const taskItemPos = $pos.before(d);
 
-            // Update the checked attribute in the document
-            const tr = state.tr.setNodeMarkup(taskItemPos, undefined, {
-              ...node.attrs,
-              ['checked']: !node.attrs['checked'],
-            });
+              const tr = state.tr.setNodeMarkup(taskItemPos, undefined, {
+                ...node.attrs,
+                ['checked']: !node.attrs['checked'],
+              });
 
-            this.editor()!.view.dispatch(tr);
-            break;
+              this.editor()!.view.dispatch(tr);
+              break;
+            }
           }
         }
       }
-    }
-  };
+    };
 
-  editorElement.addEventListener('mousedown', (event) => {
-    handleCheckboxClick(event.target as HTMLElement, event);
-  }, true);
+    editorElement.addEventListener(
+      'mousedown',
+      (event) => {
+        handleCheckboxClick(event.target as HTMLElement, event);
+      },
+      true,
+    );
 
-  editorElement.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement;
-    const isCheckboxArea =
-      (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') ||
-      (target.tagName === 'SPAN' && target.parentElement?.tagName === 'LABEL' && target.parentElement.querySelector('input[type="checkbox"]')) ||
-      (target.tagName === 'LABEL' && target.querySelector('input[type="checkbox"]'));
+    editorElement.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const isCheckboxArea =
+          (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') ||
+          (target.tagName === 'SPAN' &&
+            target.parentElement?.tagName === 'LABEL' &&
+            target.parentElement.querySelector('input[type="checkbox"]')) ||
+          (target.tagName === 'LABEL' && target.querySelector('input[type="checkbox"]'));
 
-    if (isCheckboxArea) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }, true);
+        if (isCheckboxArea) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      true,
+    );
 
-  editorElement.addEventListener('touchstart', (event: TouchEvent) => {
-    handleCheckboxClick(event.target as HTMLElement, event);
-  }, { capture: true });
+    editorElement.addEventListener(
+      'touchstart',
+      (event: TouchEvent) => {
+        handleCheckboxClick(event.target as HTMLElement, event);
+      },
+      { capture: true },
+    );
   }
 
   saveContent(content: JSONContent) {
