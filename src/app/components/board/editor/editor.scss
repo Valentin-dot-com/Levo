@@ -179,7 +179,7 @@
       align-items: center;
       justify-content: flex-start;
       gap: 0.6rem;
-      margin: 0.4em 0;
+      margin: 1.5rem 0;
       list-style: none;
 
       label {
@@ -212,11 +212,11 @@
 
       //Custom checkbox:
       label span {
-        min-width: 2rem;
-        min-height: 2rem;
-        width: 2rem;
-        height: 2rem;
-        border-radius: $border-radius-S;
+        min-width: 3rem;
+        min-height: 3rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: $border-radius-XL;
         border: 2px solid $color-grey;
         display: inline-flex;
         align-items: center;
@@ -273,5 +273,16 @@
     height: 100%;
     max-height: 100%;
     overflow-y: auto;
+
+    .ProseMirror {
+      ul[data-type='taskList'] > li {
+        label span {
+          min-height: 2rem;
+          min-width: 2rem;
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+    }
   }
 }
