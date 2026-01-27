@@ -64,7 +64,7 @@ export class WeeklyCalendarComponent implements OnDestroy {
       container.scrollTop;
 
     container.scrollTo({
-      top: weekTop - this.remToPx(3),
+      top: weekTop - this.remToPx(3.5),
       behavior: 'auto',
     });
     this.loading.set(false);
@@ -136,7 +136,7 @@ export class WeeklyCalendarComponent implements OnDestroy {
         container.scrollTop;
 
       container.scrollTo({
-        top: weekTop - this.remToPx(3),
+        top: weekTop - this.remToPx(3.5),
         behavior: 'smooth',
       });
 
