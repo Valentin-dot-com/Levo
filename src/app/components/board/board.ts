@@ -5,10 +5,11 @@ import { BoardService } from '../../services/boards';
 import { EditorComponent } from './editor/editor';
 import { DeleteIconComponent } from '../../icons/deleteIcon';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
+import { LoaderComponent } from '../loader/loader';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent],
+  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })

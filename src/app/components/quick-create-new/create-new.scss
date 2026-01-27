@@ -63,6 +63,7 @@
       color: $color-text;
       background-color: $color-grey;
       transition: background 0.2s ease-in-out;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
       @include hover-supported {
         cursor: pointer;
@@ -97,6 +98,6 @@
     left: 50%;
     transform: translate(-50%, 50%);
     border-radius: $border-radius-XL;
-    box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22), 0 10px 14px rgba($color-primary, $alpha: 0.22);
+    box-shadow: 0 -4px 14px rgba(#000, $alpha: 0.15), 0 4px 14px rgba(#000, $alpha: 0.15);
   }
 }

@@ -251,6 +251,8 @@ app-icon-delete {
     border-radius: $border-radius-XL;
     background-color: $color-error;
     color: $color-white;
+    font-size: $font-size-text;
+    font-weight: 500;
     line-height: normal;
     position: relative;
     cursor: pointer;
@@ -365,12 +367,28 @@ app-icon-delete {
   }
 }
 
+.loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .enter-animation {
   @include slide-in-animation();
 }
 
 .leave-animation {
   @include slide-out-animation();
+}
+
+.fade-in-animation {
+  @include fade-in-animation();
+}
+
+.fade-out-animation {
+  @include fade-out-animation();
 }
 
 @media screen and (min-width: 1300px) {
@@ -451,8 +469,8 @@ app-icon-delete {
 
     .open-delete {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 1.25rem;
+      right: 1rem;
       margin: 0;
     }
 

@@ -78,7 +78,5 @@
   @if (selectedEvent()) {
     <app-edit-event [event]="selectedEvent()" (closed)="closeEdit()" animate.enter="enter-animation" animate.leave="leave-animation"/>
   }
-
-  <button (click)="signOut()">Logga ut</button>
 </section>
 

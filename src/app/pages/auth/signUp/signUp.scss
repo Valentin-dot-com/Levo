@@ -23,6 +23,7 @@ form {
       background-color: $color-grey;
       line-height: normal;
       transition: outline 0.2s ease-in-out;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
       &:focus {
         outline: 2px solid $color-primary;
@@ -40,6 +41,47 @@ form {
     }
   }
 
+  .password {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    label {
+      flex-basis: 100%;
+    }
+
+    .password-input {
+      flex: 1;
+    }
+
+    .toggle-password-btn {
+      aspect-ratio: 1 / 1;
+      height: 2.25rem;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background-color: $color-grey;
+      color: $color-text;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+
+      @include hover-supported {
+        background-color: $color-accent;
+      }
+    }
+
+    .feedback-invalid {
+      flex-basis: 100%;
+    }
+
+    .password-rules {
+      flex-basis: 100%;
+    }
+  }
+
   .submit-btn {
     border: none;
     border-radius: $border-radius-XL;
@@ -48,15 +90,19 @@ form {
     font-weight: 600;
     background-color: $color-success;
     padding: 0.5rem;
-    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transition:
+      background 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
     cursor: pointer;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     @include hover-supported {
       background-color: $color-accent;
     }
 
     &:disabled {
-      background-color: $color-success;
+      background-color: $color-grey;
+      color: $color-text;
       opacity: 50%;
       cursor: auto;
     }
@@ -92,5 +138,19 @@ form {
     justify-content: center;
     align-items: center;
     gap: 2rem;
+  }
+
+  .password-rules {
+    padding-left: 1rem;
+    margin: 0;
+    font-size: 0.85rem;
+
+    li {
+      color: $color-error;
+      &.valid {
+        color: $color-success;
+        text-decoration: line-through;
+      }
+    }
   }
 }

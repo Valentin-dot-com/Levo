@@ -52,6 +52,7 @@
       color: $color-text;
       background-color: $color-grey;
       transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
       cursor: pointer;
 
       app-icon-calendar, app-icon-delete {
@@ -138,6 +139,7 @@
 
   .weekdays-day {
     text-align: center;
+    font-size: $font-size-text;
   }
 }
 
@@ -182,7 +184,7 @@
     position: relative;
     aspect-ratio: 1 / 1;
     transition: background-color 0.2s ease-in-out;
-    font-size: $font-size-S;
+    font-size: $font-size-text;
     font-weight: 500;
 
     &.weekday-0 {

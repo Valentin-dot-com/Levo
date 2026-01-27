@@ -23,6 +23,7 @@ form {
       background-color: $color-grey;
       line-height: normal;
       transition: outline 0.2s ease-in-out;
+      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
       &:focus {
         outline: 2px solid $color-primary;
@@ -48,7 +49,10 @@ form {
     font-weight: 600;
     background-color: $color-success;
     padding: 0.5rem;
-    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transition:
+      background 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
     cursor: pointer;
 
     @include hover-supported {
@@ -56,7 +60,8 @@ form {
     }
 
     &:disabled {
-      background-color: $color-success;
+      background-color: $color-grey;
+      color: $color-text;
       opacity: 50%;
       cursor: auto;
     }

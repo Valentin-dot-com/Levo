@@ -41,8 +41,12 @@
               @if (events.length > 0) {
                 <ul class="events-list">
                   @for (event of events; track event.id) {
+                    @let eventCalendar = getCalendar(event.calendar_id);
                     <li class="event">
                       <article class="event-card">
+                        @if (eventCalendar?.is_shared) {
+                          <app-icon-shared aria-label="Shared calendar" />
+                        }
                         <h5>{{ event.title }}</h5>
 
                         @if (event.scheduled_at) {

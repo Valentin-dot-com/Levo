@@ -83,8 +83,4 @@ export class HomeComponent {
     const selected = format(date, 'yyyy-MM-dd');
     this.router.navigate(['/day', selected]);
   }
-
-  signOut() {
-    this.auth.signOut();
-  }
 }

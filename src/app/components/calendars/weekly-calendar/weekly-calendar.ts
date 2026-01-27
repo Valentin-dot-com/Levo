@@ -14,15 +14,18 @@ import { CommonModule } from '@angular/common';
 import { CalendarMonth } from '../../../models/calendar.model';
 import { LoaderComponent } from '../../loader/loader';
 import { RouterLink } from "@angular/router";
+import { CalendarService } from '../../../services/calendars';
+import { SharedIconComponent } from '../../../icons/sharedIcon';
 
 @Component({
   selector: 'app-weekly-calendar',
-  imports: [CommonModule, LoaderComponent, RouterLink],
+  imports: [CommonModule, LoaderComponent, RouterLink, SharedIconComponent],
   templateUrl: './weekly-calendar.html',
   styleUrls: ['./weekly-calendar.scss'],
 })
 export class WeeklyCalendarComponent implements OnDestroy {
   calendarView = inject(CalendarViewService);
+  calendarService = inject(CalendarService);
 
   monthsToRender = input.required<CalendarMonth[]>();
 
@@ -49,19 +52,19 @@ export class WeeklyCalendarComponent implements OnDestroy {
   set todayAnchor(el: ElementRef<HTMLElement> | undefined) {
     if (!el || this.hasInitialScroll) return;
 
-    const weekEl = el.nativeElement.closest('.week');
+    const dayEl = el.nativeElement.closest('.day-card');
 
-    if (!weekEl) return;
+    if (!dayEl) return;
 
     const container = this.container.nativeElement;
 
     const weekTop =
-      weekEl.getBoundingClientRect().top -
+      dayEl.getBoundingClientRect().top -
       container.getBoundingClientRect().top +
       container.scrollTop;
 
     container.scrollTo({
-      top: weekTop - this.remToPx(3),
+      top: weekTop - this.remToPx(3.5),
       behavior: 'auto',
     });
     this.loading.set(false);
@@ -121,19 +124,19 @@ export class WeeklyCalendarComponent implements OnDestroy {
 
       if (!el) return;
 
-      const weekEl = el.closest('.week');
+      const dayEl = el.closest('.day-card');
 
-      if (!weekEl) return;
+      if (!dayEl) return;
 
       const container = this.container.nativeElement;
 
       const weekTop =
-        weekEl.getBoundingClientRect().top -
+        dayEl.getBoundingClientRect().top -
         container.getBoundingClientRect().top +
         container.scrollTop;
 
       container.scrollTo({
-        top: weekTop - this.remToPx(3),
+        top: weekTop - this.remToPx(3.5),
         behavior: 'smooth',
       });
 
@@ -143,6 +146,11 @@ export class WeeklyCalendarComponent implements OnDestroy {
 
   private remToPx(rem: number): number {
     return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+  }
+
+  getCalendar(calId: string) {
+    const calendar = this.calendarService.calendars().find((cal) => cal.id === calId);
+    return calendar || null;
   }
 
   get weekDayNames() {

@@ -62,15 +62,17 @@ nav {
       font-weight: 600;
       font-size: $font-size-text;
       transition:
-        background 0.2s,
-        color 0.2s;
+      background 0.2s,
+      color 0.2s;
 
       &.active {
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
         background: $color-fff;
         color: $color-primary;
       }
 
       @include hover-supported {
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
         background-color: $color-primary;
         color: $color-white;
       }

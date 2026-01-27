@@ -274,9 +274,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid $color-accent;
-    padding: 0.25rem 0.5rem;
-    border-radius: $border-radius-S;
+    // padding: 0.25rem 0.5rem;
 
     app-icon-shared {
       display: flex;

@@ -238,8 +238,14 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
 
   private focusActiveDayButton() {
     setTimeout(() => {
-      const active = this.hostRef.nativeElement.querySelector('.calendar-day[tabindex="0"]');
-      if (active) (active as HTMLElement).focus();
+      const active = this.hostRef.nativeElement.querySelector('.calendar-day[tabindex="0"]') as HTMLElement | null;
+      if (active) {
+        try {
+          active.focus({ preventScroll: true });
+        } catch {
+          active.focus();
+        }
+      }
     });
   }
 

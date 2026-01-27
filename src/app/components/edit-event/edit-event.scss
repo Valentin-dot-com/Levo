@@ -22,6 +22,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   position: relative;
+  box-shadow: 0 -4px 14px rgba(#000, $alpha: 0.15), 0 4px 14px rgba(#000, $alpha: 0.15);
 
   .edit-event {
     display: flex;
@@ -68,6 +69,7 @@
     color: $color-text;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
     transition:
       background 0.2s ease-in-out,
       color 0.2s ease-in-out;
@@ -90,6 +92,5 @@
     max-width: 32rem;
     height: 70%;
     border-radius: $border-radius-XL;
-    box-shadow: 0 -10px 14px rgba($color-primary, $alpha: 0.22), 0 10px 14px rgba($color-primary, $alpha: 0.22);
   }
 }

@@ -56,11 +56,13 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.initializeEditor();
     this.setupAutoSave();
+    this.setupCheckboxHandler();
   }
 
   initializeEditor() {
     const editor = new Editor({
       element: this.editorHost.nativeElement,
+      autofocus: false,
       extensions: [
         Document,
         Paragraph,
@@ -72,19 +74,24 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
         Heading,
         TaskList,
         Link.configure({
-          autolink: true, // This enables auto-linking when you type URLs
+          autolink: true,
         }),
-        TaskItem.configure({ nested: true }),
+        TaskItem.configure({
+          nested: true,
+          onReadOnlyChecked() {
+            return false;
+          },
+        }),
       ],
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
         this.editorState.update((v) => v + 1);
-        editor.commands.scrollIntoView();
+        this.scrollCaretIntoView(editor);
       },
       onSelectionUpdate: () => {
         this.editorState.update((v) => v + 1);
-        editor.commands.scrollIntoView();
+        this.scrollCaretIntoView(editor);
       },
       onFocus: () => {
         this.isEditing.set(true);
@@ -101,6 +108,111 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this.contentChange$.pipe(debounceTime(1500), takeUntil(this.destroy$)).subscribe((content) => {
       this.saveContent(content);
     });
+  }
+
+  setupCheckboxHandler() {
+    const editorElement = this.editorHost.nativeElement;
+
+    const handleCheckboxClick = (target: HTMLElement, event: Event) => {
+      let checkbox: HTMLInputElement | null = null;
+
+      if (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') {
+        checkbox = target as HTMLInputElement;
+      } else if (target.tagName === 'SPAN') {
+        const parent = target.parentElement;
+        if (parent?.tagName === 'LABEL') {
+          checkbox = parent.querySelector('input[type="checkbox"]');
+        }
+      } else if (target.tagName === 'LABEL') {
+        checkbox = target.querySelector('input[type="checkbox"]');
+      }
+
+      if (checkbox) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const pos = this.editor()?.view.posAtDOM(checkbox, 0);
+
+        if (pos !== undefined && pos !== null && this.editor()) {
+          const { state } = this.editor()!;
+          const $pos = state.doc.resolve(pos);
+
+          for (let d = $pos.depth; d > 0; d--) {
+            const node = $pos.node(d);
+            if (node.type.name === 'taskItem') {
+              const taskItemPos = $pos.before(d);
+
+              const tr = state.tr.setNodeMarkup(taskItemPos, undefined, {
+                ...node.attrs,
+                ['checked']: !node.attrs['checked'],
+              });
+
+              this.editor()!.view.dispatch(tr);
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    editorElement.addEventListener(
+      'mousedown',
+      (event) => {
+        handleCheckboxClick(event.target as HTMLElement, event);
+      },
+      true,
+    );
+
+    editorElement.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const isCheckboxArea =
+          (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'checkbox') ||
+          (target.tagName === 'SPAN' &&
+            target.parentElement?.tagName === 'LABEL' &&
+            target.parentElement.querySelector('input[type="checkbox"]')) ||
+          (target.tagName === 'LABEL' && target.querySelector('input[type="checkbox"]'));
+
+        if (isCheckboxArea) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      true,
+    );
+
+    editorElement.addEventListener(
+      'touchstart',
+      (event: TouchEvent) => {
+        handleCheckboxClick(event.target as HTMLElement, event);
+      },
+      { capture: true },
+    );
+  }
+
+  scrollCaretIntoView(editor: Editor) {
+    const view = editor.view;
+    const { from } = editor.state.selection;
+
+    const domAtPos = view.domAtPos(from);
+    const caretNode = domAtPos.node as HTMLElement;
+
+    if (!caretNode || !caretNode.getBoundingClientRect) return;
+
+    const caretRect = caretNode.getBoundingClientRect();
+
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+
+
+    const comfortBottom = viewportHeight * 0.5;
+
+    if (caretRect.bottom > comfortBottom) {
+      caretNode.scrollIntoView({
+        block: 'center',
+        inline: 'nearest',
+      });
+    }
   }
 
   saveContent(content: JSONContent) {
