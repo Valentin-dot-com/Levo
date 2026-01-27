@@ -204,12 +204,12 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
 
-    // 👇 hur tidigt du vill scrolla (justera!)
-    const comfortBottom = viewportHeight * 0.6;
+
+    const comfortBottom = viewportHeight * 0.5;
 
     if (caretRect.bottom > comfortBottom) {
       caretNode.scrollIntoView({
-        block: 'center', // ⭐ nyckeln
+        block: 'center',
         inline: 'nearest',
       });
     }
