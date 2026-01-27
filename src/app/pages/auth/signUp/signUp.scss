@@ -40,6 +40,46 @@ form {
     }
   }
 
+  .password {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    label {
+      flex-basis: 100%;
+    }
+
+    .password-input {
+      flex: 1;
+    }
+
+    .toggle-password-btn {
+      aspect-ratio: 1 / 1;
+      height: 2.25rem;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background-color: $color-primary;
+      color: $color-white;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+
+      @include hover-supported {
+        background-color: $color-accent;
+      }
+    }
+
+    .feedback-invalid {
+      flex-basis: 100%;
+    }
+
+    .password-rules {
+      flex-basis: 100%;
+    }
+  }
+
   .submit-btn {
     border: none;
     border-radius: $border-radius-XL;
@@ -48,7 +88,9 @@ form {
     font-weight: 600;
     background-color: $color-success;
     padding: 0.5rem;
-    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transition:
+      background 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
     cursor: pointer;
 
     @include hover-supported {
@@ -92,5 +134,19 @@ form {
     justify-content: center;
     align-items: center;
     gap: 2rem;
+  }
+
+  .password-rules {
+    padding-left: 1rem;
+    margin: 0;
+    font-size: 0.85rem;
+
+    li {
+      color: $color-error;
+      &.valid {
+        color: $color-success;
+        text-decoration: line-through;
+      }
+    }
   }
 }

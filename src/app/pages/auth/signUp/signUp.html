@@ -49,20 +49,83 @@
       }
     </div>
 
-    <div class="input-container">
+    <div class="input-container password">
       <label for="password">Password</label>
       <input
         id="password"
-        type="password"
+        [type]="showPassword() ? 'text' : 'password'"
         formControlName="password"
         required
         autocomplete="new-password"
-        class="sign-up-input"
+        class="sign-up-input password-input"
         [class.error]="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched"
       />
-      @if (signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched) {
-        <span class="feedback-invalid">Password must be at least 8 characters</span>
+      <button
+        type="button"
+        class="toggle-password-btn"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+      >
+        @if (showPassword()) {
+          <app-icon-hide />
+        } @else {
+          <app-icon-show />
+        }
+      </button>
+      @let passwordControl = signUpForm.get('password');
+      @let strength = passwordControl?.errors?.['passwordStrength'];
 
+      @if (passwordControl?.touched) {
+
+        @if (passwordControl?.errors?.['required']) {
+          <span class="feedback-invalid">Password is required</span>
+        }
+
+        @if (passwordControl?.errors?.['minlength']) {
+          <span class="feedback-invalid">Password must be at least 8 characters</span>
+        }
+
+        @if (strength) {
+          <span class="feedback-invalid">Password requirements:</span>
+          <ul class="password-rules">
+            <li [class.valid]="strength?.hasUpperCase">
+              {{ strength?.hasUpperCase ? 'Contains' : 'Missing ' }} at least one uppercase letter (A-Z)
+            </li>
+
+            <li [class.valid]="strength?.hasLowerCase">
+              {{ strength?.hasLowerCase ? 'Contains' : 'Missing' }} at least one lowercase letter (a-z)
+            </li>
+
+            <li [class.valid]="strength?.hasNumeric">
+              {{ strength?.hasNumeric ? 'Contains' : 'Missing' }} at least one number (0-9)
+            </li>
+
+            <li [class.valid]="strength?.hasSymbol">
+              {{ strength?.hasSymbol ? 'Contains' : 'Missing' }} at least one symbol (!@#$%^&*...)
+            </li>
+          </ul>
+        }
+      }
+    </div>
+
+    <div class="input-container">
+      <label for="confirmPassword">Confirm your password</label>
+      <input
+        id="confirmPassword"
+        [type]="showPassword() ? 'text' : 'password'"
+        formControlName="confirmPassword"
+        required
+        autocomplete="new-password"
+        class="sign-up-input"
+        [class.error]="(signUpForm.get('confirmPassword')?.invalid || signUpForm.errors?.['passwordMismatch']) && signUpForm.get('confirmPassword')?.touched"
+      />
+      @if (signUpForm.get('confirmPassword')?.touched) {
+        @if (signUpForm.get('confirmPassword')?.errors?.['required']) {
+          <span class="feedback-invalid">Please confirm your password</span>
+        }
+        @if (signUpForm.errors?.['passwordMismatch'] && !signUpForm.get('confirmPassword')?.errors?.['required']) {
+          <span class="feedback-invalid">Passwords do not match</span>
+        }
       }
     </div>
 
