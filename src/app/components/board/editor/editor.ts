@@ -87,11 +87,11 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       onUpdate: ({ editor }) => {
         this.contentChange$.next(editor.getJSON());
         this.editorState.update((v) => v + 1);
-        editor.commands.scrollIntoView();
+        this.scrollCaretIntoView(editor);
       },
       onSelectionUpdate: () => {
         this.editorState.update((v) => v + 1);
-        editor.commands.scrollIntoView();
+        this.scrollCaretIntoView(editor);
       },
       onFocus: () => {
         this.isEditing.set(true);
@@ -189,6 +189,30 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       },
       { capture: true },
     );
+  }
+
+  scrollCaretIntoView(editor: Editor) {
+    const view = editor.view;
+    const { from } = editor.state.selection;
+
+    const domAtPos = view.domAtPos(from);
+    const caretNode = domAtPos.node as HTMLElement;
+
+    if (!caretNode || !caretNode.getBoundingClientRect) return;
+
+    const caretRect = caretNode.getBoundingClientRect();
+
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+
+    // 👇 hur tidigt du vill scrolla (justera!)
+    const comfortBottom = viewportHeight * 0.6;
+
+    if (caretRect.bottom > comfortBottom) {
+      caretNode.scrollIntoView({
+        block: 'center', // ⭐ nyckeln
+        inline: 'nearest',
+      });
+    }
   }
 
   saveContent(content: JSONContent) {
