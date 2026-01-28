@@ -22,7 +22,7 @@
     min-width: 3rem;
     border-radius: $border-radius-XL;
     border: none;
-    background: $color-white;
+    background: $color-grey;
     color: $color-text;
     font-weight: 600;
     cursor: pointer;
@@ -263,6 +263,10 @@
     position: relative;
     top: 0;
     justify-content: flex-start;
+
+    button {
+      background-color: $color-fff;
+    }
   }
 
   .editor-wrapper {
