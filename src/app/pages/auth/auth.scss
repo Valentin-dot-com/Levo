@@ -3,12 +3,12 @@
 
 .auth-container {
   height: 100%;
-  padding: 4rem 1rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
+  align-items: stretch;
+  gap: 1rem;
   overflow-y: auto;
 
   .divider {
@@ -60,6 +60,9 @@
   -webkit-appearance: none;
   user-select: none;
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
   background-color: WHITE;
   background-image: none;
   border: none;
@@ -70,12 +73,12 @@
   color: #1f1f1f;
   cursor: pointer;
   font-family: 'Roboto', arial, sans-serif;
-  font-size: 14px;
-  height: 40px;
+  font-size: 1rem;
   letter-spacing: 0.25px;
   outline: none;
   overflow: hidden;
-  padding: 0 12px;
+  min-height: 40px;
+  padding: 1rem;
   position: relative;
   text-align: center;
   -webkit-transition:
@@ -92,6 +95,7 @@
   max-width: 400px;
   min-width: min-content;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+  margin-inline: auto;
 }
 
 .gsi-material-button .gsi-material-button-icon {
@@ -170,9 +174,11 @@
   opacity: 8%;
 }
 
-@media screen and (min-width: 1300px) {
+@media screen and (min-width: 800px) {
   .auth-container {
-    gap: 4rem;
-    padding: 20dvh 40dvw;
+    padding: 4rem clamp(5rem, 30vw, 35rem);
+    width: 100%;
+    max-width: 100rem;
+    margin-inline: auto;
   }
 }

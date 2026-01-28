@@ -1,5 +1,5 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLogIn()">
-  <h1>Welcome to Levo, please sign in:</h1>
+<form class="sign-in-form" [formGroup]="loginForm" (ngSubmit)="onLogIn()">
+  <h2>Please sign in:</h2>
   <div class="input-container">
     <label for="email">Email</label>
     <input
@@ -48,8 +48,8 @@
 
   @if ((loading())) {
     <span class="loading-container">
-      <p>Signing in...</p>
       <app-loader />
+      <p>Signing in...</p>
     </span>
   }
 
