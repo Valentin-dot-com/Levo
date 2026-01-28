@@ -163,6 +163,11 @@ main.content {
           width: 5rem;
           background-color: $color-grey;
           border: none;
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+
+          @include hover-supported {
+            background-color: $color-white;
+          }
 
           &.active {
             background-color: $color-primary;
