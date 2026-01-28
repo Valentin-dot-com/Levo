@@ -63,6 +63,16 @@ export class CalendarService {
     return this._eventCache().get(key) ?? [];
   }
 
+  public getAllCachedEvents() {
+    const allEvents: Event[] = [];
+
+    for (const monthEvents of this._eventCache().values()) {
+      allEvents.push(...monthEvents);
+    }
+
+    return allEvents;
+  }
+
   prefetchAdjacentMonths(year: number, month: number): void {
     // Previous month
     const prevMonth = month === 0 ? 11 : month - 1;

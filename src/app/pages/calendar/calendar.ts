@@ -9,7 +9,7 @@ import { CalendarService } from '../../services/calendars';
 import { MonthlyCalendarComponent } from '../../components/calendars/monthly-calendar/monthly-calendar';
 import { ScreenSizeService } from '../../services/ScreenSize';
 import { DesktopDaySummaryComponent } from '../../components/desktop-day-summary/desktop-day-summary';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DayComponent } from '../../components/day/day';
 
 @Component({
@@ -25,7 +25,6 @@ import { DayComponent } from '../../components/day/day';
   styleUrl: './calendar.scss',
 })
 export class CalendarComponent implements OnInit {
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
   protected calendarView = inject(CalendarViewService);
   private calendarService = inject(CalendarService);

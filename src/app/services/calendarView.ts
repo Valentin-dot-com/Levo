@@ -42,7 +42,7 @@ export class CalendarViewService {
   }
 
   readonly events = computed(() => {
-    return this.calendarService.getCachedEventsForMonth(this.currentYear(), this.currentMonth());
+    return this.calendarService.getAllCachedEvents();
   });
 
   readonly eventsForSelectedDay = computed(() => {

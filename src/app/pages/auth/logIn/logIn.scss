@@ -1,10 +1,15 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-form {
+.sign-in-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
+
+  h2 {
+    font-size: $font-size-M;
+  }
 
   .input-container {
     display: flex;
