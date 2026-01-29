@@ -68,8 +68,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: $font-size-S;
-        font-weight: 500;
+        font-size: $font-size-M;
+        font-weight: 600;
         color: $color-text;
         background-color: $color-grey;
         border-radius: 50%;
@@ -91,10 +91,8 @@
       }
 
       &.today {
-        color: $color-accent;
-
         a {
-          color: $color-white;
+          color: $color-fff;
           background-color: $color-accent;
         }
       }
