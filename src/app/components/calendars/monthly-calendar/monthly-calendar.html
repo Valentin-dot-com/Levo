@@ -2,7 +2,7 @@
   <app-loader />
 </div>
 
-<section class="calendar">
+<section class="calendar" role="region">
   <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
 
   <nav class="calendar-navigation">
@@ -23,22 +23,29 @@
     }
   </div>
 
-  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">
+  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()" role="grid">
     @for (month of monthsToRender(); track month.id) {
       <section class="calendar-monthly" [attr.data-month]="month.id">
         <h2>{{ month.name }}</h2>
 
         <div class="weeks">
           @for (week of month.weeks; track $index) {
-            <section class="week">
+            <section class="week" role="row">
               <h3>w. {{ week.weekNumber }}</h3>
-              <div class="week-days calendar-grid">
+
+              <div class="week-days calendar-grid" role="row">
                 @for (day of week.days; track $index) {
                   <a
                     [routerLink]="[]"
                     [queryParams]="{ day: formatDate(day.date) }"
                     queryParamsHandling="merge"
-                    (click)="selectDay(day.date)" class="calendar-day"
+                    (click)="selectDay(day.date)"
+                    class="calendar-day"
+                    role="gridcell"
+                    [attr.tabindex]="getDayTabIndex(day)"
+                    [attr.aria-label]="`${day.dayNumber} ${month.name}, ${month.year}`"
+                    [attr.aria-current]="day.isToday ? 'date' : null"
+                    [attr.data-date]="formatDate(day.date)"
                     [class.today]="day.isToday"
                     [class.selected]="calendarView.selectedDay()?.toDateString() === day.date.toDateString()"
                     [class]="'weekday-' + day.weekdayIndex"

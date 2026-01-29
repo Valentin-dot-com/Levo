@@ -121,24 +121,16 @@ export class WeeklyCalendarComponent implements OnDestroy {
         newDay = new Date(currentDate);
         newDay.setDate(currentDate.getDate() + 1);
         break;
-      // case 'ArrowUp':
-      //   newDay = new Date(currentDate);
-      //   newDay.setDate(currentDate.getDate() - 7);
-      //   break;
-      // case 'ArrowDown':
-      //   newDay = new Date(currentDate);
-      //   newDay.setDate(currentDate.getDate() + 7);
-      //   break;
       case 'Home':
-        newDay = new Date(); // Today
+        newDay = new Date();
         this.scrollDayIntoView(newDay);
         return;
     }
 
-    if (newDay) {
-      this.focusedDay.set(newDay);
-      this.scrollDayIntoView(newDay!);
-    }
+    if (!newDay) return;
+
+    this.focusedDay.set(newDay);
+    this.scrollDayIntoView(newDay!);
   }
 
   scrollDayIntoView(date: Date) {
@@ -159,35 +151,18 @@ export class WeeklyCalendarComponent implements OnDestroy {
         behavior: 'smooth',
       });
 
-      // Focus after DOM updates
-      this.focusActiveDayButton();
+      setTimeout(() => {
+        dayElement.focus({ preventScroll: true });
+      });
     }
-  }
-
-  private focusActiveDayButton() {
-    setTimeout(() => {
-      const active = this.container.nativeElement.querySelector(
-        '.day-card[tabindex="0"]',
-      ) as HTMLElement | null;
-      if (active) {
-        try {
-          active.focus({ preventScroll: true });
-        } catch {
-          active.focus();
-        }
-      }
-    });
   }
 
   getDayTabIndex(day: CalendarDay): number {
     const focused = this.focusedDay();
-
-    // If there's a focused day from keyboard navigation, only it should be tabbable
     if (focused) {
       return focused.toDateString() === day.date.toDateString() ? 0 : -1;
     }
 
-    // Otherwise, only today should be tabbable
     return day.isToday ? 0 : -1;
   }
 
