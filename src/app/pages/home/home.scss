@@ -305,6 +305,7 @@
 
     .today-container {
       flex-direction: row;
+      align-items: flex-start;
       flex-wrap: wrap;
       position: relative;
 
@@ -327,9 +328,7 @@
       }
 
       .todays-events {
-        position: absolute;
-        top: 1rem;
-        right: 0;
+        position: relative;
         width: calc(50% - 1rem);
       }
     }
