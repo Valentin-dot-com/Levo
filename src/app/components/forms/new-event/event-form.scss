@@ -58,10 +58,13 @@
     }
 
     .dropdown {
+      appearance: none;
       cursor: pointer;
+      color: $color-text;
 
       option {
         font-family: $font-primary;
+        padding: 0.5rem;
       }
     }
 

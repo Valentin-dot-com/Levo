@@ -11,6 +11,7 @@ import {
 import { CreateEvent, Event } from '../../../models/event.model';
 import { DatePickerComponent } from '../../date-picker/date-picker';
 import { TimePickerComponent } from '../../time-picker/time-picker';
+import { CustomSelectorComponent } from '../../custom-select/custom-select';
 
 @Component({
   selector: 'app-event-form',
@@ -20,6 +21,7 @@ import { TimePickerComponent } from '../../time-picker/time-picker';
     ReactiveFormsModule,
     DatePickerComponent,
     TimePickerComponent,
+    CustomSelectorComponent
   ],
   templateUrl: './event-form.html',
   styleUrl: './event-form.scss',

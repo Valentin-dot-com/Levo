@@ -1,0 +1,74 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.selector-container {
+  position: relative;
+  width: 100%;
+}
+
+.select-button {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid transparent;
+  color: $color-text;
+  font-size: $font-size-S;
+  font-weight: 500;
+  border-radius: $border-radius-S;
+  background-color: $color-grey;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  line-height: normal;
+  cursor: pointer;
+
+  app-icon-arrow-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(90deg);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  @include hover-supported {
+    border-color: $color-accent;
+  }
+
+  &.open {
+    app-icon-arrow-right {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+.options {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 1rem 0;
+  list-style: none;
+  background-color: $color-fff;
+  max-height: 13rem;
+  overflow-y: auto;
+  z-index: 6;
+  border-radius: $border-radius-S;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+
+  .option {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
+    border-radius: $border-radius-S;
+
+    @include hover-supported {
+      background-color: $color-accent;
+      color: $color-fff;
+    }
+  }
+}

@@ -2,17 +2,8 @@
   <span class="inputs">
     <div class="input-container">
       <label for="calendar_id">Calendar*</label>
-      <select
-        id="calendar_id"
-        formControlName="calendar_id"
-        required
-        class="new-event-input dropdown"
-        [class.error]="eventForm.get('calendar_id')?.invalid && eventForm.get('calendar_id')?.touched"
-      >
-      @for (cal of calendars(); track cal.id) {
-        <option [value]="cal.id">{{ cal.name }}</option>
-      }
-      </select>
+      <app-custom-selector [options]="calendars()" formControlName="calendar_id"/>
+
       @if (eventForm.get('calendar_id')?.invalid && eventForm.get('calendar_id')?.touched) {
         <span class="feedback-invalid">Calendar is required</span>
       }

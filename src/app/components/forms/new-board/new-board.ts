@@ -4,10 +4,11 @@ import { BoardService } from '../../../services/boards';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBoard } from '../../../models/board.model';
+import { CustomSelectorComponent } from '../../custom-select/custom-select';
 
 @Component({
   selector: 'app-new-board',
-  imports: [CommonModule, ɵInternalFormsSharedModule, ReactiveFormsModule],
+  imports: [CommonModule, ɵInternalFormsSharedModule, ReactiveFormsModule, CustomSelectorComponent],
   templateUrl: './new-board.html',
   styleUrl: './new-board.scss',
 })
