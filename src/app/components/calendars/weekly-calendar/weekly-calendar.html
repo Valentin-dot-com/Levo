@@ -3,7 +3,6 @@
 </div>
 
 <section class="weekly-calendar">
-  <!-- <h2>{{ `${currentMonth()} ${currentYear()}` }}</h2> -->
   <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
 
   <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">

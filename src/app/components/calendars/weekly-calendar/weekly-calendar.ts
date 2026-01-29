@@ -13,7 +13,7 @@ import { CalendarViewService } from '../../../services/calendarView';
 import { CommonModule } from '@angular/common';
 import { CalendarMonth } from '../../../models/calendar.model';
 import { LoaderComponent } from '../../loader/loader';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { CalendarService } from '../../../services/calendars';
 import { SharedIconComponent } from '../../../icons/sharedIcon';
 
@@ -73,6 +73,12 @@ export class WeeklyCalendarComponent implements OnDestroy {
       this.hasInitialScroll = true;
     }, 400);
 
+    requestAnimationFrame(() => {
+      this.initTodayObserver(el.nativeElement);
+    });
+  }
+
+  private initTodayObserver(el: HTMLElement) {
     this.todayObserver?.disconnect();
 
     this.todayObserver = new IntersectionObserver(
@@ -80,12 +86,12 @@ export class WeeklyCalendarComponent implements OnDestroy {
         this.isTodayVisible.set(entry.isIntersecting);
       },
       {
-        root: this.container.nativeElement, // 🔑 viktigt
-        threshold: 0.1, // räcker att lite syns
-      }
+        root: this.container.nativeElement,
+        threshold: 0.1,
+      },
     );
 
-    this.todayObserver.observe(el.nativeElement);
+    this.todayObserver.observe(el);
   }
 
   eventsForDate(date: Date) {
@@ -140,7 +146,9 @@ export class WeeklyCalendarComponent implements OnDestroy {
         behavior: 'smooth',
       });
 
-      this.isBtnScrolling.set(false);
+      setTimeout(() => {
+        this.isBtnScrolling.set(false);
+      }, 400);
     });
   }
 

@@ -4,7 +4,8 @@ import {
   ElementRef,
   inject,
   signal,
-  ViewChild, OnDestroy,
+  ViewChild,
+  OnDestroy,
   input,
   output,
 } from '@angular/core';
@@ -14,11 +15,17 @@ import { CalendarViewService } from '../../../services/calendarView';
 import { LoaderComponent } from '../../loader/loader';
 import { ArrowLeftIconComponent } from '../../../icons/arrowLeftIcon';
 import { ArrowRightIconComponent } from '../../../icons/arrowRightIcon';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-monthly-calendar',
-  imports: [CommonModule, LoaderComponent, ArrowLeftIconComponent, ArrowRightIconComponent, RouterLink],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    ArrowLeftIconComponent,
+    ArrowRightIconComponent,
+    RouterLink,
+  ],
   templateUrl: './monthly-calendar.html',
   styleUrl: './monthly-calendar.scss',
 })
@@ -67,8 +74,17 @@ export class MonthlyCalendarComponent implements OnDestroy {
     });
 
     this.loading.set(false);
-    this.hasInitialScroll = true;
 
+    setTimeout(() => {
+      this.hasInitialScroll = true;
+    }, 400);
+
+    requestAnimationFrame(() => {
+      this.initTodayObserver(el.nativeElement);
+    });
+  }
+
+  private initTodayObserver(el: HTMLElement) {
     this.todayObserver?.disconnect();
 
     this.todayObserver = new IntersectionObserver(
@@ -76,12 +92,12 @@ export class MonthlyCalendarComponent implements OnDestroy {
         this.isTodayVisible.set(entry.isIntersecting);
       },
       {
-        root: this.container.nativeElement, // 🔑 viktigt
-        threshold: 0.1, // räcker att lite syns
-      }
+        root: this.container.nativeElement,
+        threshold: 0.1,
+      },
     );
 
-    this.todayObserver.observe(el.nativeElement);
+    this.todayObserver.observe(el);
   }
 
   eventsForDate(date: Date) {
