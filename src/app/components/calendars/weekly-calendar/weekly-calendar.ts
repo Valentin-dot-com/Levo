@@ -7,11 +7,12 @@ import {
   OnDestroy,
   input,
   output,
+  HostListener,
 } from '@angular/core';
 import { format } from 'date-fns';
 import { CalendarViewService } from '../../../services/calendarView';
 import { CommonModule } from '@angular/common';
-import { CalendarMonth } from '../../../models/calendar.model';
+import { CalendarDay, CalendarMonth } from '../../../models/calendar.model';
 import { LoaderComponent } from '../../loader/loader';
 import { RouterLink } from '@angular/router';
 import { CalendarService } from '../../../services/calendars';
@@ -42,6 +43,7 @@ export class WeeklyCalendarComponent implements OnDestroy {
   readonly loading = signal(true);
   readonly isBtnScrolling = signal(false);
   readonly isTodayVisible = signal(true);
+  readonly focusedDay = signal<Date | null>(null);
 
   private hasInitialScroll = false;
 
@@ -92,6 +94,101 @@ export class WeeklyCalendarComponent implements OnDestroy {
     );
 
     this.todayObserver.observe(el);
+  }
+
+  @HostListener('keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.day-card')) {
+      return;
+    }
+
+    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const currentDate = this.focusedDay() || this.calendarView.selectedDay() || new Date();
+    let newDay: Date | null = null;
+
+    switch (event.key) {
+      case 'ArrowUp':
+        newDay = new Date(currentDate);
+        newDay.setDate(currentDate.getDate() - 1);
+        break;
+      case 'ArrowDown':
+        newDay = new Date(currentDate);
+        newDay.setDate(currentDate.getDate() + 1);
+        break;
+      // case 'ArrowUp':
+      //   newDay = new Date(currentDate);
+      //   newDay.setDate(currentDate.getDate() - 7);
+      //   break;
+      // case 'ArrowDown':
+      //   newDay = new Date(currentDate);
+      //   newDay.setDate(currentDate.getDate() + 7);
+      //   break;
+      case 'Home':
+        newDay = new Date(); // Today
+        this.scrollDayIntoView(newDay);
+        return;
+    }
+
+    if (newDay) {
+      this.focusedDay.set(newDay);
+      this.scrollDayIntoView(newDay!);
+    }
+  }
+
+  scrollDayIntoView(date: Date) {
+    const dateStr = this.formatDate(date);
+    const dayElement = this.container.nativeElement.querySelector(
+      `[data-date="${dateStr}"]`,
+    ) as HTMLElement;
+
+    if (dayElement) {
+      const container = this.container.nativeElement;
+      const dayTop =
+        dayElement.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop;
+
+      container.scrollTo({
+        top: dayTop - this.remToPx(3.5),
+        behavior: 'smooth',
+      });
+
+      // Focus after DOM updates
+      this.focusActiveDayButton();
+    }
+  }
+
+  private focusActiveDayButton() {
+    setTimeout(() => {
+      const active = this.container.nativeElement.querySelector(
+        '.day-card[tabindex="0"]',
+      ) as HTMLElement | null;
+      if (active) {
+        try {
+          active.focus({ preventScroll: true });
+        } catch {
+          active.focus();
+        }
+      }
+    });
+  }
+
+  getDayTabIndex(day: CalendarDay): number {
+    const focused = this.focusedDay();
+
+    // If there's a focused day from keyboard navigation, only it should be tabbable
+    if (focused) {
+      return focused.toDateString() === day.date.toDateString() ? 0 : -1;
+    }
+
+    // Otherwise, only today should be tabbable
+    return day.isToday ? 0 : -1;
   }
 
   eventsForDate(date: Date) {

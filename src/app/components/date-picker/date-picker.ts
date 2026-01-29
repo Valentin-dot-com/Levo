@@ -173,7 +173,6 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
-  // TODO: Look up if this format is acceptable for Supabase timestamptz
   formatDate(date: Date): string {
     return format(date, 'yyyy-MM-dd');
   }

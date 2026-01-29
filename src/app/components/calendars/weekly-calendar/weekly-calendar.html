@@ -2,19 +2,19 @@
   <app-loader />
 </div>
 
-<section class="weekly-calendar">
+<section class="weekly-calendar" role="region" aria-label="Weekly calendar">
   <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
 
-  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()">
+  <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()" role="grid" aria-label="Calendar days">
     @for (month of monthsToRender(); track month.id) {
     <section class="month">
       <h2>{{ month.name }}</h2>
 
       @for (week of month.weeks; track week.weekNumber) {
-      <article class="week">
+      <article class="week" role="row" aria-labelledby="month-{{month.name}}">
         <h3>w. {{ week.weekNumber }}</h3>
 
-        <div class="week-days">
+        <div class="week-days" role="row">
           @for (day of week.days; track day.date) {
             <a
               [routerLink]="[]"
@@ -22,8 +22,12 @@
               queryParamsHandling="merge"
               (click)="selectDay(day.date)"
               class="day-card"
+              role="gridcell"
               [class.today]="day.isToday"
-              [class.selected]="calendarView.selectedDay()?.toDateString() === day.date.toDateString()"
+              [attr.tabindex]="getDayTabIndex(day)"
+              [attr.aria-label]="`${day.dayNumber} ${month.name}, ${month.year}`"
+              [attr.aria-current]="day.isToday ? 'date' : null"
+              [attr.data-date]="formatDate(day.date)"
             >
               @if (day.isToday) {
                 <h4 #todayAnchor class="day today" data-today>
@@ -38,7 +42,7 @@
               }
               @let events = eventsForDate(day.date);
               @if (events.length > 0) {
-                <ul class="events-list">
+                <ul class="events-list" aria-label="{{events.length}} events">
                   @for (event of events; track event.id) {
                     @let eventCalendar = getCalendar(event.calendar_id);
                     <li class="event">
