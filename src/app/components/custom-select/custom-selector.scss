@@ -8,7 +8,6 @@
 
 .select-button {
   width: 100%;
-  padding: 0.5rem;
   border: 2px solid transparent;
   color: $color-text;
   font-size: $font-size-S;
@@ -18,7 +17,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   line-height: normal;
   cursor: pointer;
 
