@@ -123,6 +123,7 @@ export class WeeklyCalendarComponent implements OnDestroy {
         break;
       case 'Home':
         newDay = new Date();
+        this.focusedDay.set(newDay)
         this.scrollDayIntoView(newDay);
         return;
     }
