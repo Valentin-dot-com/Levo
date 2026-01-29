@@ -54,7 +54,6 @@
           name="title"
           [value]="newEventTitle()"
           (input)="newEventTitle.set($any($event.target).value)"
-          (keyup.enter)="createEvent()"
           placeholder="Title"
           required
           autocomplete="off"

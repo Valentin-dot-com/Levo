@@ -117,7 +117,6 @@ export class DayComponent implements OnDestroy, OnInit {
   }
 
   openEditEvent(event: Event) {
-    console.log('EVent clicked');
     this.selectedEvent.set(event);
   }
 
