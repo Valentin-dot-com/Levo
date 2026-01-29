@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="24"
       width="24"
+      aria-label="Icon for tasks or checkboxes"
     >
       <path d="m9 11 3 3L22 4" stroke-width="2"></path>
       <path

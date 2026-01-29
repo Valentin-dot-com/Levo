@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="24"
       width="24"
+      aria-label="Icon for calendar"
     >
       <path
         d="M4.6875 3.75h13.125s1.875 0 1.875 1.875v13.125s0 1.875 -1.875 1.875H4.6875s-1.875 0 -1.875 -1.875V5.625s0 -1.875 1.875 -1.875"

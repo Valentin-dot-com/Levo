@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="16"
       width="16"
+      aria-label="Icon for shared content"
     >
       <path
         d="M10.625 13.125v-1.25a2.5 2.5 0 0 0 -2.5 -2.5H3.125a2.5 2.5 0 0 0 -2.5 2.5v1.25"

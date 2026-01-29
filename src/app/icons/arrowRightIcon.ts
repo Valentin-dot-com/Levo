@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="32"
       width="32"
+      aria-label="Icon for a arrow pointing right"
     >
       <path d="m12 24 8 -8 -8 -8" stroke-width="2"></path>
     </svg>

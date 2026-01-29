@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="24"
       width="24"
+      aria-label="Icon for home"
     >
       <path
         d="m1.875 5.625 5.625 -4.375 5.625 4.375v6.875a1.25 1.25 0 0 1 -1.25 1.25H3.125a1.25 1.25 0 0 1 -1.25 -1.25z"

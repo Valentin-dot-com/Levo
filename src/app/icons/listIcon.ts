@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       class="id"
       height="24"
       width="24"
+      aria-label="Icon for a list"
     >
       <path d="m8 6 13 0" stroke-width="2"></path>
       <path d="m8 12 13 0" stroke-width="2"></path>

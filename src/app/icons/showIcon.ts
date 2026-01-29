@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="16"
       width="16"
-      aria-label="Show"
+      aria-label="Icon for showing"
     >
       <path
         d="M0.625 7.5s2.5 -5 6.875 -5 6.875 5 6.875 5 -2.5 5 -6.875 5 -6.875 -5 -6.875 -5z"

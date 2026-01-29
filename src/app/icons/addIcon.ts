@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       class="icon"
       height="32"
       width="32"
+      aria-label="Icon for a plus-sign"
     >
       <path d="m16 6.666666666666666 0 18.666666666666664" stroke-width="2"></path>
       <path d="m6.666666666666666 16 18.666666666666664 0" stroke-width="2"></path>
