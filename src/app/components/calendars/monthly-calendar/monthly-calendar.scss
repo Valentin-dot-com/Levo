@@ -187,9 +187,12 @@
     &.today {
       background-color: $color-accent;
       border-color: $color-accent;
+      padding: 0.3rem;
+      justify-content: space-between;
 
       h4 {
-        color: $color-white;
+        color: $color-fff;
+        font-size: $font-size-M;
       }
 
       .calendar-events .event-dot {
