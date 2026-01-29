@@ -3,8 +3,6 @@
 </div>
 
 <section class="weekly-calendar" role="region" aria-label="Weekly calendar">
-  <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
-
   <div class="calendar-scroll" #scrollContainer (scroll)="onScroll()" role="grid" aria-label="Calendar days">
     @for (month of monthsToRender(); track month.id) {
     <section class="month">
@@ -69,4 +67,5 @@
     }
   </div>
 
+  <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
 </section>

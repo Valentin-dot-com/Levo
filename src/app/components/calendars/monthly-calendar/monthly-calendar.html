@@ -3,8 +3,6 @@
 </div>
 
 <section class="calendar" role="region">
-  <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
-
   <nav class="calendar-navigation">
     <button class="calendar-nav-btn back" (click)="goToPrevious()" aria-label="Go to previous month">
       <app-icon-arrow-left />
@@ -75,4 +73,5 @@
     }
   </div>
 
+  <button class="go-to-today-btn" [class.visible]="!isTodayVisible()" (click)="scrollToToday()" role="button">Go to today</button>
 </section>
