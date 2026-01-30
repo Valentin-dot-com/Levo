@@ -5,10 +5,11 @@ import { BoardService } from '../../services/boards';
 import { CalendarService } from '../../services/calendars';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { NewBoardComponent } from '../../components/forms/new-board/new-board';
+import { CloseBtnComponent } from '../../components/close-btn/close-btn';
 
 @Component({
   selector: 'app-boards',
-  imports: [CommonModule, RouterLink, SharedIconComponent, NewBoardComponent],
+  imports: [CommonModule, RouterLink, SharedIconComponent, NewBoardComponent, CloseBtnComponent],
   templateUrl: './boards.html',
   styleUrl: './boards.scss',
 })

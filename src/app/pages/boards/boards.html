@@ -28,9 +28,9 @@
   @if(openCreate()) {
     <aside class="overlay" animate.enter="slide-in-animation" animate.leave="slide-out-animation">
       <div class="create-new-container">
+        <app-close-btn (closeOverlay)="close()" />
         <h2>Create new board</h2>
         <app-new-board />
-        <button type="button" class="close" (click)="close()">Cancel</button>
       </div>
     </aside>
   }

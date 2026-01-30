@@ -34,33 +34,6 @@
     }
   }
 
-  .close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: transparent;
-    font: $font-size-S;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s ease-in-out;
-
-    app-icon-add {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transform: rotate(45deg);
-    }
-
-    @include hover-supported {
-      color: $color-error;
-    }
-  }
-
   .delete-event-btn {
     border-radius: $border-radius-XL;
     border: none;

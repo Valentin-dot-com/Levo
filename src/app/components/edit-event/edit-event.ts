@@ -9,12 +9,12 @@ import {
 import { Event } from '../../models/event.model';
 import { EventFormComponent } from '../forms/new-event/event-form';
 import { CalendarService } from '../../services/calendars';
-import { AddIconComponent } from '../../icons/addIcon';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
+import { CloseBtnComponent } from '../close-btn/close-btn';
 
 @Component({
   selector: 'app-edit-event',
-  imports: [CommonModule, EventFormComponent, AddIconComponent],
+  imports: [CommonModule, EventFormComponent, CloseBtnComponent],
   templateUrl: './edit-event.html',
   styleUrl: './edit-event.scss',
 })

@@ -19,11 +19,7 @@
     @if (openCreate()) {
       <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
         <div class="create-container">
-          <!-- TODO: Make this button a component, can be used elsewhere -->
-          <button type="button" class="close" (click)="close()">
-            <span>Close</span>
-            <app-icon-add />
-          </button>
+          <app-close-btn (closeOverlay)="close()" />
           <app-new-sub-board (closeCreateNew)="close()" [boardId]="this.boardId()" />
         </div>
       </div>
@@ -65,11 +61,7 @@
   @if(openDelete()) {
   <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
     <div class="delete-container">
-      <!-- TODO: Make this a separate component, can be used in other components -->
-      <button type="button" class="close" (click)="close()">
-        <span>Close</span>
-        <app-icon-add />
-      </button>
+      <app-close-btn (closeOverlay)="close()" />
       <app-delete-board [board]="currentBoard()" (deleted)="deleteBoard($event)" />
     </div>
   </div>

@@ -21,33 +21,6 @@
   z-index: 15;
   box-shadow: 0 -10px 14px rgba(0, 0, 0, 0.22);
 
-  .close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: transparent;
-    font: $font-size-S;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s ease-in-out;
-
-    app-icon-add {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transform: rotate(45deg);
-    }
-
-    @include hover-supported {
-      color: $color-error;
-    }
-  }
-
   .choices {
     display: flex;
     align-items: center;

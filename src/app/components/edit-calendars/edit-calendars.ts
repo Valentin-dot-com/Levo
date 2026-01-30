@@ -5,12 +5,12 @@ import { Calendar, CreateCalendar } from '../../models/calendar.model';
 import { AuthService } from '../../services/authenticate';
 import { UUID } from '../../models/primitives.model';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
-import { ArrowLeftIconComponent } from "../../icons/arrowLeftIcon";
 import { DeleteIconComponent } from '../../icons/deleteIcon';
+import { CloseBtnComponent } from '../close-btn/close-btn';
 
 @Component({
   selector: 'app-edit-calendars',
-  imports: [CommonModule, ArrowLeftIconComponent, DeleteIconComponent],
+  imports: [CommonModule, DeleteIconComponent, CloseBtnComponent],
   templateUrl: './edit-calendars.html',
   styleUrl: './edit-calendars.scss',
 })

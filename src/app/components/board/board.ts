@@ -7,14 +7,24 @@ import { DeleteIconComponent } from '../../icons/deleteIcon';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { LoaderComponent } from '../loader/loader';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
-import { AddIconComponent } from '../../icons/addIcon';
 import { NewSubBoardComponent } from '../forms/new-sub-board/new-sub-board';
 import { DeleteBoardComponent } from '../delete-board/delete-board';
 import { UUID } from '../../models/primitives.model';
+import { CloseBtnComponent } from '../close-btn/close-btn';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent, NewSubBoardComponent, AddIconComponent, DeleteBoardComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    EditorComponent,
+    DeleteIconComponent,
+    ArrowLeftIconComponent,
+    LoaderComponent,
+    NewSubBoardComponent,
+    DeleteBoardComponent,
+    CloseBtnComponent,
+  ],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -42,7 +52,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     try {
       await this.boardService.getBoardWithDetails(this.boardId());
     } catch (err: unknown) {
-      console.error('Failed to load board. ', err)
+      console.error('Failed to load board. ', err);
       this.feedbackService.setError(err instanceof Error ? err.message : 'Failed to load board');
     } finally {
       this.loading.set(false);
