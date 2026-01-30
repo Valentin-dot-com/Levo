@@ -20,9 +20,7 @@
   min-height: 0;
   max-height: 100%;
   overflow-y: auto;
-  box-shadow:
-    0 -4px 15px rgba(0, 0, 0, 0.15),
-    0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: $overlay-shadow;
 
 
   h2 {
@@ -65,18 +63,10 @@
     right: 0;
 
     .leave-cal, .delete-cal {
-      border: none;
-      border-radius: $border-radius-XL;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      min-height: 3rem;
-      padding: 0.75rem;
+      @include base-button;
+      font-size: $font-size-text;
+
       color: $color-text;
-      font-weight: 500;
-      cursor: pointer;
-      transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
 
       @include hover-supported {
         background-color: $color-error;
@@ -156,14 +146,10 @@
   }
 
   .submit-btn {
-    border: none;
-    border-radius: $border-radius-XL;
-    padding: 0.5rem 0.75rem;
-    font-weight: 500;
+    @include base-button;
+
     background-color: $color-success;
     color: $color-white;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 
     &:disabled {
       background-color: $color-grey;

@@ -1,3 +1,33 @@
+@use 'variables' as *;
+
+// ------------------ STYLES -------------------------
+// ----------- Button ------------
+
+@mixin base-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: $border-radius-XL;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  min-height: 3rem;
+  font-size: $font-size-S;
+  cursor: pointer;
+  box-shadow: $card-shadow;
+  position: relative;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+// ----------- Overlay ------------
+
+@mixin overlay {
+
+}
+
+// ------------------ HOVER -------------------------
+
 @mixin hover-supported {
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -5,6 +35,8 @@
     }
   }
 }
+
+// ------------------ ANIMATIONS -------------------------
 
 @mixin slide-in-animation($duration: 0.5s, $easing: cubic-bezier(0.16, 1, 0.3, 1)) {
   animation: slide-in $duration $easing;

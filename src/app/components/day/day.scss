@@ -98,7 +98,7 @@
     align-items: center;
     gap: 1rem;
     row-gap: 0.25rem;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
 
@@ -201,27 +201,23 @@
       }
     }
 
-    button {
-      border: none;
-      border-radius: $border-radius-XL;
+    .submit-btn {
+      @include base-button;
       background-color: $color-success;
       color: $color-white;
-      font-weight: 600;
       padding: 0.5rem;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-      cursor: pointer;
-      transition:
-        background 0.2s ease-in-out,
-        opacity 0.2s ease-in-out;
+      margin-top: 1rem;
+      box-shadow: $card-shadow;
 
       @include hover-supported {
         background-color: $color-accent;
       }
 
       &:disabled {
+        background-color: $color-grey;
+        color: $color-text;
+        opacity: 70%;
         cursor: auto;
-        background-color: $color-success;
-        opacity: 0.7;
       }
     }
   }

@@ -19,10 +19,9 @@
   padding: 1rem;
   margin: 1rem 0 7rem;
   width: calc(100% - 2rem);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 -4px 14px rgba(#000, $alpha: 0.15), 0 4px 14px rgba(#000, $alpha: 0.15);
+  box-shadow: $overlay-shadow;
 
   .edit-event {
     display: flex;
@@ -35,17 +34,8 @@
   }
 
   .delete-event-btn {
-    border-radius: $border-radius-XL;
-    border: none;
-    background-color: $color-grey;
-    padding: 0.5rem;
-    color: $color-text;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-    transition:
-      background 0.2s ease-in-out,
-      color 0.2s ease-in-out;
+    @include base-button;
+    color: $color-error;
 
     @include hover-supported {
       background-color: $color-error;

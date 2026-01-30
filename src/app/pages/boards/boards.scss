@@ -14,6 +14,18 @@
     font-size: $font-size-M;
   }
 
+  .open-create-btn {
+    @include base-button;
+
+    width: 100%;
+    background-color: $color-primary;
+    color: $color-white;
+
+    @include hover-supported {
+      background-color: $color-accent;
+    }
+  }
+
   .boards-list {
     display: flex;
     flex-direction: column;
@@ -27,7 +39,7 @@
     background-color: $color-grey;
     border-radius: $border-radius-XL;
     overflow: hidden;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
 
     a {
       padding: 1rem;
@@ -60,28 +72,6 @@
 
     .board-title {
       font-size: $font-size-S;
-    }
-  }
-
-  .create-new {
-    display: flex;
-    align-items: center;
-
-    .open-create {
-      border: none;
-      border-radius: $border-radius-XL;
-      padding: 1rem;
-      width: 100%;
-      background-color: $color-primary;
-      color: $color-white;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-
-      @include hover-supported {
-        background-color: $color-accent;
-      }
     }
   }
 }
@@ -123,9 +113,7 @@
     padding: 1rem;
     border-radius: $border-radius-XL;
     overflow-y: auto;
-    box-shadow:
-      0 -10px 14px rgba(#000, $alpha: 0.15),
-      0 10px 14px rgba(#000, $alpha: 0.15);
+    box-shadow: $overlay-shadow;
   }
 }
 
@@ -139,11 +127,18 @@
 
 @media screen and (min-width: 1300px) {
   .boards-page {
+    position: relative;
+    .open-create-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: calc(50% - 1.5rem);
+    }
+
     .boards-list {
       flex-direction: row;
       flex-wrap: wrap;
       gap: 1rem;
-      // align-items: stretch;
     }
 
     .board {

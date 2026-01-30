@@ -78,7 +78,7 @@
         max-height: 5rem;
         max-width: 5rem;
         text-decoration: none;
-        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+        box-shadow: $card-shadow;
 
         transition:
           background 0.2s ease-in-out,
@@ -141,7 +141,7 @@
       position: relative;
       align-items: center;
       transition: background 0.2s ease;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+      box-shadow: $card-shadow;
 
       &.completed {
         background-color: $color-success;
@@ -230,7 +230,7 @@
       background-color: $color-grey;
       border-radius: $border-radius-XL;
       overflow: hidden;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+      box-shadow: $card-shadow;
 
 
       a {

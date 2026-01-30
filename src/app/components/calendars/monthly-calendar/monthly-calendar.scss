@@ -46,7 +46,7 @@
     opacity: 0;
     cursor: pointer;
     z-index: 2;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
 
     &.visible, &:focus-visible {
       transform: translateX(-50%) translateY(-1rem);
@@ -76,7 +76,7 @@
     padding: 0.25rem;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
 
     app-icon-arrow-left,
     app-icon-arrow-right {

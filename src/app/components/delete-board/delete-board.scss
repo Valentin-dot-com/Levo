@@ -13,22 +13,10 @@
   }
 
   .delete-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: $border-radius-XL;
-    font-size: $font-size-S;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
+    @include base-button;
+
     background-color: $color-error;
     color: $color-white;
-    cursor: pointer;
-    transition:
-      background 0.2s ease-in-out,
-      color 0.2s ease-in-out;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     @include hover-supported {
       background-color: $color-accent;

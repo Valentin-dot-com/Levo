@@ -71,7 +71,7 @@ app-icon-delete {
       gap: 0.5rem;
       list-style: none;
       margin: 0;
-      padding: 0.5rem 0.5rem;
+      padding: 0.5rem;
       overflow-x: auto;
     }
 
@@ -81,7 +81,7 @@ app-icon-delete {
       border-radius: $border-radius-M;
       min-width: 7rem;
       height: 3rem;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+      box-shadow: $card-shadow;
 
       .link {
         background-color: $color-grey;
@@ -157,24 +157,12 @@ app-icon-delete {
   }
 
   .open-delete {
+    @include base-button;
+
     margin: 2rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: $border-radius-XL;
     background-color: $color-error;
     color: $color-white;
-    font-size: $font-size-S;
-    font-weight: 500;
-    line-height: normal;
-    position: relative;
-    cursor: pointer;
     z-index: 1;
-    transition: background 0.2s ease-in-out;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     @include hover-supported {
       background-color: $color-accent;
@@ -203,9 +191,7 @@ app-icon-delete {
     padding: 4rem 1rem 2rem;
     position: relative;
     border-radius: $border-radius-XL;
-    box-shadow:
-      0 -4px 15px rgba(0, 0, 0, 0.15),
-      0 4px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: $overlay-shadow;
     h2 {
       text-align: center;
     }
@@ -261,11 +247,6 @@ app-icon-delete {
 
     h1 {
       grid-column: 1 / span 2;
-      font-size: $font-size-L;
-    }
-
-    h2 {
-      font-size: $font-size-M;
     }
 
     .board-nav {
@@ -333,7 +314,7 @@ app-icon-delete {
       margin: 0;
     }
 
-    .delete-overlay {
+    .delete-container, .create-container {
       width: 30%;
       max-width: 32rem;
     }
