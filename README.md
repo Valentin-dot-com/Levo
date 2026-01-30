@@ -18,6 +18,12 @@ Levo is a minimalist calendar- and notebook-application. The web application is 
 
 [Click here to view the live website](https://levo-eight.vercel.app/)
 
+**If you just want to look around without signing up, feel free to use these credentials to login:**
+
+email: demo@levo.dev
+
+password: Levo-demo321
+
 ## 📸 Screenshots
 
 ### 📱 Mobile
