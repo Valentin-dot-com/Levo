@@ -11,10 +11,11 @@ import { EventFormComponent } from '../forms/new-event/event-form';
 import { CalendarService } from '../../services/calendars';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
 import { CloseBtnComponent } from '../close-btn/close-btn';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-edit-event',
-  imports: [CommonModule, EventFormComponent, CloseBtnComponent],
+  imports: [CommonModule, EventFormComponent, CloseBtnComponent, DeleteIconComponent],
   templateUrl: './edit-event.html',
   styleUrl: './edit-event.scss',
 })
