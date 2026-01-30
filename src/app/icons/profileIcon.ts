@@ -21,6 +21,13 @@ import { Component } from '@angular/core';
       <path d="M7.5 6.5625a3.75 3.75 0 1 0 7.5 0 3.75 3.75 0 1 0 -7.5 0" stroke-width="1.5"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class ProfileIconComponent {
 

@@ -50,12 +50,6 @@
     height: 3rem;
     box-shadow: $card-shadow;
 
-    app-icon-delete {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     @include hover-supported {
       background-color: $color-error;
       color: $color-fff;

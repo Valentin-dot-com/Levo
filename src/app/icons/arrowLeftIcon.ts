@@ -18,5 +18,12 @@ import { Component } from '@angular/core';
       <path d="m20 24 -8 -8 8 -8" stroke-width="2"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class ArrowLeftIconComponent {}

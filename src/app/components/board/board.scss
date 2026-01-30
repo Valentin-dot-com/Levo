@@ -1,12 +1,6 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-app-icon-delete {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .board-nav {
   display: flex;
   flex-direction: row;
@@ -26,12 +20,6 @@ app-icon-delete {
     padding: 0.5rem 0;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
-
-    app-icon-arrow-left {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
     @include hover-supported {
       color: $color-accent;

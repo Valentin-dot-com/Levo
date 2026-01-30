@@ -19,5 +19,12 @@ import { Component } from '@angular/core';
       <path d="m6.666666666666666 16 18.666666666666664 0" stroke-width="2"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class AddIconComponent {}

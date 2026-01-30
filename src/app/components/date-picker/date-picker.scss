@@ -55,12 +55,6 @@
       box-shadow: $card-shadow;
       cursor: pointer;
 
-      app-icon-calendar, app-icon-delete {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
       @include hover-supported {
         color: $color-accent;
       }
@@ -119,9 +113,6 @@
 
     app-icon-arrow-left,
     app-icon-arrow-right {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       color: $color-white;
     }
 

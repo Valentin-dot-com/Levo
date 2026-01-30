@@ -23,5 +23,12 @@ import { Component } from '@angular/core';
       <path d="M10 1.9562499999999998a2.5 2.5 0 0 1 0 4.84375" stroke-width="2"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class SharedIconComponent {}

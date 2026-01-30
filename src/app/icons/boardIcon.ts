@@ -20,6 +20,13 @@ import { Component } from '@angular/core';
       <path d="M2.8125 13.125h6.5625v6.5625H2.8125Z" stroke-width="1.5"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class BoardIconComponent {
 

@@ -21,5 +21,12 @@ import { Component } from '@angular/core';
       <path d="m5.625 13.75 0 -6.25 3.75 0 0 6.25" stroke-width="1"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class HomeIconComponent {}

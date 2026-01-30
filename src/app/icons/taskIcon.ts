@@ -22,5 +22,12 @@ import { Component } from '@angular/core';
       ></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class TaskIconComponent {}

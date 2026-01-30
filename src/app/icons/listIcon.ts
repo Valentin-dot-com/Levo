@@ -23,5 +23,12 @@ import { Component } from '@angular/core';
       <path d="m3 18 0.01 0" stroke-width="2"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class ListIconComponent {}

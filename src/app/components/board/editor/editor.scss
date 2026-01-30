@@ -39,24 +39,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
-      app-icon-list {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
     }
 
     &.task-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-
-      app-icon-task {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
     }
 
     &:hover {

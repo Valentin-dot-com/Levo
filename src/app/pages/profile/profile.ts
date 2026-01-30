@@ -4,10 +4,11 @@ import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
 import { EditCalendarsComponent } from '../../components/edit-calendars/edit-calendars';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
+import { DeleteIconComponent } from '../../icons/deleteIcon';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, EditCalendarsComponent],
+  imports: [CommonModule, EditCalendarsComponent, DeleteIconComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

@@ -22,9 +22,6 @@
   cursor: pointer;
 
   app-icon-arrow-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     transform: rotate(90deg);
     transition: transform 0.3s ease-in-out;
   }

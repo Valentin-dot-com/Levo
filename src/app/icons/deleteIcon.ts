@@ -24,5 +24,12 @@ import { Component } from '@angular/core';
       <path d="m14 11 0 6" stroke-width="2"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class DeleteIconComponent {}

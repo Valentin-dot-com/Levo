@@ -35,12 +35,6 @@
       cursor: pointer;
       transition: color 0.2s ease-in-out;
 
-      app-icon-arrow-left {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
       @include hover-supported {
         color: $color-accent;
       }
@@ -118,10 +112,6 @@
       align-items: center;
       gap: 0.5rem;
       app-icon-shared {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
         color: $color-accent;
         fill: none;
       }

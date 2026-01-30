@@ -23,5 +23,12 @@ import { Component } from '@angular/core';
       <path d="m2.8125 9.375 16.875 0" stroke-width="1.5"></path>
     </svg>
   `,
+  styles: `
+    :host {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
 })
 export class CalendarIconComponent {}

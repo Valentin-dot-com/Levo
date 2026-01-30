@@ -95,12 +95,6 @@
           background-color: $color-error;
         }
 
-        app-icon-add {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
         @include hover-supported {
           background-color: $color-primary;
         }

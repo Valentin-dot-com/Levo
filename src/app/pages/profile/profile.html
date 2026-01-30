@@ -18,6 +18,7 @@
       <p>Delete your account</p>
       <button type="button" class="delete-btn" (click)="deleteAccount()" [disabled]="isDeleting()">
         {{ isDeleting() ? 'Deleting account...' : 'Delete account' }}
+        <app-icon-delete />
       </button>
     </span>
   </article>
