@@ -7,10 +7,12 @@ import { DeleteIconComponent } from '../../icons/deleteIcon';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { LoaderComponent } from '../loader/loader';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
+import { AddIconComponent } from '../../icons/addIcon';
+import { NewSubBoardComponent } from '../forms/new-sub-board/new-sub-board';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent],
+  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent, NewSubBoardComponent, AddIconComponent],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -23,7 +25,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   loading = signal(false);
   boardId = signal('');
   currentBoard = this.boardService.currentBoard;
-  newSubBoardTitle = signal('');
   openCreate = signal(false);
   openDelete = signal(false);
 
@@ -66,34 +67,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   openDeleteDialog() {
     this.openDelete.set(true);
-  }
-
-  async createSubBoard() {
-    const calendarId = this.currentBoard()?.board?.calendar_id;
-    if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) {
-      this.feedbackService.setError('Something went wrong, please try again.');
-      return;
-    }
-
-    try {
-      await this.boardService.createSubBoard({
-        calendar_id: calendarId,
-        title: this.newSubBoardTitle(),
-        parent_board_id: this.boardId(),
-        order_index: this.currentBoard()?.subBoards.length || 0,
-      });
-
-      this.newSubBoardTitle.set('');
-      this.feedbackService.setSuccess('Sub-board created successfully');
-      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
-      this.openCreate.set(false);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        this.feedbackService.setError(err.message ?? 'An error occured, could not create sub-board.');
-      } else {
-        this.feedbackService.setError('An error occured, could not create sub-board.');
-      }
-    }
   }
 
   deleteBoard(boardId: string) {

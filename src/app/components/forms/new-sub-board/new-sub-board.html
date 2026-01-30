@@ -1,0 +1,9 @@
+<form class="create-sub-board" (submit)="createSubBoard()">
+  <label for="new-sub-board">Title for your new sub-board</label>
+  <input name="new-sub-board" [value]="newSubBoardTitle()" (input)="newSubBoardTitle.set($any($event.target).value)"
+    placeholder="Title..." />
+  <button type="button" class="submit-btn" (click)="createSubBoard()"
+    [disabled]="newSubBoardTitle().length === 0">Create
+    new board
+  </button>
+</form>
