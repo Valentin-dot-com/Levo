@@ -1,0 +1,26 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.delete-board {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h2 {
+    font-size: $font-size-M;
+    text-align: center;
+    color: $color-error;
+  }
+
+  .delete-btn {
+    @include base-button;
+
+    background-color: $color-error;
+    color: $color-white;
+
+    @include hover-supported {
+      background-color: $color-accent;
+      color: $color-white;
+    }
+  }
+}

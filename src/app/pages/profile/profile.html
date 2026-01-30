@@ -1,4 +1,4 @@
-<section class="profile">
+<section class="profile" animate.enter="page-in" animate.leave="page-out" >
   <h1>{{ currentUser()?.first_name }} {{ currentUser()?.last_name }}</h1>
 
   <article class="settings">
@@ -26,11 +26,5 @@
     <aside class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
       <app-edit-calendars (closed)="closeEdit()" />
     </aside>
-  }
-
-  @if (errorMessage()) {
-    <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
-      <p>{{ errorMessage() }}</p>
-    </span>
   }
 </section>

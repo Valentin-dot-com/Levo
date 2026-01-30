@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1rem;
+  gap: 0.5rem;
   border-radius: $border-radius-XL $border-radius-XL 0 0;
   position: fixed;
   width: 100%;
@@ -21,33 +21,6 @@
   z-index: 15;
   box-shadow: 0 -10px 14px rgba(0, 0, 0, 0.22);
 
-  .close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: transparent;
-    font: $font-size-S;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s ease-in-out;
-
-    app-icon-add {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transform: rotate(45deg);
-    }
-
-    @include hover-supported {
-      color: $color-error;
-    }
-  }
-
   .choices {
     display: flex;
     align-items: center;
@@ -55,15 +28,11 @@
     gap: 1rem;
 
     .choice-btn {
-      padding: 0.5rem 0.75rem;
-      border-radius: $border-radius-XL;
-      border: 2px solid transparent;
+      @include base-button;
       font-size: $font-size-text;
-      font-weight: 600;
       color: $color-text;
-      background-color: $color-grey;
-      transition: background 0.2s ease-in-out;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+      border: 2px solid transparent;
+      min-height: 2.75rem;
 
       @include hover-supported {
         cursor: pointer;
@@ -98,6 +67,6 @@
     left: 50%;
     transform: translate(-50%, 50%);
     border-radius: $border-radius-XL;
-    box-shadow: 0 -4px 14px rgba(#000, $alpha: 0.15), 0 4px 14px rgba(#000, $alpha: 0.15);
+    box-shadow: $overlay-shadow;
   }
 }

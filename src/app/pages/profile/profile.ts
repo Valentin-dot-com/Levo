@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/authenticate';
 import { Router } from '@angular/router';
 import { EditCalendarsComponent } from '../../components/edit-calendars/edit-calendars';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 @Component({
   selector: 'app-profile',
@@ -13,9 +14,9 @@ import { EditCalendarsComponent } from '../../components/edit-calendars/edit-cal
 export class ProfileComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private feedbackService = inject(FeedbackMessageService);
 
   isDeleting = signal(false);
-  errorMessage = signal('');
   isEditingCalendars = signal(false);
   isEditingName = signal(false);
 
@@ -40,7 +41,7 @@ export class ProfileComponent {
     if (!confirmation) return;
 
     this.isDeleting.set(true);
-    this.errorMessage.set('');
+    this.feedbackService.setError('');
 
     try {
       await this.auth.deleteAccount();
@@ -48,7 +49,7 @@ export class ProfileComponent {
       this.signOut();
       this.router.navigate(['/']);
     } catch (err: unknown) {
-      this.errorMessage.set(err instanceof Error ? err.message : 'Failed to delete account. Please try again');
+      this.feedbackService.setError(err instanceof Error ? err.message : 'Failed to delete account. Please try again');
     } finally {
       this.isDeleting.set(false);
     }

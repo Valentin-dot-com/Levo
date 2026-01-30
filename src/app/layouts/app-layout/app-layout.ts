@@ -9,6 +9,7 @@ import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { BoardIconComponent } from '../../icons/boardIcon';
 import { ProfileIconComponent } from '../../icons/profileIcon';
 import { CreateNewComponent } from '../../components/quick-create-new/create-new';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 @Component({
   selector: 'app-layout',
@@ -31,9 +32,13 @@ export class AppLayoutComponent implements OnInit {
   private calendarService = inject(CalendarService);
   private calendarView = inject(CalendarViewService);
   private boardService = inject(BoardService);
+  private feedbackService = inject(FeedbackMessageService);
 
   initError = signal<string | null>(null);
   openCreateNew = signal(false);
+
+  successMessage = this.feedbackService.success;
+  errorMessage = this.feedbackService.error;
 
   toggleCreateNew() {
     this.openCreateNew.update(value => !value);

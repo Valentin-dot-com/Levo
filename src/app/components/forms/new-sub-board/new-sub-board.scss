@@ -1,0 +1,57 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+:host {
+  width: 100%;
+}
+
+.create-sub-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+
+  label {
+    font-size: $font-size-S;
+    font-weight: 600;
+    color: $color-primary;
+  }
+
+  input {
+    border: 2px solid transparent;
+    border-radius: $border-radius-S;
+    padding: 0.5rem 0.75rem;
+    background-color: $color-grey;
+    line-height: normal;
+    transition: border 0.2s ease-in-out;
+
+    @include hover-supported {
+      border-color: $color-accent;
+    }
+
+    &:focus {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+  }
+
+  .submit-btn {
+    @include base-button;
+    background-color: $color-success;
+    color: $color-white;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    box-shadow: $card-shadow;
+
+    @include hover-supported {
+      background-color: $color-accent;
+    }
+
+    &:disabled {
+      background-color: $color-grey;
+      color: $color-text;
+      opacity: 70%;
+      cursor: auto;
+    }
+  }
+}

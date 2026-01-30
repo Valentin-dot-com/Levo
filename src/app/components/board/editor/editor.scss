@@ -29,7 +29,7 @@
     transition:
       background 0.2s ease-in-out,
       color 0.2s ease-in-out;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
 
     &.italic-btn {
       font-style: italic;
@@ -75,7 +75,7 @@
   padding: 1rem;
   border-radius: $border-radius-XL;
   background: $color-fff;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: $card-shadow;
 
   font-family: $font-primary, sans-serif;
   line-height: 1.6;

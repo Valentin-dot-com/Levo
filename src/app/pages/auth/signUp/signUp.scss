@@ -87,18 +87,10 @@
   }
 
   .submit-btn {
-    border: none;
-    border-radius: $border-radius-XL;
+    @include base-button;
+    
     color: $color-white;
-    font-size: $font-size-S;
-    font-weight: 600;
     background-color: $color-success;
-    padding: 0.5rem;
-    transition:
-      background 0.2s ease-in-out,
-      opacity 0.2s ease-in-out;
-    cursor: pointer;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     @include hover-supported {
       background-color: $color-accent;

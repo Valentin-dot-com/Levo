@@ -14,6 +14,18 @@
     font-size: $font-size-M;
   }
 
+  .open-create-btn {
+    @include base-button;
+
+    width: 100%;
+    background-color: $color-primary;
+    color: $color-white;
+
+    @include hover-supported {
+      background-color: $color-accent;
+    }
+  }
+
   .boards-list {
     display: flex;
     flex-direction: column;
@@ -27,7 +39,7 @@
     background-color: $color-grey;
     border-radius: $border-radius-XL;
     overflow: hidden;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $card-shadow;
 
     a {
       padding: 1rem;
@@ -62,37 +74,12 @@
       font-size: $font-size-S;
     }
   }
-
-  .create-new {
-    display: flex;
-    align-items: center;
-
-    .open-create {
-      border: none;
-      border-radius: $border-radius-XL;
-      padding: 1rem;
-      width: 100%;
-      background-color: $color-primary;
-      color: $color-white;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-
-      @include hover-supported {
-        background-color: $color-accent;
-      }
-    }
-  }
 }
 
 .is-shared-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid $color-accent;
-  padding: 0.25rem 0.5rem;
-  border-radius: $border-radius-S;
 
   app-icon-shared {
     display: flex;
@@ -116,43 +103,17 @@
   -webkit-backdrop-filter: blur(12px) saturate(120%);
 
   .create-new-container {
+    position: relative;
     width: calc(100% - 2rem);
     height: 55vh;
     background-color: $color-white;
     display: flex;
     flex-direction: column;
-    // align-items: center;
     gap: 1rem;
-    padding: 2rem 1rem;
+    padding: 1rem;
     border-radius: $border-radius-XL;
     overflow-y: auto;
-    box-shadow:
-      0 -10px 14px rgba(#000, $alpha: 0.15),
-      0 10px 14px rgba(#000, $alpha: 0.15);
-
-    .close {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: $border-radius-XL;
-      font-size: $font-size-S;
-      color: $color-text;
-      font-weight: 600;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      background-color: $color-grey;
-      cursor: pointer;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-      transition:
-        background 0.2s ease-in-out,
-        color 0.2s ease-in-out;
-
-      @include hover-supported {
-        background-color: $color-accent;
-        color: $color-white;
-      }
-    }
+    box-shadow: $overlay-shadow;
   }
 }
 
@@ -164,13 +125,28 @@
   @include slide-out-animation();
 }
 
+.page-in {
+  @include page-animation-in();
+}
+
+.page-out {
+  @include page-animation-out();
+}
+
 @media screen and (min-width: 1300px) {
   .boards-page {
+    position: relative;
+    .open-create-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: calc(50% - 1.5rem);
+    }
+
     .boards-list {
       flex-direction: row;
       flex-wrap: wrap;
       gap: 1rem;
-      // align-items: stretch;
     }
 
     .board {

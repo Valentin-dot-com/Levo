@@ -1,37 +1,35 @@
-<section class="boards-page">
+<section class="boards-page" animate.enter="page-in" animate.leave="page-out" >
   <h1>Your boards</h1>
 
+  <button type="button" class="open-create-btn" (click)="openCreateNew()">
+    Create new board
+  </button>
   <ul class="boards-list">
     @for (board of boards(); track board.id) {
-      @let boardCalendar = getCalendar(board.calendar_id);
-      <li class="board">
-        <a [routerLink]="['/boards', board.id]">
-          <span class="board-calendar">
-            {{ boardCalendar?.name }}
-            @if (boardCalendar?.is_shared) {
-              <span class="is-shared-container">
-                <app-icon-shared />
-              </span>
-            }
+    @let boardCalendar = getCalendar(board.calendar_id);
+    <li class="board">
+      <a [routerLink]="['/boards', board.id]">
+        <span class="board-calendar">
+          {{ boardCalendar?.name }}
+          @if (boardCalendar?.is_shared) {
+          <span class="is-shared-container">
+            <app-icon-shared />
           </span>
-          <h3 class="board-title">{{ board.title }}</h3>
-        </a>
-      </li>
-    }
-    <li class="create-new">
-      <button type="button" class="open-create" (click)="openCreateNew()">
-        Create new board
-      </button>
+          }
+        </span>
+        <h3 class="board-title">{{ board.title }}</h3>
+      </a>
     </li>
+    }
   </ul>
 
   @if(openCreate()) {
-    <aside class="overlay" animate.enter="slide-in-animation" animate.leave="slide-out-animation">
-      <div class="create-new-container">
-        <h2>Create new board</h2>
-        <app-new-board />
-        <button type="button" class="close" (click)="close()">Cancel</button>
-      </div>
-    </aside>
+  <aside class="overlay" animate.enter="slide-in-animation" animate.leave="slide-out-animation">
+    <div class="create-new-container">
+      <app-close-btn (closeOverlay)="close()" />
+      <h2>Create new board</h2>
+      <app-new-board />
+    </div>
+  </aside>
   }
 </section>

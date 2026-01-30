@@ -8,6 +8,7 @@ import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { Event } from '../../models/event.model';
 import { EditEventComponent } from '../edit-event/edit-event';
 import { ActivatedRoute } from '@angular/router';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 interface DayDetails {
   number: string;
@@ -28,13 +29,12 @@ export class DayComponent implements OnDestroy, OnInit {
   private calendarService = inject(CalendarService);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
+  private feedbackService = inject(FeedbackMessageService);
 
   calendarIds = this.calendarService.calendarIds;
   day = this.calendarView.selectedDay;
   events = this.calendarView.eventsForSelectedDay;
 
-  errorMessage = signal('');
-  successMessage = signal('');
   newEventTitle = signal('');
   selectedEvent = signal<Event | null>(null);
 
@@ -83,12 +83,12 @@ export class DayComponent implements OnDestroy, OnInit {
   async createEvent() {
     const calendarId = this.calendarIds()[0];
     if (!calendarId) {
-      this.errorMessage.set('Something went wrong, please try again.');
+      this.feedbackService.setError('Something went wrong, please try again.');
       return;
     }
 
     if (this.newEventTitle().length === 0) {
-      this.errorMessage.set('You need to enter atleast 1 carachter.');
+      this.feedbackService.setError('You need to enter atleast 1 carachter.');
       return;
     }
 
@@ -105,13 +105,12 @@ export class DayComponent implements OnDestroy, OnInit {
       });
 
       this.newEventTitle.set('');
-      this.successMessage.set('New event created successfully');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackService.setSuccess('New event created successfully');
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, could not create event.');
+        this.feedbackService.setError(err.message ?? 'An error occured, could not create event.');
       } else {
-        this.errorMessage.set('An error occured, could not create event.');
+        this.feedbackService.setError('An error occured, could not create event.');
       }
     }
   }

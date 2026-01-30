@@ -76,56 +76,22 @@
   }
 
   .submit-btn {
-    border: none;
-    border-radius: $border-radius-XL;
-    color: $color-white;
-    font-size: $font-size-S;
-    font-weight: 600;
+    @include base-button;
     background-color: $color-success;
+    color: $color-white;
     padding: 0.5rem;
     margin-top: 1rem;
-    transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
+    box-shadow: $card-shadow;
 
     @include hover-supported {
       background-color: $color-accent;
     }
 
     &:disabled {
-      background-color: $color-success;
-      opacity: 50%;
+      background-color: $color-grey;
+      color: $color-text;
+      opacity: 70%;
       cursor: auto;
-    }
-
-    &.success {
-      background-color: $color-success;
-    }
-  }
-
-  .success-msg,
-  .error-msg {
-    position: fixed;
-    bottom: 7rem;
-    left: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-
-    p {
-      background-color: $color-success;
-      padding: 0.5rem 1rem;
-      color: $color-white;
-      font-size: $font-size-S;
-      border-radius: $border-radius-XL;
-    }
-  }
-
-  .error-msg {
-    p {
-      background-color: $color-error;
     }
   }
 }

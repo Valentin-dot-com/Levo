@@ -5,12 +5,12 @@ import { Calendar, CreateCalendar } from '../../models/calendar.model';
 import { AuthService } from '../../services/authenticate';
 import { UUID } from '../../models/primitives.model';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
-import { ArrowLeftIconComponent } from "../../icons/arrowLeftIcon";
 import { DeleteIconComponent } from '../../icons/deleteIcon';
+import { CloseBtnComponent } from '../close-btn/close-btn';
 
 @Component({
   selector: 'app-edit-calendars',
-  imports: [CommonModule, ArrowLeftIconComponent, DeleteIconComponent],
+  imports: [CommonModule, DeleteIconComponent, CloseBtnComponent],
   templateUrl: './edit-calendars.html',
   styleUrl: './edit-calendars.scss',
 })
@@ -62,7 +62,6 @@ export class EditCalendarsComponent {
       this.newCalendarTitle.set('');
       this.isNewCalShared.set(false);
       this.feedbackMsg.success.set('New calendar created successfully');
-      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.feedbackMsg.error.set(err.message ?? 'An error occured, could not create calendar.');
@@ -81,7 +80,6 @@ export class EditCalendarsComponent {
       await this.calendarService.leaveCalendar(calId, userId);
 
       this.feedbackMsg.success.set('You have successfully left the calendar');
-      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.feedbackMsg.error.set(err.message ?? 'An error occured, could not leave calendar.');
@@ -98,7 +96,6 @@ export class EditCalendarsComponent {
       await this.calendarService.deleteCalendar(calId);
 
       this.feedbackMsg.success.set('Calendar deleted successfully');
-      setTimeout(() => this.feedbackMsg.success.set(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.feedbackMsg.error.set(err.message ?? 'An error occured, could not delete calendar.');

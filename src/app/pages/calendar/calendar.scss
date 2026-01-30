@@ -51,7 +51,6 @@ nav {
     background: $color-grey;
     border-radius: 999px;
     padding: 4px;
-    // box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
 
     button {
       border: none;
@@ -67,13 +66,13 @@ nav {
       color 0.2s;
 
       &.active {
-        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+        box-shadow: $card-shadow;
         background: $color-fff;
         color: $color-primary;
       }
 
       @include hover-supported {
-        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+        box-shadow: $card-shadow;
         background-color: $color-primary;
         color: $color-white;
       }
@@ -92,6 +91,14 @@ nav {
   flex-direction: column;
   justify-content: flex-start;
   background-color: $color-white;
+}
+
+.page-in {
+  @include page-animation-in();
+}
+
+.page-out {
+  @include page-animation-out();
 }
 
 @media screen and (min-width: 1300px) {

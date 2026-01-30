@@ -1,10 +1,5 @@
 <article class="edit-calendars">
-  <nav class="board-nav">
-    <button (click)="close()" class="back-btn" aria-label="Go back to previous page">
-      <app-icon-arrow-left />
-      Go back
-    </button>
-  </nav>
+  <app-close-btn (closeOverlay)="close()" />
 
   <h2>Your calendars</h2>
 

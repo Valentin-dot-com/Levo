@@ -36,11 +36,25 @@
     @if (initError()) {
     <div class="error-banner">{{ initError() }}</div>
     }
+
     @if (openCreateNew()) {
     <div class="overlay" animate.enter="enter-animation" animate.leave="leave-animation">
       <app-create-new (closed)="openCreateNew.set(false)"/>
     </div>
     }
+
     <router-outlet />
+
+    @if (successMessage()) {
+      <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+        <p>{{ successMessage() }}</p>
+      </span>
+    }
+
+    @if (errorMessage()) {
+      <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
+        <p>{{ errorMessage() }}</p>
+      </span>
+    }
   </main>
 </section>

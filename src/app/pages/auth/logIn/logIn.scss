@@ -28,7 +28,7 @@
       background-color: $color-grey;
       line-height: normal;
       transition: outline 0.2s ease-in-out;
-      box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
+      box-shadow: $card-shadow;
 
       &:focus {
         outline: 2px solid $color-primary;
@@ -47,18 +47,10 @@
   }
 
   .submit-btn {
-    border: none;
-    border-radius: $border-radius-XL;
-    color: $color-white;
-    font-size: $font-size-S;
-    font-weight: 600;
+    @include base-button;
+
     background-color: $color-success;
-    padding: 0.5rem;
-    transition:
-      background 0.2s ease-in-out,
-      opacity 0.2s ease-in-out;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
+    color: $color-white;
 
     @include hover-supported {
       background-color: $color-accent;

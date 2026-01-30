@@ -1,10 +1,7 @@
 <div role="dialog" class="edit-overlay" (close)="close()">
   <section class="edit-event">
     <h2>Edit event</h2>
-    <button type="button" class="close" (click)="close()">
-      <span>Close</span>
-      <app-icon-add />
-    </button>
+    <app-close-btn (closeOverlay)="close()" />
     <app-event-form [mode]="'edit'" [initialData]="event()" />
 
     <button class="delete-event-btn" type="button" (click)="delete()">
