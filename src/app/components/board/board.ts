@@ -9,10 +9,12 @@ import { LoaderComponent } from '../loader/loader';
 import { FeedbackMessageService } from '../../services/feedbackMessage';
 import { AddIconComponent } from '../../icons/addIcon';
 import { NewSubBoardComponent } from '../forms/new-sub-board/new-sub-board';
+import { DeleteBoardComponent } from '../delete-board/delete-board';
+import { UUID } from '../../models/primitives.model';
 
 @Component({
   selector: 'app-board',
-  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent, NewSubBoardComponent, AddIconComponent],
+  imports: [CommonModule, RouterLink, EditorComponent, DeleteIconComponent, ArrowLeftIconComponent, LoaderComponent, NewSubBoardComponent, AddIconComponent, DeleteBoardComponent],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -47,8 +49,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  goBack() {
-    const parentId = this.currentBoard()?.board?.parent_board_id;
+  goBack(parentId: UUID | null) {
     if (parentId) {
       this.router.navigate(['/boards', parentId]);
     } else {
@@ -69,10 +70,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.openDelete.set(true);
   }
 
-  deleteBoard(boardId: string) {
-    this.boardService.deleteBoard(boardId);
+  deleteBoard(parentBoardId: UUID | null) {
     this.openDelete.set(false);
-    this.goBack();
+    this.goBack(parentBoardId);
   }
 
   ngOnDestroy(): void {

@@ -49,9 +49,6 @@ export class NewSubBoardComponent {
       } else {
         this.feedbackService.setError('An error occured, could not create sub-board.');
       }
-      setTimeout(() => {
-        this.feedbackService.setError('');
-      }, 5000);
     }
   }
 
