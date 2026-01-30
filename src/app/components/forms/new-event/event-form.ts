@@ -13,6 +13,7 @@ import { DatePickerComponent } from '../../date-picker/date-picker';
 import { TimePickerComponent } from '../../time-picker/time-picker';
 import { CustomSelectorComponent } from '../../custom-select/custom-select';
 import { FeedbackMessageService } from '../../../services/feedbackMessage';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-event-form',
@@ -57,6 +58,12 @@ export class EventFormComponent implements OnInit {
         location: eventData.location,
         date: eventData.date,
         scheduled_at: eventData.scheduled_at?.slice(0, 5),
+      });
+    } else {
+      const today = format(new Date(), 'yyyy-MM-dd');
+
+      this.eventForm.patchValue({
+        date: today,
       });
     }
 
