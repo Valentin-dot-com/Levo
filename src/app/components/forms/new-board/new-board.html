@@ -3,7 +3,7 @@
     <div class="input-container">
       <label for="calendar_id">Calendar*</label>
       <app-custom-selector [options]="calendars()" formControlName="calendar_id"/>
-      
+
       @if (newBoardForm.get('calendar_id')?.invalid && newBoardForm.get('calendar_id')?.touched) {
         <span class="feedback-invalid">Calendar is required</span>
       }
@@ -29,15 +29,4 @@
     Create board
   </button>
 
-  @if (errorMessage()) {
-    <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
-      <p>{{ errorMessage() }}</p>
-    </span>
-  }
-
-  @if (successMessage()) {
-    <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
-      <p>{{ successMessage() }}</p>
-    </span>
-  }
 </form>

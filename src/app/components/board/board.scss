@@ -339,32 +339,6 @@ app-icon-delete {
       flex-direction: column;
     }
   }
-
-  .success-msg,
-  .error-msg {
-    position: fixed;
-    bottom: 7rem;
-    left: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-
-    p {
-      background-color: $color-success;
-      padding: 0.5rem 1rem;
-      color: $color-white;
-      font-size: $font-size-S;
-      border-radius: $border-radius-XL;
-    }
-  }
-
-  .error-msg {
-    p {
-      background-color: $color-error;
-    }
-  }
 }
 
 .loader {

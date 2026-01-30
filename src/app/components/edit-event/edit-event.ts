@@ -10,6 +10,7 @@ import { Event } from '../../models/event.model';
 import { EventFormComponent } from '../forms/new-event/event-form';
 import { CalendarService } from '../../services/calendars';
 import { AddIconComponent } from '../../icons/addIcon';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 @Component({
   selector: 'app-edit-event',
@@ -19,6 +20,7 @@ import { AddIconComponent } from '../../icons/addIcon';
 })
 export class EditEventComponent {
   private calendarService = inject(CalendarService);
+  private feedbackService = inject(FeedbackMessageService);
 
   errorMessage = signal('');
   event = input<Event | null>(null);
@@ -33,17 +35,21 @@ export class EditEventComponent {
     const oldEvent = this.event();
 
     if (!oldEvent || oldEvent === null) {
-      this.errorMessage.set('No event found, could not delete.');
+      this.feedbackService.setError('No event found, could not delete.');
     }
 
     try {
       await this.calendarService.deleteEvent(oldEvent!);
+      this.feedbackService.setSuccess('Event is now deleted');
+      setTimeout(() => {
+        this.feedbackService.setSuccess('');
+      }, 3000)
       this.close();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, please try again.');
+        this.feedbackService.setError(err.message ?? 'An error occured, please try again.');
       } else {
-        this.errorMessage.set('An error occured, please try again');
+        this.feedbackService.setError('An error occured, please try again');
       }
     }
   }

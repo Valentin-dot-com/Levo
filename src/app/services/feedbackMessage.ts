@@ -4,8 +4,8 @@ import { Injectable, signal } from "@angular/core";
   providedIn: 'root',
 })
 export class FeedbackMessageService {
-  success = signal('');
-  error = signal('');
+  readonly success = signal('');
+  readonly error = signal('');
 
   setSuccess(msg: string) {
     this.success.set(msg);

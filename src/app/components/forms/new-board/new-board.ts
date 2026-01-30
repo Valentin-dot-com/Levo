@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBoard } from '../../../models/board.model';
 import { CustomSelectorComponent } from '../../custom-select/custom-select';
+import { FeedbackMessageService } from '../../../services/feedbackMessage';
 
 @Component({
   selector: 'app-new-board',
@@ -15,9 +16,8 @@ import { CustomSelectorComponent } from '../../custom-select/custom-select';
 export class NewBoardComponent {
   private calendarService = inject(CalendarService);
   private boardService = inject(BoardService);
+  private feedbackService = inject(FeedbackMessageService);
 
-  errorMessage = signal('');
-  successMessage = signal('');
   loading = signal(false);
   calendars = this.calendarService.calendars;
 
@@ -29,8 +29,8 @@ export class NewBoardComponent {
   async onCreate() {
     if (this.newBoardForm.invalid) return;
     this.loading.set(true);
-    this.errorMessage.set('');
-    this.successMessage.set('');
+    this.feedbackService.setError('');
+    this.feedbackService.setSuccess('');
 
     try {
       const formData = this.newBoardForm.value;
@@ -42,11 +42,11 @@ export class NewBoardComponent {
       await this.boardService.createBoard(newBoard);
 
       this.newBoardForm.reset();
-      this.successMessage.set('Board created successfully!');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackService.setSuccess('Board created successfully!');
+      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(
+        this.feedbackService.setError(
           err.message ?? 'An error occured while trying to create board. Please try again.'
         );
       }

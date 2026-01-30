@@ -12,6 +12,7 @@ import { CreateEvent, Event } from '../../../models/event.model';
 import { DatePickerComponent } from '../../date-picker/date-picker';
 import { TimePickerComponent } from '../../time-picker/time-picker';
 import { CustomSelectorComponent } from '../../custom-select/custom-select';
+import { FeedbackMessageService } from '../../../services/feedbackMessage';
 
 @Component({
   selector: 'app-event-form',
@@ -28,10 +29,9 @@ import { CustomSelectorComponent } from '../../custom-select/custom-select';
 })
 export class EventFormComponent implements OnInit {
   private calendarService = inject(CalendarService);
+  private feedbackService = inject(FeedbackMessageService);
 
   loading = signal(false);
-  errorMessage = signal('');
-  successMessage = signal('');
 
   initialData = input<Event | null>(null);
   mode = input<'create' | 'edit'>('create');
@@ -80,8 +80,8 @@ export class EventFormComponent implements OnInit {
     if (!this.initialData()) return;
 
     this.loading.set(true);
-    this.errorMessage.set('');
-    this.successMessage.set('');
+    this.feedbackService.setSuccess('');
+    this.feedbackService.setError('');
 
     try {
       const formData = this.eventForm.value;
@@ -105,11 +105,11 @@ export class EventFormComponent implements OnInit {
 
       await this.calendarService.updateEvent(id, updatedEvent, oldEvent);
 
-      this.successMessage.set('Event updated successfully');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackService.setSuccess('Event updated successfully');
+      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(
+        this.feedbackService.setError(
           err.message ?? 'An error occured while trying to update event. Please try again.',
         );
       }
@@ -121,8 +121,8 @@ export class EventFormComponent implements OnInit {
   async onCreate() {
     if (this.eventForm.invalid) return;
     this.loading.set(true);
-    this.errorMessage.set('');
-    this.successMessage.set('');
+    this.feedbackService.setSuccess('');
+    this.feedbackService.setError('');
 
     try {
       const formData = this.eventForm.value;
@@ -138,11 +138,11 @@ export class EventFormComponent implements OnInit {
       await this.calendarService.createEvent(newEvent);
 
       this.eventForm.reset({ calendar_id: this.calendars()[0]?.id ?? '' });
-      this.successMessage.set('Event created successfully!');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackService.setSuccess('Event created successfully!');
+      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(
+        this.feedbackService.setError(
           err.message ?? 'An error occured while trying to create event. Please try again.',
         );
       }

@@ -6,6 +6,7 @@ import { EditorComponent } from './editor/editor';
 import { DeleteIconComponent } from '../../icons/deleteIcon';
 import { ArrowLeftIconComponent } from '../../icons/arrowLeftIcon';
 import { LoaderComponent } from '../loader/loader';
+import { FeedbackMessageService } from '../../services/feedbackMessage';
 
 @Component({
   selector: 'app-board',
@@ -17,13 +18,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private boardService = inject(BoardService);
+  private feedbackService = inject(FeedbackMessageService);
 
   loading = signal(false);
   boardId = signal('');
   currentBoard = this.boardService.currentBoard;
   newSubBoardTitle = signal('');
-  successMessage = signal('');
-  errorMessage = signal('');
   openCreate = signal(false);
   openDelete = signal(false);
 
@@ -40,7 +40,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       await this.boardService.getBoardWithDetails(this.boardId());
     } catch (err: unknown) {
       console.error('Failed to load board. ', err)
-      this.errorMessage.set(err instanceof Error ? err.message : 'Failed to load board');
+      this.feedbackService.setError(err instanceof Error ? err.message : 'Failed to load board');
     } finally {
       this.loading.set(false);
     }
@@ -71,7 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   async createSubBoard() {
     const calendarId = this.currentBoard()?.board?.calendar_id;
     if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) {
-      this.errorMessage.set('Something went wrong, please try again.');
+      this.feedbackService.setError('Something went wrong, please try again.');
       return;
     }
 
@@ -84,14 +84,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
 
       this.newSubBoardTitle.set('');
-      this.successMessage.set('Sub-board created successfully');
-      setTimeout(() => this.successMessage.set(''), 3000);
+      this.feedbackService.setSuccess('Sub-board created successfully');
+      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
       this.openCreate.set(false);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.errorMessage.set(err.message ?? 'An error occured, could not create sub-board.');
+        this.feedbackService.setError(err.message ?? 'An error occured, could not create sub-board.');
       } else {
-        this.errorMessage.set('An error occured, could not create sub-board.');
+        this.feedbackService.setError('An error occured, could not create sub-board.');
       }
     }
   }

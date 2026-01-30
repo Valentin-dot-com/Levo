@@ -82,18 +82,6 @@
     </section>
   </div>
   }
-
-  @if (errorMessage()) {
-  <span class="error-msg" animate.enter="enter-animation" animate.leave="leave-animation">
-    <p>{{ errorMessage() }}</p>
-  </span>
-  }
-
-  @if (successMessage()) {
-  <span class="success-msg" animate.enter="enter-animation" animate.leave="leave-animation">
-    <p>{{ successMessage() }}</p>
-  </span>
-  }
 </section>
 
 }
