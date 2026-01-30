@@ -16,16 +16,16 @@
       }
     </div>
     <article class="todays-events">
-      <h3>Today's events</h3>
+      <h2>Today's events</h2>
       <ul class="events">
         @if (events().length) {
           @for (event of events(); track event.id) {
             @let eventCalendar = getCalendar(event.calendar_id);
             <li class="list-item">
               <article class="event" tabindex="0" (click)="openEditEvent(event)" (keyup.enter)="openEditEvent(event)">
-                <h4>
+                <h3>
                   {{ event.title }}
-                </h4>
+                </h3>
                 @if (eventCalendar?.is_shared) {
                   <span class="is-shared-container">
                     <app-icon-shared aria-label="Shared calendar"/>
@@ -39,7 +39,7 @@
           }
         } @else {
           <li class="no-events">
-            <h4>You have no events planned for today</h4>
+            <h3>You have no events planned for today</h3>
           </li>
         }
         <li class="add-event-today">
