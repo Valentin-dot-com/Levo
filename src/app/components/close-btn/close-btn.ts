@@ -9,7 +9,7 @@ import { AddIconComponent } from "../../icons/addIcon";
   styleUrl: './close-btn.scss'
 })
 export class CloseBtnComponent {
-  closeOverlay = output();
+  closeOverlay = output<void>();
 
   onClick() {
     this.closeOverlay.emit();
