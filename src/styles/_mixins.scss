@@ -17,13 +17,15 @@
   cursor: pointer;
   box-shadow: $card-shadow;
   position: relative;
-  transition: background 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition:
+    background 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
 }
 
 // ----------- Overlay ------------
 
 @mixin overlay {
-
 }
 
 // ------------------ HOVER -------------------------
@@ -39,7 +41,9 @@
 // ------------------ ANIMATIONS -------------------------
 
 @mixin slide-in-animation($duration: 0.5s, $easing: cubic-bezier(0.16, 1, 0.3, 1)) {
-  animation: slide-in $duration $easing;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: slide-in $duration $easing;
+  }
   @keyframes slide-in {
     from {
       opacity: 0.5;
@@ -53,7 +57,9 @@
 }
 
 @mixin slide-out-animation($duration: 0.4s, $easing: ease-in-out) {
-  animation: slide-out $duration $easing;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: slide-out $duration $easing;
+  }
   @keyframes slide-out {
     from {
       opacity: 1;
@@ -67,7 +73,9 @@
 }
 
 @mixin fade-in-animation($duration: 0.2s, $easing: ease-in-out) {
-  animation: fade-in $duration $easing;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade-in $duration $easing;
+  }
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -79,13 +87,51 @@
 }
 
 @mixin fade-out-animation($duration: 0.2s, $easing: ease-in-out) {
-  animation: fade-out $duration $easing;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade-out $duration $easing;
+  }
   @keyframes fade-out {
     from {
       opacity: 1;
     }
     to {
       opacity: 0;
+    }
+  }
+}
+
+@mixin page-animation-in($duration: 0.25s, $easing: cubic-bezier(0.22, 1, 0.36, 1)) {
+  @media (prefers-reduced-motion: no-preference) {
+    z-index: 2;
+    animation: page-in $duration $easing;
+  }
+  @keyframes page-in {
+    from {
+      opacity: 0.5;
+      transform: translateY(20px) translateZ(0);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+}
+
+@mixin page-animation-out($duration: 0.25s, $easing: cubic-bezier(0.22, 1, 0.36, 1)) {
+  @media (prefers-reduced-motion: no-preference) {
+    z-index: 1;
+    animation: page-out $duration $easing;
+  }
+  @keyframes page-out {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+    to {
+      opacity: 0.5;
+      transform: translateY(-20px) scale(0.9);
+      filter: blur(5px);
     }
   }
 }

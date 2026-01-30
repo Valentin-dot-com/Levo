@@ -125,6 +125,14 @@
   @include slide-out-animation();
 }
 
+.page-in {
+  @include page-animation-in();
+}
+
+.page-out {
+  @include page-animation-out();
+}
+
 @media screen and (min-width: 1300px) {
   .boards-page {
     position: relative;
