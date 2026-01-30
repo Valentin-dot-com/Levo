@@ -151,3 +151,12 @@
     }
   }
 }
+
+@media screen and (min-width: 1300px) {
+  .edit-calendars {
+    width: 30%;
+    max-width: 32rem;
+    max-height: 70%;
+    margin: auto;
+  }
+}
