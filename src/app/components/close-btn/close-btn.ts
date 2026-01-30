@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, output } from "@angular/core";
-import { AddIconComponent } from "../../icons/addIcon";
+import { CloseIconComponent } from "../../icons/closeIcon";
 
 @Component({
   selector: 'app-close-btn',
-  imports: [CommonModule, AddIconComponent],
+  imports: [CommonModule, CloseIconComponent],
   templateUrl: './close-btn.html',
   styleUrl: './close-btn.scss'
 })

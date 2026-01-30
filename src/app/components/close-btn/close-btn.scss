@@ -20,10 +20,6 @@
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 
-  app-icon-add {
-    transform: rotate(45deg);
-  }
-
   @include hover-supported {
     color: $color-error;
   }
