@@ -36,9 +36,9 @@
 // ------------------ ANIMATIONS -------------------------
 
 @mixin slide-in-animation($duration: 0.5s, $easing: cubic-bezier(0.16, 1, 0.3, 1)) {
-  @media (prefers-reduced-motion: no-preference) {
+  // @media (prefers-reduced-motion: no-preference) {
     animation: slide-in $duration $easing;
-  }
+  // }
   @keyframes slide-in {
     from {
       opacity: 0.5;
@@ -52,9 +52,9 @@
 }
 
 @mixin slide-out-animation($duration: 0.4s, $easing: ease-in-out) {
-  @media (prefers-reduced-motion: no-preference) {
+  // @media (prefers-reduced-motion: no-preference) {
     animation: slide-out $duration $easing;
-  }
+  // }
   @keyframes slide-out {
     from {
       opacity: 1;
@@ -68,9 +68,9 @@
 }
 
 @mixin fade-in-animation($duration: 0.2s, $easing: ease-in-out) {
-  @media (prefers-reduced-motion: no-preference) {
+  // @media (prefers-reduced-motion: no-preference) {
     animation: fade-in $duration $easing;
-  }
+  // }
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -82,9 +82,9 @@
 }
 
 @mixin fade-out-animation($duration: 0.2s, $easing: ease-in-out) {
-  @media (prefers-reduced-motion: no-preference) {
+  // @media (prefers-reduced-motion: no-preference) {
     animation: fade-out $duration $easing;
-  }
+  // }
   @keyframes fade-out {
     from {
       opacity: 1;
