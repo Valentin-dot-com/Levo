@@ -43,7 +43,6 @@ export class NewBoardComponent {
 
       this.newBoardForm.reset();
       this.feedbackService.setSuccess('Board created successfully!');
-      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.feedbackService.setError(

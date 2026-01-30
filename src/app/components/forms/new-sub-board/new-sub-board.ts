@@ -24,6 +24,9 @@ export class NewSubBoardComponent {
     const calendarId = this.currentBoard()?.board?.calendar_id;
     if (!this.newSubBoardTitle().trim() || !this.currentBoard || !calendarId) {
       this.feedbackService.setError('Something went wrong, please try again.');
+      setTimeout(() => {
+        this.feedbackService.setError('');
+      }, 5000);
       return;
     }
 
@@ -37,16 +40,17 @@ export class NewSubBoardComponent {
 
       this.newSubBoardTitle.set('');
       this.feedbackService.setSuccess('Sub-board created successfully');
-      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
       this.close();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        this.feedbackService.setError(err.message ?? 'An error occured, could not create sub-board.');
+        this.feedbackService.setError(
+          err.message ?? 'An error occured, could not create sub-board.',
+        );
       } else {
         this.feedbackService.setError('An error occured, could not create sub-board.');
       }
       setTimeout(() => {
-        this.feedbackService.setError('')
+        this.feedbackService.setError('');
       }, 5000);
     }
   }

@@ -139,7 +139,6 @@ export class EventFormComponent implements OnInit {
 
       this.eventForm.reset({ calendar_id: this.calendars()[0]?.id ?? '' });
       this.feedbackService.setSuccess('Event created successfully!');
-      setTimeout(() => this.feedbackService.setSuccess(''), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         this.feedbackService.setError(

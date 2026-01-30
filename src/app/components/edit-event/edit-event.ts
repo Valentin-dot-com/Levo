@@ -41,9 +41,6 @@ export class EditEventComponent {
     try {
       await this.calendarService.deleteEvent(oldEvent!);
       this.feedbackService.setSuccess('Event is now deleted');
-      setTimeout(() => {
-        this.feedbackService.setSuccess('');
-      }, 3000)
       this.close();
     } catch (err: unknown) {
       if (err instanceof Error) {
