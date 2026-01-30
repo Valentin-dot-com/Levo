@@ -17,6 +17,15 @@
   }
 }
 
+.error-banner {
+  background-color: $color-error;
+  border-radius: $border-radius-M;
+  color: $color-white;
+  padding: 0.25rem 0.75rem;
+  text-align: center;
+  margin: 0.5rem 1rem;
+}
+
 .main-nav {
   width: 100%;
   position: fixed;
