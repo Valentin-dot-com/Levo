@@ -11,6 +11,11 @@
   gap: 1rem;
   overflow-y: auto;
 
+  h1 {
+    text-align: center;
+    font-size: $font-size-L;
+  }
+
   .divider {
     display: flex;
     justify-content: center;
@@ -33,7 +38,9 @@
 
     .toggle-btn {
       @include base-button;
-      
+      background-color: $color-primary;
+      color: $color-white;
+
       min-width: 15rem;
 
       @include hover-supported {
@@ -57,8 +64,8 @@
   background-color: WHITE;
   background-image: none;
   border: none;
-  -webkit-border-radius: 20px;
-  border-radius: 20px;
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #1f1f1f;
@@ -69,7 +76,7 @@
   outline: none;
   overflow: hidden;
   min-height: 40px;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   position: relative;
   text-align: center;
   -webkit-transition:
