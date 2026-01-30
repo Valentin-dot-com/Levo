@@ -6,14 +6,13 @@ import { CommonModule } from '@angular/common';
 import { CalendarViewService } from '../../services/calendarView';
 import { compareAsc, format, isToday, parseISO } from 'date-fns';
 import { Router, RouterLink } from '@angular/router';
-import { AddIconComponent } from '../../icons/addIcon';
 import { SharedIconComponent } from '../../icons/sharedIcon';
 import { EditEventComponent } from '../../components/edit-event/edit-event';
 import { Event } from '../../models/event.model';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, AddIconComponent, SharedIconComponent, EditEventComponent],
+  imports: [CommonModule, RouterLink, SharedIconComponent, EditEventComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
