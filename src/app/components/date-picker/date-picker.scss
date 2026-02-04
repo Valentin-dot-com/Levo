@@ -75,13 +75,36 @@
   }
 }
 
-.datepicker-dialog {
-  position: absolute;
-  z-index: 1000;
-  bottom: calc(100% + 0.5rem);
-  left: 0;
+.close-dialog {
+  position: fixed;
+  right: 1rem;
+  top: 8%;
+  border-radius: 50%;
+  border: 2px solid $color-error;
+  background-color: $color-fff;
+  color: $color-error;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  height: 3rem;
+  box-shadow: $card-shadow;
+  cursor: pointer;
+  transition: 0.2s background ease-in-out, color 0.2s ease-in-out;
 
-  width: 100%;
+  @include hover-supported {
+    background-color: $color-error;
+    color: $color-fff;
+  }
+}
+
+.datepicker-dialog {
+  position: fixed;
+  z-index: 1000;
+  top: 15%;
+  left: 1rem;
+
+  width: calc(100% - 2rem);
   padding: 0.75rem;
 
   background: #fff;
@@ -137,12 +160,11 @@
 .calendar-monthly {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
 
   .weeks {
     display: flex;
     flex-direction: column;
-    // gap: 1rem;
+    margin-bottom: 1rem;
   }
 
   .week {
@@ -167,7 +189,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-height: 3rem;
+    max-height: 3.5rem;
     align-items: center;
     border-radius: $border-radius-L;
     color: $color-text;

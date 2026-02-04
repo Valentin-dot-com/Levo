@@ -11,6 +11,9 @@
   </div>
 
   @if (isOpen()) {
+  <button (click)="close()" type="button" class="close-dialog" aria-label="Close date-picker" animate.enter="enter-animation" animate.leave="leave-animation" >
+    <app-icon-close />
+  </button>
   <div
     class="datepicker-dialog"
     role="dialog"

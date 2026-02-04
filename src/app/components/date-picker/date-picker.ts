@@ -19,6 +19,7 @@ import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { format, isValid, parseISO } from 'date-fns';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DeleteIconComponent } from '../../icons/deleteIcon';
+import { CloseIconComponent } from '../../icons/closeIcon';
 
 @Component({
   selector: 'app-date-picker',
@@ -29,6 +30,7 @@ import { DeleteIconComponent } from '../../icons/deleteIcon';
     CalendarIconComponent,
     FormsModule,
     DeleteIconComponent,
+    CloseIconComponent
   ],
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.scss'],
