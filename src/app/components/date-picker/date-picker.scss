@@ -86,7 +86,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  aspect-ratio: 1 / 1;
+  width: 3rem;
+  z-index: 999;
   height: 3rem;
   box-shadow: $card-shadow;
   cursor: pointer;
@@ -100,7 +101,7 @@
 
 .datepicker-dialog {
   position: fixed;
-  z-index: 1000;
+  z-index: 999;
   top: 17%;
   left: 1rem;
 
