@@ -78,7 +78,7 @@
 .close-dialog {
   position: fixed;
   right: 1rem;
-  top: 8%;
+  top: 10%;
   border-radius: 50%;
   border: 2px solid $color-error;
   background-color: $color-fff;
@@ -101,7 +101,7 @@
 .datepicker-dialog {
   position: fixed;
   z-index: 1000;
-  top: 15%;
+  top: 17%;
   left: 1rem;
 
   width: calc(100% - 2rem);
