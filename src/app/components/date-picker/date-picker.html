@@ -11,65 +11,67 @@
   </div>
 
   @if (isOpen()) {
-  <button (click)="close()" type="button" class="close-dialog" aria-label="Close date-picker" animate.enter="enter-animation" animate.leave="leave-animation" >
-    <app-icon-close />
-  </button>
   <div
     class="datepicker-dialog"
     role="dialog"
     aria-modal="true"
     (keydown)="onKeydown($event)"
+    (click)="close()"
     animate.enter="enter-animation"
     animate.leave="leave-animation"
   >
-    <nav class="calendar-navigation">
-      <button class="calendar-nav-btn back" type="button" (click)="goToPrevious()" aria-label="Go to previous month">
-        <app-icon-arrow-left />
-      </button>
+    <button (click)="close()" type="button" class="close-dialog" aria-label="Close date-picker" animate.enter="enter-animation" animate.leave="leave-animation" >
+      <app-icon-close />
+    </button>
+    <div class="container" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" tabindex="-1">
+      <nav class="calendar-navigation">
+        <button class="calendar-nav-btn back" type="button" (click)="goToPrevious()" aria-label="Go to previous month">
+          <app-icon-arrow-left />
+        </button>
 
-      <h2>{{ monthLabel() }}, {{ currentYear() }}</h2>
+        <h2>{{ monthLabel() }}, {{ currentYear() }}</h2>
 
-      <button class="calendar-nav-btn forward" type="button" (click)="goToNext()" aria-label="Go to next month">
-        <app-icon-arrow-right />
-      </button>
-    </nav>
+        <button class="calendar-nav-btn forward" type="button" (click)="goToNext()" aria-label="Go to next month">
+          <app-icon-arrow-right />
+        </button>
+      </nav>
 
-
-    <div class="calendar">
-      <div class="calendar-weekdays">
-        @for (dayLabel of weekDayNames; track $index) {
-        <div class="weekdays-day">{{ dayLabel }}</div>
-        }
-      </div>
-      <section class="calendar-monthly">
-        <div class="weeks">
-          @for (week of month().weeks; track $index) {
-          <section class="week">
-            <h3>w. {{ week.weekNumber }}</h3>
-            <div class="week-days calendar-grid">
-              @for (day of week.days; track day.dayNumber) {
-              <button
-                type="button"
-                class="calendar-day"
-                role="gridcell"
-                [class.today]="day.isToday"
-                [class]="'weekday-' + day.weekdayIndex"
-                [class.selected]="isSelected(day)"
-                [attr.aria-selected]="isSelected(day)"
-                [attr.tabindex]="isFocused(day) ? 0 : -1" (click)="select(day)"
-                [attr.aria-label]="'Select ' + day.date.toLocaleDateString()"
-              >
-                {{ day.dayNumber }}
-              </button>
-              }
-            </div>
-          </section>
+      <div class="calendar">
+        <div class="calendar-weekdays">
+          @for (dayLabel of weekDayNames; track $index) {
+          <div class="weekdays-day">{{ dayLabel }}</div>
           }
         </div>
-      </section>
+        <section class="calendar-monthly">
+          <div class="weeks">
+            @for (week of month().weeks; track $index) {
+            <section class="week">
+              <h3>w. {{ week.weekNumber }}</h3>
+              <div class="week-days calendar-grid">
+                @for (day of week.days; track day.dayNumber) {
+                <button
+                  type="button"
+                  class="calendar-day"
+                  role="gridcell"
+                  [class.today]="day.isToday"
+                  [class]="'weekday-' + day.weekdayIndex"
+                  [class.selected]="isSelected(day)"
+                  [attr.aria-selected]="isSelected(day)"
+                  [attr.tabindex]="isFocused(day) ? 0 : -1" (click)="select(day)"
+                  [attr.aria-label]="'Select ' + day.date.toLocaleDateString()"
+                >
+                  {{ day.dayNumber }}
+                </button>
+                }
+              </div>
+            </section>
+            }
+          </div>
+        </section>
+
+      </div>
 
     </div>
-
   </div>
   }
 

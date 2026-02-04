@@ -6,8 +6,6 @@ import {
   ViewChild,
   ElementRef,
   forwardRef,
-  OnDestroy,
-  Renderer2,
 } from '@angular/core';
 import { CalendarViewService } from '../../services/calendarView';
 import { CommonModule } from '@angular/common';
@@ -38,12 +36,10 @@ import { CloseIconComponent } from '../../icons/closeIcon';
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatePickerComponent), multi: true },
   ],
 })
-export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
+export class DatePickerComponent implements ControlValueAccessor {
   inputText = '';
   private calendarView = inject(CalendarViewService);
-  private renderer = inject(Renderer2);
   private hostRef = inject(ElementRef);
-  private documentClickUnlisten: (() => void) | null = null;
 
   @ViewChild('input', { static: true })
   inputRef!: ElementRef<HTMLInputElement>;
@@ -98,10 +94,6 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.removeDocumentClickListener();
-  }
-
   toggleOpen() {
     if (this.isOpen()) {
       this.close();
@@ -120,14 +112,11 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
       new Date();
 
     if (initial) this.focusedDate.set(initial);
-    this.addDocumentClickListener();
     this.focusActiveDayButton();
   }
 
   close() {
     this.isOpen.set(false);
-    // this.inputRef.nativeElement.focus();
-    this.removeDocumentClickListener();
   }
 
   clear() {
@@ -138,26 +127,6 @@ export class DatePickerComponent implements ControlValueAccessor, OnDestroy {
     this.onTouched?.();
     const today = new Date();
     this.calendarView.goToMonth(today.getFullYear(), today.getMonth());
-  }
-
-  private addDocumentClickListener() {
-    if (this.documentClickUnlisten) return;
-    this.documentClickUnlisten = this.renderer.listen(
-      'document',
-      'mousedown',
-      (event: MouseEvent) => {
-        if (!this.hostRef.nativeElement.contains(event.target)) {
-          this.close();
-        }
-      }
-    );
-  }
-
-  private removeDocumentClickListener() {
-    if (this.documentClickUnlisten) {
-      this.documentClickUnlisten();
-      this.documentClickUnlisten = null;
-    }
   }
 
   onInput(value: string) {
