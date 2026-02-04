@@ -159,7 +159,7 @@ main.content {
 
 @media screen and (min-width: 1300px) {
   main.content {
-    padding: 2rem 0;
+    padding: 2rem 0 8rem;
     width: 100%;
     padding-inline: clamp(5rem, 10vw, 20rem);
     max-width: 120rem;
@@ -168,18 +168,16 @@ main.content {
   }
 
   .main-nav {
-    right: 0;
+    right: 50%;
     left: auto;
-    bottom: 50%;
-    transform: translateY(50%);
+    transform: translateX(50%);
     width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    padding-bottom: 2rem;
 
     .nav-links {
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 1rem;
@@ -203,7 +201,6 @@ main.content {
             color: $color-white;
             fill: $color-white;
             border: none;
-            margin: 2rem 0;
           }
         }
         .add-new-btn {
