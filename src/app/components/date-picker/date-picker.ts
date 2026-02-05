@@ -17,7 +17,6 @@ import { CalendarIconComponent } from '../../icons/calendarIcon';
 import { format, isValid, parseISO } from 'date-fns';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DeleteIconComponent } from '../../icons/deleteIcon';
-import { CloseIconComponent } from '../../icons/closeIcon';
 
 @Component({
   selector: 'app-date-picker',
@@ -28,7 +27,6 @@ import { CloseIconComponent } from '../../icons/closeIcon';
     CalendarIconComponent,
     FormsModule,
     DeleteIconComponent,
-    CloseIconComponent
   ],
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.scss'],
@@ -40,6 +38,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   inputText = '';
   private calendarView = inject(CalendarViewService);
   private hostRef = inject(ElementRef);
+  private scrollableParent: HTMLElement | null = null;
 
   @ViewChild('input', { static: true })
   inputRef!: ElementRef<HTMLInputElement>;
@@ -55,7 +54,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   readonly loading = signal(true);
 
   readonly month = computed(() =>
-    this.calendarView.generateMonth(new Date(this.currentYear(), Number(this.currentMonth())))
+    this.calendarView.generateMonth(new Date(this.currentYear(), Number(this.currentMonth()))),
   );
 
   readonly days = computed(() => this.month().days);
@@ -104,6 +103,12 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   open() {
     this.isOpen.set(true);
+    document.body.style.overflow = 'hidden';
+
+    this.scrollableParent = this.findScrollableParent(this.hostRef.nativeElement);
+    if (this.scrollableParent) {
+      this.scrollableParent.style.overflow = 'hidden';
+    }
 
     const initial =
       this.selectedDate() ??
@@ -117,6 +122,25 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   close() {
     this.isOpen.set(false);
+    document.body.style.overflow = '';
+
+    // Restore scroll on the parent
+    if (this.scrollableParent) {
+      this.scrollableParent.style.overflow = '';
+      this.scrollableParent = null;
+    }
+  }
+
+  private findScrollableParent(element: HTMLElement): HTMLElement | null {
+    let parent = element.parentElement;
+    while (parent) {
+      const style = getComputedStyle(parent);
+      if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+        return parent;
+      }
+      parent = parent.parentElement;
+    }
+    return null;
   }
 
   clear() {
@@ -208,7 +232,9 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   private focusActiveDayButton() {
     setTimeout(() => {
-      const active = this.hostRef.nativeElement.querySelector('.calendar-day[tabindex="0"]') as HTMLElement | null;
+      const active = this.hostRef.nativeElement.querySelector(
+        '.calendar-day[tabindex="0"]',
+      ) as HTMLElement | null;
       if (active) {
         try {
           active.focus({ preventScroll: true });

@@ -20,9 +20,6 @@
     animate.enter="enter-animation"
     animate.leave="leave-animation"
   >
-    <button (click)="close()" type="button" class="close-dialog" aria-label="Close date-picker" animate.enter="enter-animation" animate.leave="leave-animation" >
-      <app-icon-close />
-    </button>
     <div class="container" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" tabindex="-1">
       <nav class="calendar-navigation">
         <button class="calendar-nav-btn back" type="button" (click)="goToPrevious()" aria-label="Go to previous month">
