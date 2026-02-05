@@ -47,3 +47,7 @@ textarea,
 select {
   font-family: $font-primary;
 }
+
+html, body, a, input, textarea, select, button, label {
+  touch-action: manipulation;
+}
