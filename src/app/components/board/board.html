@@ -9,6 +9,20 @@
       <app-icon-arrow-left />
       {{ currentBoard()?.parentBoard?.title ?? 'All boards'}}
     </button>
+
+    @if (activeUsers().length > 0) {
+      <div class="presence">
+        @for (user of activeUsers(); track user.userId) {
+          <span class="user" animate.enter="presence-in" animate.leave="presence-out">
+            <!-- TODO: Add real pictures later, this is imaginary for now -->
+            <span class="profile-picture">
+              <app-icon-profile />
+            </span>
+            <p class="user-name">{{ user.userName }}</p>
+          </span>
+        }
+      </div>
+    }
   </nav>
 
   <h1>{{ currentBoard()?.board?.title }}</h1>

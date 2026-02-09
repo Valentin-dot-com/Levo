@@ -18,11 +18,47 @@
     font-size: $font-size-text;
     font-weight: 500;
     padding: 0.5rem 0;
+    min-width: 0;
+    flex-shrink: 1;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 
     @include hover-supported {
       color: $color-accent;
+    }
+  }
+
+  .presence {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    .user {
+      display: flex;
+      flex-direction: column;
+      min-height: 4rem;
+
+      .profile-picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: none;
+        color: $color-accent;
+        width: 3rem;
+        height: 3rem;
+        background-color: $color-fff;
+        border-radius: 50%;
+        border: 2px solid $color-primary;
+      }
+
+      .user-name {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: $color-primary;
+        line-height: normal;
+      }
     }
   }
 }
@@ -222,6 +258,14 @@
 
 .fade-out-animation {
   @include fade-out-animation();
+}
+
+.presence-in {
+  @include presence-in-animation();
+}
+
+.presence-out {
+  @include presence-out-animation();
 }
 
 @media screen and (min-width: 1300px) {

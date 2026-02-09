@@ -10,6 +10,11 @@ export interface Board {
   order_index: number;
 }
 
+export interface UserPresence {
+  userId: string;
+  userName: string;
+}
+
 export interface CreateBoard {
   calendar_id: UUID;
   title: string;

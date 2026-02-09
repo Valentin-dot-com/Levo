@@ -26,6 +26,9 @@ import Link from '@tiptap/extension-link';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { ListIconComponent } from '../../../icons/listIcon';
 import { TaskIconComponent } from '../../../icons/taskIcon';
+import { SupabaseService } from '../../../services/supabase';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { FeedbackMessageService } from '../../../services/feedbackMessage';
 
 @Component({
   selector: 'app-editor',
@@ -36,6 +39,10 @@ import { TaskIconComponent } from '../../../icons/taskIcon';
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
   private boardService = inject(BoardService);
+  private feedbackService = inject(FeedbackMessageService);
+  private supabase = inject(SupabaseService);
+  private realtimeChannel: RealtimeChannel | null = null;
+  private isRemoteUpdate = false;
 
   currentBoard = this.boardService.currentBoard;
   newSubBoardTitle = signal('');
@@ -57,6 +64,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this.initializeEditor();
     this.setupAutoSave();
     this.setupCheckboxHandler();
+    this.setupRealtimeSubscription();
   }
 
   initializeEditor() {
@@ -85,7 +93,9 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       ],
       content: this.savedContent() ?? '<p>Start typing...</p>',
       onUpdate: ({ editor }) => {
-        this.contentChange$.next(editor.getJSON());
+        if (!this.isRemoteUpdate) {
+          this.contentChange$.next(editor.getJSON());
+        }
         this.editorState.update((v) => v + 1);
         this.scrollCaretIntoView(editor);
       },
@@ -191,6 +201,58 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  setupRealtimeSubscription() {
+    const boardId = this.boardId();
+    if (!boardId) return;
+
+    this.realtimeChannel = this.supabase.supabaseClient
+      .channel(`board_items:${boardId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'board_items',
+          filter: `board_id=eq.${boardId}`,
+        },
+        (payload) => {
+          const newContent = payload.new['content'] as JSONContent;
+          if (newContent && this.editor()) {
+            this.applyRemoteUpdate(newContent);
+          }
+        },
+      )
+      .subscribe();
+  }
+
+  private applyRemoteUpdate(content: JSONContent) {
+    const editor = this.editor();
+    if (!editor) return;
+
+    const currentContent = JSON.stringify(editor.getJSON());
+    const newContent = JSON.stringify(content);
+
+    if (currentContent === newContent) return;
+
+    this.isRemoteUpdate = true;
+
+    const { from, to } = editor.state.selection;
+
+    editor.commands.setContent(content, { emitUpdate: false });
+
+    const docLength = editor.state.doc.content.size;
+    const safeFrom = Math.min(from, docLength);
+    const safeTo = Math.min(to, docLength);
+
+    try {
+      editor.commands.setTextSelection({ from: safeFrom, to: safeTo });
+    } catch {
+      // If position restoration fails, just continue
+    }
+
+    this.isRemoteUpdate = false;
+  }
+
   scrollCaretIntoView(editor: Editor) {
     const view = editor.view;
     const { from } = editor.state.selection;
@@ -204,7 +266,6 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
 
-
     const comfortBottom = viewportHeight * 0.5;
 
     if (caretRect.bottom > comfortBottom) {
@@ -215,17 +276,29 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  saveContent(content: JSONContent) {
+  async saveContent(content: JSONContent) {
     const id = this.boardId();
 
     if (id === null) return;
 
-    this.boardService.updateBoardItem(id, content);
+    try {
+      this.boardService.updateBoardItem(id, content);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      }
+      this.feedbackService.setError('Could not update board right now.')
+    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.realtimeChannel) {
+      this.supabase.supabaseClient.removeChannel(this.realtimeChannel);
+    }
+
     this.editor()?.destroy();
     this.editor.set(null);
   }
