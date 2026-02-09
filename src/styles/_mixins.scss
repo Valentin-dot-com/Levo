@@ -120,3 +120,31 @@
     }
   }
 }
+
+@mixin presence-in-animation($duration: 0.2s, $easing: ease-in-out) {
+  animation: fade-in $duration $easing;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-30vh);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@mixin presence-out-animation($duration: 0.2s, $easing: ease-in-out) {
+  animation: fade-out $duration $easing;
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-30vh);
+    }
+  }
+}
