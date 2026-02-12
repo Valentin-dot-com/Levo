@@ -50,8 +50,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private presenceChannel: RealtimeChannel | null = null;
   activeUsers = signal<UserPresence[]>([]);
-  private currentUserId = this.auth.profile()?.user_id;
-  private currentUserName = this.auth.profile()?.first_name;
 
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
@@ -73,25 +71,47 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  setupPresence() {
-    const boardId = this.boardId();
-    if (!boardId) return;
+  private cleanupPresence() {
+    if (this.presenceChannel) {
+      const channel = this.presenceChannel;
+      this.presenceChannel = null;
+      channel.untrack().catch((err) => {
+        if (err instanceof Error) {
+          console.warn('Failed to untrack presence channel');
+        }
+      }).finally(() => {
+        this.supabase.supabaseClient.removeChannel(channel);
+      });
+    }
+    this.activeUsers.set([]);
+  }
 
-    this.presenceChannel = this.supabase.supabaseClient
+  setupPresence() {
+    this.cleanupPresence();
+
+    const boardId = this.boardId();
+    const currentUserId = this.auth.currentUser?.id;
+    const currentUserName = this.auth.profile()?.first_name ?? 'Unknown';
+
+    if (!boardId || !currentUserId) return;
+
+    const channel = this.supabase.supabaseClient
       .channel(`board-presence:${boardId}`, {
         config: {
           presence: {
-            key: this.currentUserId,
+            key: currentUserId,
           },
         },
       })
       .on('presence', { event: 'sync' }, () => {
-        const state = this.presenceChannel!.presenceState<UserPresence>();
+        if (this.presenceChannel !== channel) return;
+
+        const state = channel.presenceState<UserPresence>();
         const users: UserPresence[] = [];
 
         Object.entries(state).forEach(([userId, presences]) => {
           const presence = presences[0];
-          if (presence && userId !== this.currentUserId) {
+          if (presence && userId !== currentUserId) {
             users.push(presence);
           }
         });
@@ -99,14 +119,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.activeUsers.set(users);
       })
       .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          await this.presenceChannel!.track({
-            userId: this.currentUserId,
-            userName: this.currentUserName,
+        if (status === 'SUBSCRIBED' && this.presenceChannel === channel) {
+          await channel.track({
+            userId: currentUserId,
+            userName: currentUserName,
             joinedAt: Date.now(),
           });
         }
       });
+
+    this.presenceChannel = channel;
   }
 
   goBack(parentId: UUID | null) {
@@ -137,10 +159,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.boardService.clearCurrent();
-
-    if (this.presenceChannel) {
-      this.presenceChannel.untrack();
-      this.supabase.supabaseClient.removeChannel(this.presenceChannel);
-    }
+    this.cleanupPresence();
   }
 }

@@ -236,43 +236,49 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     this.isRemoteUpdate = true;
 
-    const { from, to } = editor.state.selection;
-
-    editor.commands.setContent(content, { emitUpdate: false });
-
-    const docLength = editor.state.doc.content.size;
-    const safeFrom = Math.min(from, docLength);
-    const safeTo = Math.min(to, docLength);
 
     try {
+      const { from, to } = editor.state.selection;
+
+      editor.commands.setContent(content, { emitUpdate: false });
+
+      const docLength = editor.state.doc.content.size;
+      const safeFrom = Math.min(from, docLength);
+      const safeTo = Math.min(to, docLength);
       editor.commands.setTextSelection({ from: safeFrom, to: safeTo });
     } catch {
-      // If position restoration fails, just continue
+      console.warn('Failed to apply remote update')
+    } finally {
+      this.isRemoteUpdate = false;
     }
 
-    this.isRemoteUpdate = false;
   }
 
   scrollCaretIntoView(editor: Editor) {
+    if (!this.isEditing() || this.isRemoteUpdate) return;
+
     const view = editor.view;
     const { from } = editor.state.selection;
 
-    const domAtPos = view.domAtPos(from);
-    const caretNode = domAtPos.node as HTMLElement;
+    try {
+      const domAtPos = view.domAtPos(from);
+      const caretNode = domAtPos.node as HTMLElement;
 
-    if (!caretNode || !caretNode.getBoundingClientRect) return;
+      if (!caretNode || !caretNode.getBoundingClientRect) return;
 
-    const caretRect = caretNode.getBoundingClientRect();
+      const caretRect = caretNode.getBoundingClientRect();
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const comfortBottom = viewportHeight * 0.8;
 
-    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-
-    const comfortBottom = viewportHeight * 0.5;
-
-    if (caretRect.bottom > comfortBottom) {
-      caretNode.scrollIntoView({
-        block: 'center',
-        inline: 'nearest',
-      });
+      if (caretRect.bottom > comfortBottom) {
+        caretNode.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest',
+        });
+      }
+    } catch {
+      // Position may be invalid during remote updates
     }
   }
 
@@ -282,12 +288,12 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     if (id === null) return;
 
     try {
-      this.boardService.updateBoardItem(id, content);
+      await this.boardService.updateBoardItem(id, content);
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error(err.message);
       }
-      this.feedbackService.setError('Could not update board right now.')
+      this.feedbackService.setError('Could not update board right now.');
     }
   }
 

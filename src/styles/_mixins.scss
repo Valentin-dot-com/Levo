@@ -122,8 +122,8 @@
 }
 
 @mixin presence-in-animation($duration: 0.2s, $easing: ease-in-out) {
-  animation: fade-in $duration $easing;
-  @keyframes fade-in {
+  animation: presence-in $duration $easing;
+  @keyframes presence-in {
     from {
       opacity: 0;
       transform: translateY(-30vh);
@@ -136,8 +136,8 @@
 }
 
 @mixin presence-out-animation($duration: 0.2s, $easing: ease-in-out) {
-  animation: fade-out $duration $easing;
-  @keyframes fade-out {
+  animation: presence-out $duration $easing;
+  @keyframes presence-out {
     from {
       opacity: 1;
       transform: translateY(0);
