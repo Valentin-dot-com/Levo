@@ -50,8 +50,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private presenceChannel: RealtimeChannel | null = null;
   activeUsers = signal<UserPresence[]>([]);
-  private currentUserId = this.auth.profile()?.user_id;
-  private currentUserName = this.auth.profile()?.first_name;
 
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
@@ -73,15 +71,35 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  private cleanupPresence() {
+    if (this.presenceChannel) {
+      const channel = this.presenceChannel;
+      this.presenceChannel = null;
+      channel.untrack().catch((err) => {
+        if (err instanceof Error) {
+          console.warn('Failed to untrack presence channel');
+        }
+      }).finally(() => {
+        this.supabase.supabaseClient.removeChannel(channel);
+      });
+    }
+    this.activeUsers.set([]);
+  }
+
   setupPresence() {
+    this.cleanupPresence();
+
     const boardId = this.boardId();
-    if (!boardId) return;
+    const currentUserId = this.auth.currentUser?.id;
+    const currentUserName = this.auth.profile()?.first_name;
+
+    if (!boardId || !currentUserId) return;
 
     this.presenceChannel = this.supabase.supabaseClient
       .channel(`board-presence:${boardId}`, {
         config: {
           presence: {
-            key: this.currentUserId,
+            key: currentUserId,
           },
         },
       })
@@ -91,7 +109,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
         Object.entries(state).forEach(([userId, presences]) => {
           const presence = presences[0];
-          if (presence && userId !== this.currentUserId) {
+          if (presence && userId !== currentUserId) {
             users.push(presence);
           }
         });
@@ -101,8 +119,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await this.presenceChannel!.track({
-            userId: this.currentUserId,
-            userName: this.currentUserName,
+            userId: currentUserId,
+            userName: currentUserName,
             joinedAt: Date.now(),
           });
         }
@@ -137,10 +155,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.boardService.clearCurrent();
-
-    if (this.presenceChannel) {
-      this.presenceChannel.untrack();
-      this.supabase.supabaseClient.removeChannel(this.presenceChannel);
-    }
+    this.cleanupPresence();
   }
 }

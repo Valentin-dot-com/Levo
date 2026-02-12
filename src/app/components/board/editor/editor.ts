@@ -236,25 +236,25 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     this.isRemoteUpdate = true;
 
-    const { from, to } = editor.state.selection;
-
-    editor.commands.setContent(content, { emitUpdate: false });
-
-    const docLength = editor.state.doc.content.size;
-    const safeFrom = Math.min(from, docLength);
-    const safeTo = Math.min(to, docLength);
 
     try {
+      const { from, to } = editor.state.selection;
+
+      editor.commands.setContent(content, { emitUpdate: false });
+
+      const docLength = editor.state.doc.content.size;
+      const safeFrom = Math.min(from, docLength);
+      const safeTo = Math.min(to, docLength);
       editor.commands.setTextSelection({ from: safeFrom, to: safeTo });
     } catch {
       // If position restoration fails, just continue
+    } finally {
+      this.isRemoteUpdate = false;
     }
 
-    this.isRemoteUpdate = false;
   }
 
   scrollCaretIntoView(editor: Editor) {
-    // Only scroll when user is actively editing
     if (!this.isEditing() || this.isRemoteUpdate) return;
 
     const view = editor.view;
@@ -288,7 +288,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     if (id === null) return;
 
     try {
-      this.boardService.updateBoardItem(id, content);
+      await this.boardService.updateBoardItem(id, content);
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error(err.message);
