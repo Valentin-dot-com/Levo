@@ -254,25 +254,31 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   }
 
   scrollCaretIntoView(editor: Editor) {
+    // Only scroll when user is actively editing
+    if (!this.isEditing() || this.isRemoteUpdate) return;
+
     const view = editor.view;
     const { from } = editor.state.selection;
 
-    const domAtPos = view.domAtPos(from);
-    const caretNode = domAtPos.node as HTMLElement;
+    try {
+      const domAtPos = view.domAtPos(from);
+      const caretNode = domAtPos.node as HTMLElement;
 
-    if (!caretNode || !caretNode.getBoundingClientRect) return;
+      if (!caretNode || !caretNode.getBoundingClientRect) return;
 
-    const caretRect = caretNode.getBoundingClientRect();
+      const caretRect = caretNode.getBoundingClientRect();
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const comfortBottom = viewportHeight * 0.8;
 
-    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-
-    const comfortBottom = viewportHeight * 0.5;
-
-    if (caretRect.bottom > comfortBottom) {
-      caretNode.scrollIntoView({
-        block: 'center',
-        inline: 'nearest',
-      });
+      if (caretRect.bottom > comfortBottom) {
+        caretNode.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest',
+        });
+      }
+    } catch {
+      // Position may be invalid during remote updates
     }
   }
 
