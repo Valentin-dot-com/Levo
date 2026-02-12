@@ -91,11 +91,11 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     const boardId = this.boardId();
     const currentUserId = this.auth.currentUser?.id;
-    const currentUserName = this.auth.profile()?.first_name;
+    const currentUserName = this.auth.profile()?.first_name ?? 'Unknown';
 
     if (!boardId || !currentUserId) return;
 
-    this.presenceChannel = this.supabase.supabaseClient
+    const channel = this.supabase.supabaseClient
       .channel(`board-presence:${boardId}`, {
         config: {
           presence: {
@@ -104,7 +104,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         },
       })
       .on('presence', { event: 'sync' }, () => {
-        const state = this.presenceChannel!.presenceState<UserPresence>();
+        if (this.presenceChannel !== channel) return;
+
+        const state = channel.presenceState<UserPresence>();
         const users: UserPresence[] = [];
 
         Object.entries(state).forEach(([userId, presences]) => {
@@ -117,14 +119,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.activeUsers.set(users);
       })
       .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          await this.presenceChannel!.track({
+        if (status === 'SUBSCRIBED' && this.presenceChannel === channel) {
+          await channel.track({
             userId: currentUserId,
             userName: currentUserName,
             joinedAt: Date.now(),
           });
         }
       });
+
+    this.presenceChannel = channel;
   }
 
   goBack(parentId: UUID | null) {

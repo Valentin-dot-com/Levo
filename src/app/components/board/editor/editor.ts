@@ -247,7 +247,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       const safeTo = Math.min(to, docLength);
       editor.commands.setTextSelection({ from: safeFrom, to: safeTo });
     } catch {
-      // If position restoration fails, just continue
+      console.warn('Failed to apply remote update')
     } finally {
       this.isRemoteUpdate = false;
     }
@@ -293,7 +293,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       if (err instanceof Error) {
         console.error(err.message);
       }
-      this.feedbackService.setError('Could not update board right now.')
+      this.feedbackService.setError('Could not update board right now.');
     }
   }
 
