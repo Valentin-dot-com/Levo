@@ -1,8 +1,8 @@
-import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, forwardRef, HostListener, input, signal } from "@angular/core";
-import { Calendar } from "../../models/calendar.model";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { ArrowRightIconComponent } from "../../icons/arrowRightIcon";
+import { CommonModule } from '@angular/common';
+import { Component, computed, forwardRef, HostListener, input, signal } from '@angular/core';
+import { Calendar } from '../../models/calendar.model';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ArrowRightIconComponent } from '../../icons/arrowRightIcon';
 
 @Component({
   selector: 'app-custom-selector',
@@ -14,39 +14,51 @@ import { ArrowRightIconComponent } from "../../icons/arrowRightIcon";
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CustomSelectorComponent),
       multi: true,
-    }
-  ]
+    },
+  ],
 })
-export class CustomSelectorComponent implements AfterViewInit, ControlValueAccessor {
+export class CustomSelectorComponent implements ControlValueAccessor {
   options = input.required<Calendar[]>();
 
   isOpen = signal(false);
-  selectedOption = signal('');
+  private selectedOption = signal('');
 
   onChange?: (value: string) => void;
   onTouched?: () => void;
 
-  ngAfterViewInit(): void {
-    if (this.options()) {
-      this.selectedOption.set(this.options()[0].name);
+  selectedLabel = computed(() => {
+    const options = this.options();
+    const selectedId = this.selectedOption();
+    const selected = options.find((option) => option.id === selectedId);
+
+    if (selected) {
+      return selected.name;
     }
-  }
+
+    if (!selectedId && options.length) {
+      return options[0].name;
+    }
+
+    return '';
+  });
 
   toggle() {
-    this.isOpen.update(open => !open);
+    this.isOpen.update((open) => !open);
   }
 
   select(option: Calendar) {
-    this.selectedOption.set(option.name);
+    this.selectedOption.set(option.id);
     if (this.onChange) {
       this.onChange(option.id);
+    }
+    if (this.onTouched) {
+      this.onTouched();
     }
     this.isOpen.set(false);
   }
 
   writeValue(value: string): void {
-    const calendar = this.options().find(cal => cal.id === value)
-    this.selectedOption.set(calendar?.name || '');
+    this.selectedOption.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
